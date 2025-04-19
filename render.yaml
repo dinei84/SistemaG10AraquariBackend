@@ -1,0 +1,44 @@
+services:
+  # Serviu00e7o da API principal
+  - type: web
+    name: sistemag10-api
+    env: node
+    buildCommand: npm run build
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: FIREBASE_DATABASE_URL
+        sync: false
+
+  # Serviu00e7o do WebSocket para o chat
+  - type: web
+    name: sistemag10-websocket
+    env: node
+    buildCommand: npm run build
+    startCommand: cd backend/websocket && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: WEBSOCKET_PORT
+        value: 10001
+      - key: ENABLE_AUTH
+        value: true
+      - key: FIREBASE_DATABASE_URL
+        sync: false
+
+  # Serviu00e7o para o frontend
+  - type: static
+    name: sistemag10-frontend
+    buildCommand: npm run build
+    staticPublishPath: ./
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache

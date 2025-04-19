@@ -1,0 +1,19 @@
+{
+  "name": "sistemag10-araquari",
+  "version": "1.0.0",
+  "description": "Sistema G10 Araquari - Aplicação completa",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd backend && node server.js",
+    "start:websocket": "cd backend/websocket && node server.js",
+    "dev": "cd backend && npm run dev:safe",
+    "dev:websocket": "cd backend/websocket && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../backend/websocket && npm install",
+    "build": "chmod +x ./build.sh && ./build.sh"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

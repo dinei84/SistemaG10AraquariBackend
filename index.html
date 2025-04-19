@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="landing.css">
+    <link rel="shortcut icon" href="assets/favcom.png" type="image/x-icon">
+    <title>Bem-vindo</title>
+</head>
+<body>
+    <div class="landing-container">
+        <div class="welcome-card">
+            <h1>Bem-vindo ao Sistema</h1>
+            <p>Sistema de Gerenciamento Logístico Araquari</p>
+            <img src="assets/team350.jpeg" alt="Logo" class="welcome-logo">
+            <a href="login.html" class="login-button">Acessar Sistema</a>
+        </div>
+    </div>
+
+    <style>
+        .landing-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(114, 23, 56, 0.9), rgba(86, 14, 36, 0.9));
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .welcome-card h1 {
+            color: #721738;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-card p {
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-logo {
+            width: 200px;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        .login-button {
+            display: inline-block;
+            background: #721738;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .login-button:hover {
+            background: #560e24;
+        }
+    </style>
+</body>
+</html>
