@@ -1,0 +1,87 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar/Editar Frete</title>
+    <link rel="stylesheet" href="css/index01.css">
+    <link rel="stylesheet" href="../../menu.css">
+    <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/loading.css">
+</head>
+<body>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <svg class="loading-svg" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <h2>Adicionar/Editar Frete</h2>
+        <form id="formFrete">
+            <label for="data">Data</label>
+            <input type="date" id="data" required>
+
+            <label for="cliente">Cliente</label>
+            <input type="text" id="cliente" required>
+
+            <label for="expedidor">Expedidor (ARMAZEM)</label>
+            <input type="text" id="expedidor">
+
+            <label for="destinatario">Destinatário</label>
+            <input type="text" id="destinatario">
+
+            <label for="recebedor">Recebedor</label>
+            <input type="text" id="recebedor">
+
+            <label for="destino">Destino Final</label>
+            <input type="text" id="destino" required>
+
+            <label for="destinotroca">Destino Troca (se houver)</label>
+            <input type="text" id="destinotroca">
+
+            <label for="pedido">Pedido</label>
+            <input type="text" id="pedido">
+
+            <label for="frempresa">Frete Empresa</label>
+            <input type="text" id="frempresa" value="R$ ">
+
+            <label for="produto">Produto</label>
+            <input type="text" id="produto">
+
+            <label for="embalagem">Embalagem</label>
+            <input type="text" id="embalagem">
+
+            <label for="liberado">Quantidade Total (Toneladas Ex.: 40,00 ton (quarenta toneladas))</label>
+            <input type="text" id="liberado" required value="00,00 ton">
+                        
+            <label for="carregado">Total Já Carregado</label>
+            <input type="text" id="carregado" required>
+            
+            <label for="saldo">Saldo Disponível</label>
+            <input type="text" id="saldo" readonly>
+
+            <label for="motorista">Frete Motorista</label>
+            <input type="text" id="motorista" value="R$ ">
+
+            <label for="operacao">Operação</label>
+            <input type="text" id="operacao">
+
+            <label for="lote">Lote</label>
+            <input type="text" id="lote">
+
+            <label for="localizacao">Localização</label>
+            <textarea id="localizacao"></textarea>
+
+            <label for="observacao">Observação</label>
+            <textarea id="observacao"></textarea>
+
+            <button type="submit">Salvar Frete</button>
+            <button type="button" class="btn-voltar" id="btnVoltar">Voltar para Lista de Fretes</button>
+        </form>
+    </div>
+
+    <script type="module" src="js/cadastro_frete.js"></script>
+</body>
+</html>

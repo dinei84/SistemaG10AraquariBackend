@@ -1,0 +1,188 @@
+:root {
+    --primary-color: #721738;
+    --secondary-color: #333;
+    --tertiary-color: #560e24;
+    --quaternary-color: #fff;
+    --quintenary-color: #66253d;
+}
+
+body {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4; /* Cor de fundo para a página */
+    color: var(--secondary-color);
+    margin: 0; /* Removendo a margem padrão do body */
+    padding: 0; /* Removendo o padding padrão do body */
+    box-sizing: border-box; /* Garante que o padding e a borda não aumentem o tamanho total do elemento */
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Alinha os itens no centro horizontalmente */
+    justify-content: center; /* Alinha os itens no centro verticalmente */
+    width: 100%;
+    padding: 20px 0;
+    background-color: var(--primary-color);
+    color: var(--quaternary-color);
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+main {
+    width: 95%; /* Largura responsiva para dispositivos menores */
+    max-width: 400px; /* Largura máxima para telas maiores */
+    background-color: var(--quaternary-color);
+    margin: 20px auto; /* Centraliza e adiciona margem responsiva */
+    padding: 20px;
+    border: 4px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.384);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribui o espaço entre os elementos */
+    align-items: stretch; /* Estende os filhos horizontalmente */
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho total do main */
+}
+
+
+.box_datalist {
+    margin-bottom: 15px; /* Aumentando a margem inferior para melhor espaçamento */
+    display: flex;
+    flex-direction: column; /* Alinha label e input verticalmente em telas menores */
+}
+
+.box_datalist label {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 5px; /* Espaço entre label e input */
+    display: block; /* Garante que a label ocupa a largura total disponível para alinhamento */
+}
+
+.box_datalist input,
+.box_datalist select,
+.box_datalist button {
+    padding: 0.7em; /* Aumentando o padding para melhor toque em mobile */
+    border: 2px solid var(--secondary-color);
+    border-radius: 6px;
+    font-size: 1em; /* Tamanho de fonte consistente */
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+    width: 100%; /* Inputs e selects ocupam a largura total do container */
+    margin: 0; /* Removendo margens desnecessárias */
+}
+
+.box_datalist select {
+    appearance: none; /* Remove estilos padrões do sistema operacional para selects */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 5px;
+}
+
+.box_datalist select::-ms-expand {
+    display: none; /* Remove a seta padrão no IE */
+}
+
+.box_datalist input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.botoes {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.botoes button {
+    width: 45%; /* Botões ocupam quase metade da largura, com espaço entre eles */
+    height: auto; /* Altura automática baseada no conteúdo e padding */
+    padding: 0.7em 1em;
+    border-radius: 26px;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.642);
+    background-color: var(--quaternary-color);
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.botoes button:hover {
+    background-color: var(--tertiary-color);
+    color: var(--quaternary-color);
+}
+
+.botoes #limpar:hover {
+    background-color: green !important;
+}
+
+#taxaICMSField {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.7em;
+    box-sizing: border-box;
+    width: 100%; /* Ocupa a largura total */
+    margin-top: 15px; /* Espaço acima do campo */
+    font-size: 1em;
+}
+
+#resultados,
+#trocaCampos,
+#trocaCampos2 {
+    margin-top: 20px;
+}
+
+#trocaCampos,
+#trocaCampos2,
+#resultadosSegundaPerna {
+    display: none; /* Inicialmente escondidos */
+}
+
+
+/* Estilos para telas maiores (tablets e desktops) */
+@media (min-width: 768px) {
+    main {
+        width: 70%; /* Largura maior em telas grandes */
+        max-width: 800px; /* Largura máxima em telas grandes */
+        padding: 30px;
+    }
+
+    .box_datalist {
+        flex-direction: row; /* Alinha label e input horizontalmente em telas maiores */
+        align-items: center; /* Alinha verticalmente os itens na linha */
+        margin-bottom: 10px;
+    }
+
+    .box_datalist label {
+        text-align: right; /* Alinha o texto da label à direita */
+        margin-right: 15px; /* Espaço entre a label e o input */
+        margin-bottom: 0; /* Remove a margem inferior para alinhamento horizontal */
+        width: 40%; /* Largura fixa para labels em telas maiores */
+        flex-basis: 40%; /* Garante que a label não encolha */
+        display: inline-block; /* Evita quebra de linha desnecessária */
+    }
+
+    .box_datalist input,
+    .box_datalist select {
+        width: 60%; /* Inputs e selects ocupam 60% da largura do container */
+        flex-basis: 60%; /* Garante que o input não encolha */
+    }
+
+    .botoes button {
+        width: 150px; /* Largura fixa para botões em telas maiores */
+    }
+}
+
+/* Estilos adicionais para alinhamento fino e elementos específicos, se necessário */

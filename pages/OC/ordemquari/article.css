@@ -1,0 +1,49 @@
+/* Estilos para o artigo */
+article {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.autorizacao {
+    margin-top: 15px;
+}
+
+.autorizacao p {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.declaracao {
+    margin-top: 13px;
+    font-size: 16px;
+}
+
+.validade {
+    margin-top: 10px;
+}
+
+.validade h2 {
+    font-size: 17px;
+    text-align: center;
+    margin: auto;
+}
+
+/* Estilos para impressão */
+@media print {
+    body {
+        width: 100%;
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact; /* Suporte adicional */
+    }
+    section.content {
+        background-color: #aaaaaa;
+        padding-left: 165px;
+    }
+    button {
+        display: none;
+    }
+}

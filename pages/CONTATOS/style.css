@@ -1,0 +1,135 @@
+:root {
+    --primary-color: #721738;
+    --secondary-color: #333;
+    --tertiary-color: #560e24;
+    --quaternary-color: #fff;
+    --quintenary-color: #66253d;
+  }
+  
+
+
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+#form-container, #table-container {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: var(--tertiary-color);
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px;
+    border: 1px solid var(--primary-color);
+}
+
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    background: var(--quintenary-color);
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.showList{
+    display: flex;
+    justify-content: center;
+}
+
+button:hover {
+    background: var(--tertiary-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.actions {
+    text-align: center;
+}
+
+/* Estilos responsivos para os botões */
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Responsividade da tabela */
+@media screen and (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    th, td {
+        min-width: 120px;
+    }
+    
+    .actions {
+        position: sticky;
+        right: 0;
+        background: #fff;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    }
+    
+    button {
+        width: 50%;
+        margin: 5px 0;
+    }
+}
+
+/* Para telas muito pequenas */
+@media screen and (max-width: 480px) {
+    input[type="text"] {
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .button-container {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+    }
+}

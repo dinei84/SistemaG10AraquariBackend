@@ -1,0 +1,383 @@
+/* lista_fretes.css */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Container principal */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Cabeçalho */
+h1 {
+  color: #560e24;
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+/* Total Saldo */
+.total-saldo {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #ffd700;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  z-index: 10;
+}
+
+/* Botão Novo Frete */
+.btn-novo-frete {
+  background-color: #560e24;
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s, background-color 0.2s;
+  margin: 0 0 1rem;
+}
+
+.btn-novo-frete:hover {
+  transform: translateY(-2px);
+  background-color: #701c34;
+}
+
+/* Input de busca */
+#searchInput {
+  width: 100%;
+  max-width: 200px;
+  height: 2.5rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #ddd;
+  padding: 0 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Tabela */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: auto;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(86, 14, 36, 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+table#tabelaFretes tbody tr td:nth-child(3) {
+  color: #f44336 !important;
+  font-weight: bolder !important;
+  font-size: 20px;
+}
+
+#tabelaFretes tbody tr:hover td:nth-child(3) {
+  color: #f44336; 
+}
+/* Adicionar no lista_fretes.css */
+#tabelaFretes td:nth-child(8) {
+  background-color: #ffd700; /* Amarelo */
+  font-weight: bold; /* Opcional: para destacar ainda mais */
+}
+
+th {
+  background-color: #560e24;
+  color: white;
+  font-weight: 600;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Botões de ação */
+.acoes {
+  display: flex;
+  gap: 0.25rem; 
+  flex-wrap: wrap;
+  justify-content: flex-start; 
+}
+
+.acoes button {
+  padding: 2px 9px; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-size: 14px;
+  min-width: 100px; 
+  text-align: center;
+  white-space: nowrap;
+  flex: 1 1 auto;
+}
+
+.acoes button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-editar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-excluir {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-carregamento {
+  background-color: #560e24;
+  color: white;
+}
+
+.btn-listar-carregamentos {
+  background-color: #ff9800;
+  color: white;
+}
+
+.linha-clicavel {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.linha-clicavel:hover {
+  background-color: #f5f5f5;
+}
+
+.acoes button {
+  cursor: pointer;
+  pointer-events: auto; /* Permite cliques nos botões */
+}
+
+/* popup */
+/* Estilos do Popup */
+/* Popup */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.popup-content {
+  position: absolute;
+  background-color: #fff;
+  padding: 30px;
+  width: 70%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  
+  /* Centralização perfeita */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close-btn {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.popup-body {
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+.popup-body p {
+  margin: 10px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-body strong {
+  color: #333;
+  min-width: 150px;
+  display: inline-block;
+}
+
+/* Estilo para o novo botão */
+.btn-visualizar {
+  background-color: #2196F3;
+  margin: 2px;
+}
+
+.btn-visualizar:hover {
+  background-color: #1976D2;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  th, td {
+    padding: 0.5rem;
+    font-size: 0.75rem; /* Reduzido de 0.875rem */
+  }
+
+  .total-saldo {
+    position: static;
+    margin: 0.5rem 0;
+    width: fit-content;
+    padding: 0.375rem 0.75rem; /* Reduzido */
+    font-size: 0.75rem; /* Reduzido */
+  }
+
+  table#tabelaFretes tbody tr td:nth-child(3) {
+    color: #f44336 !important;
+    font-weight: bolder !important;
+    font-size: 15px;
+  }
+
+  #searchInput {
+    height: 2rem; /* Reduzido de 2.5rem */
+    font-size: 0.75rem; /* Reduzido */
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: #560e24;
+  }
+
+  .btn-novo-frete {
+    padding: 0.5rem 1rem; /* Reduzido */
+    font-size: 0.875rem; /* Reduzido */
+  }
+
+  .acoes button {
+    padding: 4px 8px; /* Reduzido */
+    font-size: 12px; /* Reduzido */
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  h1 {
+    margin: 1rem 0;
+    font-size: clamp(1.25rem, 3vw, 1.5rem); /* Reduzido */
+  }
+
+  #searchInput {
+    max-width: 100%;
+    height: 1.75rem; /* Reduzido ainda mais */
+    font-size: 0.6875rem; /* Reduzido */
+  }
+
+  .btn-novo-frete {
+    width: 100%;
+    text-align: center;
+    padding: 0.375rem 0.75rem; /* Reduzido mais */
+    font-size: 0.75rem; /* Reduzido */
+  }
+
+  /* Estilo de cartão para linhas da tabela em mobile */
+  table {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    display: block;
+    margin-bottom: 0.75rem;
+    border: 1px solid #eee;
+    border-radius: 0.25rem;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.375rem; /* Reduzido */
+    font-size: 0.6875rem; /* Reduzido */
+  }
+
+  td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 0.5rem;
+    color: #560e24;
+  }
+
+  .acoes {
+    justify-content: center;
+    gap: 0.25rem; /* Reduzido */
+  }
+
+  .acoes button {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 80px; /* Reduzir largura mínima */
+}
+}
+
+/* Scroll horizontal para tabelas largas em mobile */
+@media (max-width: 320px) {
+  table {
+    min-width: 280px; /* Ajustado para caber melhor em 320px */
+  }
+
+  th, td {
+    padding: 0.25rem; /* Reduzido ainda mais */
+    font-size: 0.625rem; /* Reduzido para telas muito pequenas */
+  }
+
+  #searchInput {
+    height: 1.5rem; /* Reduzido */
+  }
+
+  .btn-novo-frete {
+    padding: 0.25rem 0.5rem; /* Reduzido */
+  }
+  .acoes button {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-width: 70px;
+}
+}

@@ -1,0 +1,114 @@
+/* lista_carregamento.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 98%;
+    margin: 0 auto;
+    padding-left: 50px; 
+    margin-top: 20px;
+}
+
+h1 {
+    color: #560e24;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* ESTILOS DOS BOTÕES JUNTOS */
+.btn-novo-carregamento,
+.btn-voltar-fretes {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px; 
+}
+
+.btn-novo-carregamento {
+    background-color: #560e24;
+    color: white;
+}
+
+.btn-voltar-fretes {
+    background-color: gray;
+    color: white;
+}
+
+/* Table styles */
+table {
+    width: 95%; 
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 15px rgba(86, 14, 36, 0.1);
+    margin: 0 auto; 
+    margin-bottom: 20px;
+}
+
+/* Common cell styles */
+th, td {
+    padding: 0px 3px;
+    text-align: left;
+    font-size: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #560e24;
+    color: white;
+    border-radius: 5px;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Action buttons */
+.acoes button {
+    padding: 5px 10px;
+    margin: 2px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-share{
+    background-color: #560e24;
+    color: white;
+    width: 250px;
+    height: 38px;
+    box-shadow: 3px 3px 3px black;
+}
+
+.btn-editar {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-excluir {
+    background-color: #f44336;
+    color: white;
+}
+
+.hide-for-print {
+    display: none !important;
+}
+
+#tabelaFretes td:nth-child(11) {
+    background-color: #ffd700; /* Amarelo */
+    font-weight: bold; /* Opcional: para destacar ainda mais */
+}
+
+@media screen and (max-width: 1200px) {
+    .container {
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+}

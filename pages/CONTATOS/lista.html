@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planilha de Motoristas</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div id="table-container">
+            <h1>Planilha de Motoristas</h1>
+            <button id="downloadBtn">Download XLSX</button>
+            <button id="backBtn">Voltar</button>
+            <input type="text" id="searchInput" placeholder="Pesquisar...">
+            <table id="driversTable">
+                <thead>
+                    <tr>
+                        <th>Motorista</th>
+                        <th>Telefone</th>
+                        <th>Frotista (Proprietário)</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/xlsx/xlsx.js"></script>
+    <script type="module" src="../../js/firebase-config.js"></script>
+    <script type="module" src="js/lista.js"></script>
+    
+</body>
+</html>

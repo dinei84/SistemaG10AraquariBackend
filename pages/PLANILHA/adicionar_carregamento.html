@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Adicionar/Editar Carregamento</title>
+    <link rel="stylesheet" href="css/adicionar_carregamento.css" />
+    <link rel="stylesheet" href="../../menu.css">
+    <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/loading.css">
+</head>
+
+<body>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <svg class="loading-svg" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20"/>
+        </svg>
+    </div>
+
+
+
+    <div class="container">
+
+        <h2>Adicionar/Editar Carregamento</h2>
+
+        <form id="formCarregamento">
+            <label for="dataoc">Data da OC</label>
+            <input type="date" id="dataoc" />
+
+            <label for="placa">Placa</label>
+            <input type="text" id="placa" required />
+
+            <label for="motorista">Motorista</label>
+            <input type="text" id="motorista" required />
+
+            <label for="tipo-veiculo">Tipo Veiculo</label>
+            <input type="text" id="tipo-veiculo" required />
+
+            <label for="peso-carregado">Peso Carregado</label>
+            <input type="text" id="peso-carregado" required>
+
+            <label for="fretemotorista">Frete Motorista</label>
+            <input type="number" id="fretemotorista" required step="0.01" />
+
+            <label for="emissor">Emissor</label>
+            <input type="text" id="emissor" />
+
+            <label for="data-manifesto">Data Manifesto</label>
+            <input type="date" id="data-manifesto" />
+
+            <label for="cte">CTe</label>
+            <input type="text" id="cte" />
+
+            <label for="data-entrega">Data Entrega</label>
+            <input type="date" id="data-entrega" />
+
+            <label for="nfe">NFe</label>
+            <input type="text" id="nfe" />
+
+            <label for="observacao">Observação</label>
+            <input type="text" id="observacao" />
+
+            <button type="submit">Salvar Carregamento</button>
+
+            <button type="button" class="btn-voltar" id="btnVoltar">
+                Voltar para Lista de Carregamentos
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <script type="module" src="js/cadastro_carregamento.js"></script>
+</body>
+
+</html>

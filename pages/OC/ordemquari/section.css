@@ -1,0 +1,45 @@
+.blk1, .blk2, .blk3 {
+    display: flex;
+    justify-content: start;
+    width: 80%;
+    margin-bottom: 5px;
+    margin-top: 3px;
+}
+
+.blk2 .stretched {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: start;
+}
+
+.title {
+    width: 22%;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.content, .content1, .content2 {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(170, 166, 166, 0.442);
+    padding: 1px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    word-wrap: break-word;
+    overflow: hidden;
+    min-height: 30px;
+}
+
+.content span, .content1 span, .content2 span {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+}
+
+.separacao {
+    border-bottom: 12px solid rgb(116, 27, 58);
+}

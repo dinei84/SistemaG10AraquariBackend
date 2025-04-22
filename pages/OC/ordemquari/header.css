@@ -1,0 +1,58 @@
+/* Estilos para o cabeçalho */
+header {
+    margin-top: 30px;
+    display: flex;
+    height: 250px;
+    border-top: 12px solid rgb(116, 27, 58);
+    border-bottom: 12px solid rgb(116, 27, 58);
+}
+
+img {
+    width: 280px;
+    height: 107px;
+    margin-left: 75px;
+    margin-top: 50px;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 75px;
+}
+
+h2 {
+    width: 485px;
+    font-size: 27px;
+    margin-top: 20px;
+}
+
+.number input{
+    height: 38px;
+    border: none;
+    background-color: rgba(170, 166, 166, 0.442);
+    font-size: 41px;
+    text-align: center;
+    color: red;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    width: 699px;
+    height: 200px;
+    margin-left: 5px;
+    padding-top: 10px;
+}
+
+h3 {
+    text-align: center;
+    justify-content: center;
+}
+
+.number {
+    width: 700px;
+    height: 70px;
+    background-color: rgba(170, 166, 166, 0.442);
+    margin-top: 60px;
+    text-align: center;
+}

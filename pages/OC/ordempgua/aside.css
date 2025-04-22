@@ -1,0 +1,53 @@
+/* Estilos para as assinaturas */
+aside.assinatura {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+aside.assinatura .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    margin: 10px 10px; /* Adiciona espaço entre as caixas */
+}
+
+aside.assinatura .box p {
+    margin: 15px 0;
+}
+
+/* Estilos para o QR code */
+aside.qrcode {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+aside.qrcode .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    margin: 10px 10px; 
+}
+
+aside.qrcode .box p {
+    margin: 5px 0;
+}
+
+/* Estilos para o botão de impressão */
+.imprimir {
+    display: flex;
+    justify-content: space-around;
+}
+
+button{
+    width: 90px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: rgb(116, 27, 58);
+    color: white;
+}

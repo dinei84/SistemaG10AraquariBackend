@@ -1,0 +1,158 @@
+@charset "utf-8";
+
+
+body{    
+    font-family: "Noto Sans Mono", monospace;    
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+}
+
+
+.container{
+    display: flex;  
+    justify-content: center;  
+    flex-direction: column;
+    align-items: center;
+}
+
+.container{
+    margin: auto;
+    width: 400px;
+    height: 500px;    
+    border: 2px solid black;
+    border-radius: 25px;
+    box-shadow: 5px 5px 10px rgb(50, 26, 26);    
+    background: rgb(232, 228, 228);    
+}
+
+h1{
+    font-family: sans-serif;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    text-align: center;
+    color: black;
+}
+
+p{
+    font-family:sans-serif;
+    font-weight: 300;
+    color:black;
+    text-align: center;    
+}
+
+input{
+    width: 85px;
+    height: 28px;
+    font-size: 20px;
+    border-radius: 10px;    
+    border: 1.5px solid rgb(4, 4, 4);
+}
+
+
+
+.bot1{
+    /* margin-left: 100px; */
+    font-weight: bolder;
+    cursor: pointer;
+}
+.bot2{
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+
+#botao{    
+    background-color: green;
+    border-radius: 30px;
+}
+
+#botao:hover{
+    background-color: lightgreen;
+    color: green;
+}
+
+#clean{
+    background-color: red;
+    border-radius: 30px;
+}
+
+#clean:hover{
+    background-color: lightgoldenrodyellow;
+    color: red;
+}
+
+/* Caixinhas de texto emcima dos inputs */
+.ref{
+    width: 105px;
+    height: 38px;
+    margin-top: 10px;
+    border-radius: 8px;    
+    padding-top: 5px; 
+    color: black;   
+}
+
+.botoes{
+    display: flex;
+    align-items: center;
+    flex-direction: row;    
+    justify-content: space-around;
+    width: 70%;
+    margin-right: 23px;
+}
+
+@media screen and (max-width: 800px) {
+    .container{
+        width: 350px;
+        height: 450px;
+    }
+    h1{
+        font-size: 25px;
+    }
+    p{
+        text-align: right;
+    }
+    input{
+        width: 85px;
+        height: 45px;
+        font-size: 20px;
+        border-radius: 10px;
+        /* margin-top: 15px; */
+        border: 3px solid black;        
+    }
+    .ref{
+        width: 105px;
+        height: 38px;
+        margin-top: 5PX;
+        border-radius: 8px;    
+        padding-top: 5px;
+    }
+    input.bot1{
+        font-size: 15px;
+        font-weight: bolder;  
+        margin-bottom: 3px;      
+    }
+    input.bot2{
+        font-size: 15px;
+        font-weight: bolder;
+    }
+}
+
+.bot3{
+    background-color: rgb(255, 255, 255);
+    border-radius: 30px;
+    margin-top: 15px;
+    margin-left: 800px;
+    cursor: pointer;
+    font-weight: bolder;
+    color: red;
+}
+
+.imgback {
+    width: 30px;
+    height: 30px;
+    margin-left: -62px;
+    padding-top: 4px;
+    cursor: pointer;
+}

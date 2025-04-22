@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="formordempgua.css" />
+    <link rel="stylesheet" href="../../styles/main.css" />
+    <link rel="stylesheet" href="../../styles/homebotton.css">
+    <link rel="shortcut icon" href="../../../assets/favcom.png" type="image/x-icon">
+    <title>Formulário de Ordem de Carga</title>
+  </head>
+  <body>
+    <section id="form">
+      <h1 class="form-title">Formulário de Ordem de Carga</h1>
+      <form id="orderForm" class="order-form">
+        <div class="form-group">
+          <label for="centroCusto">CENTRO DE CUSTO</label>
+          <input
+            type="text"
+            id="centroCusto"
+            name="centroCusto"
+            value="PARANAGUÁ"
+          />
+        </div>
+        <div class="form-group">
+          <label for="cliente">CLIENTE</label>
+          <input type="text" id="cliente" name="cliente" />
+        </div>
+        <div class="form-group">
+          <label for="coleta">COLETA CIDADE</label>
+          <input
+            type="text"
+            id="coleta"
+            name="coleta"
+            value="SÃO FRANCISCO DO SUL"
+          />
+        </div>
+        <div class="form-group">
+          <label for="armazem">COLETA ARMAZEM</label>
+          <input type="text" id="armazem" name="armazem" />
+        </div>
+        <div class="form-group">
+          <label for="coletaUF">UF COLETA</label>
+          <input type="text" id="coletaUF" name="coletaUF" value="SC" />
+        </div>
+        <div class="form-group">
+          <label for="entrega">ENTREGA</label>
+          <input type="text" id="entrega" name="entrega" />
+        </div>
+        <div class="form-group">
+          <label for="entregaUF">UF ENTREGA</label>
+          <input type="text" id="entregaUF" name="entregaUF" />
+        </div>
+        <div class="form-group">
+          <label for="produto">PRODUTO</label>
+          <input type="text" id="produto" name="produto" />
+        </div>
+        <div class="form-group">
+          <label for="veiculo-cavalo">VEICULO PLACA CAVALO</label>
+          <input type="text" id="veiculo-cavalo" name="veiculo-cavalo" />
+        </div>
+        <div class="form-group">
+          <label for="veiculo-placa2">VEICULO PLACA 2</label>
+          <input type="text" id="veiculo-placa2" name="veiculo-placa2" />
+        </div>
+        <div class="form-group">
+          <label for="veiculo-dolly">VEICULO PLACA DOLLY</label>
+          <input type="text" id="veiculo-dolly" name="veiculo-dolly" />
+        </div>
+        <div class="form-group">
+          <label for="veiculo-placa3">VEICULO PLACA 3</label>
+          <input type="text" id="veiculo-placa3" name="veiculo-placa3" />
+        </div>
+        <div class="form-group">
+          <label for="capacidade">CAPACIDADE</label>
+          <input type="number" id="capacidade" name="capacidade" />
+        </div>
+        <div class="form-group">
+          <label for="motorista">MOTORISTA NOME:</label>
+          <input type="text" id="motorista" name="motorista" />
+        </div>
+        <div class="form-group">
+          <label for="CPFmotorista">MOTORISTA CPF:</label>
+          <input type="text" id="CPFmotorista" name="CPFmotorista" />
+        </div>
+        <div class="form-group">
+          <label for="previsaoCarregamento">PREVISÃO CARREGAMENTO</label>
+          <input
+            type="datetime-local"
+            id="previsaoCarregamento"
+            name="previsaoCarregamento"
+          />
+        </div>
+        <div class="form-group">
+          <label for="pedido">PEDIDO</label>
+          <input type="text" id="pedido" name="pedido" />
+        </div>
+        <div class="form-group">
+          <label for="observacoes">OBSERVAÇÕES</label>
+          <input type="text" id="observacoes" name="observacoes" />
+        </div>
+
+        <button type="button" class="submit-btn" onclick="submitForm()">
+          Gerar Ordem
+        </button>
+
+        <button id="clean" class="limpar" type="button">LIMPAR</button>
+      </form>
+    </section>
+
+    <div ontouchstart="">
+      <div class="button">
+        <a href="../oc.html">ORDENS</a>
+      </div>
+    </div>
+
+    <script src="../js/formordempgua.js"></script>
+  </body>
+</html>
