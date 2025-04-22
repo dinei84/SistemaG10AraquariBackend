@@ -2,9 +2,10 @@
 
 import { auth } from "./firebase-config.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import config from "./config.js";
 
 // Configurau00e7u00f5es
-const WEBSOCKET_URL = 'ws://localhost:8080';
+const WEBSOCKET_URL = config.WEBSOCKET_URL;
 const CHAT_HISTORY_KEY = 'chat_history';
 const MAX_STORED_MESSAGES = 100;
 const RECONNECT_INTERVAL = 3000; // Tentar reconectar a cada 3 segundos

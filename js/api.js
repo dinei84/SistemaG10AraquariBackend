@@ -4,7 +4,7 @@ import { auth } from "./firebase-config.js";
 
 // Configurações da API
 const API_CONFIG = {
-  BASE_URL: 'http://localhost:5000/api',
+  BASE_URL: 'https://sistemag10araquaribackend.onrender.com/api',
   DEFAULT_HEADERS: {
     'Content-Type': 'application/json'
   },

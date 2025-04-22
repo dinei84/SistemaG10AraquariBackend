@@ -1,13 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const http = require('http');
 
-// Carrega as variu00e1veis de ambiente
+// Carrega as variáveis de ambiente
 dotenv.config();
 
 // Inicializa o Express
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Cria o servidor HTTP usando o app Express
+const server = http.createServer(app);
 
 // Middleware
 app.use(cors({
@@ -42,13 +46,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Verifica se estamos em ambiente de produção na Vercel
-if (process.env.VERCEL) {
-  // Na Vercel, exportamos a aplicação como um módulo
-  module.exports = app;
-} else {
-  // Em ambiente local, iniciamos o servidor normalmente
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-  });
-}
+// Configuração do WebSocket
+const setupWebSocket = require('./websocket/setup-websocket');
+
+// Configura o WebSocket no mesmo servidor HTTP
+setupWebSocket(server);
+
+// Inicia o servidor HTTP
+server.listen(PORT, () => {
+  console.log(`Servidor HTTP e WebSocket rodando na porta ${PORT}`);
+});

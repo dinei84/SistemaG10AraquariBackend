@@ -1,74 +1,37 @@
-# Backend do Sistema G10 Araquari
+# Backend com WebSocket Integrado
 
-Este é o backend do sistema, que fornece APIs e serviços para o frontend.
+## Deploy no Render
 
-## Requisitos
+Este backend foi configurado para funcionar no Render com WebSocket integrado.
 
-- Node.js (versão 14 ou superior)
-- npm (gerenciador de pacotes do Node.js)
+### Configurações para o Render
 
-## Configuração
+1. **Root Directory**: `backend`
+2. **Build Command**: `npm install`
+3. **Start Command**: `npm start`
+4. **Environment Variables**:
+   - `PORT`: Deixe em branco (o Render fornecerá automaticamente)
+   - `NODE_ENV`: `production`
+   - `ENABLE_AUTH`: `false` (ou `true` se você tiver configurado o Firebase)
+   - `FIREBASE_DATABASE_URL`: URL do seu banco de dados Firebase (se aplicável)
 
-1. Instale as dependências:
-   ```
-   npm install
-   ```
+### Importante
 
-2. Configure as credenciais do Firebase:
-   - Renomeie o arquivo `firebase-service-account.example.json` para `firebase-service-account.json` e substitua com suas credenciais reais
-   - Ou use o modo de desenvolvimento seguro que funciona sem credenciais reais
+- O servidor HTTP e WebSocket agora estão integrados e rodam na mesma porta
+- O endpoint WebSocket estará disponível em `wss://sistemag10araquaribackend.onrender.com`
+- O endpoint HTTP estará disponível em `https://sistemag10araquaribackend.onrender.com`
 
-## Como iniciar o servidor
+## Desenvolvimento Local
 
-### Modo de produção
-```
+Para executar o servidor localmente:
+
+```bash
+npm install
 npm start
 ```
 
-### Modo de desenvolvimento (requer credenciais configuradas)
-```
+Ou para desenvolvimento com reinicialização automática:
+
+```bash
 npm run dev
 ```
-
-### Modo de desenvolvimento seguro (funciona sem credenciais reais)
-```
-npm run dev:safe
-```
-
-## Servidor WebSocket (Chat)
-
-O servidor WebSocket para o chat está localizado na pasta `websocket`. Para iniciá-lo:
-
-1. Navegue até a pasta websocket:
-   ```
-   cd websocket
-   ```
-
-2. Instale as dependências (se ainda não tiver feito):
-   ```
-   npm install
-   ```
-
-3. Inicie o servidor WebSocket:
-   ```
-   npm start
-   ```
-
-   Ou em modo de desenvolvimento:
-   ```
-   npm run dev
-   ```
-
-   Ou a versão simplificada (sem autenticação):
-   ```
-   npm run simple
-   ```
-
-## Estrutura do projeto
-
-- `server.js` - Ponto de entrada principal do servidor
-- `routes/` - Definições de rotas da API
-- `controllers/` - Lógica de negócios
-- `middleware/` - Middlewares (autenticação, etc.)
-- `config/` - Arquivos de configuração
-- `websocket/` - Servidor WebSocket para o chat
