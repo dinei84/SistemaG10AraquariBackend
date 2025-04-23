@@ -1,4 +1,3 @@
-// indextracking.js
 import { db } from "../../../js/firebase-config.js";
 import {
   collection,
@@ -8,7 +7,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 import { auth } from "../../../js/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import importManager from "../../../js/loading.js"
+import importManager from "../../../js/loading.js";
 import loadingManager from "../../../js/loading.js";
 
 onAuthStateChanged(auth, (user) => {
@@ -71,7 +70,7 @@ async function carregarCarregamentos() {
             <td>${carga.datanfe || ""}</td>
             <td>${carga.placa || ""}</td>
             <td>${carga.localizacao || ""}</td>
-            <td>${carga.status || ""}</td>                
+            <td>${carga.comentario || ""}</td> <!-- Observação mapeada para comentario -->
             <td>${carga.mercadoria || ""}</td>
             <td>${carga.nfe || ""}</td>
             <td>${carga.cte || ""}</td>
@@ -135,7 +134,7 @@ window.excluirCarga = async (id) => {
     } catch (error) {
       console.error("Erro ao excluir carga: ", error);
       alert("Erro ao excluir carga");
-    } finally{
+    } finally {
       loadingManager.hide();
     }
   }
@@ -166,7 +165,7 @@ window.captureAndShareSelected = async () => {
 
     // Cria um clone da tabela original (apenas cabeçalho)
     const originalTable = document.querySelector("table");
-    const clonedTable = originalTable.cloneNode(false); // false para pegar apenas o thead
+    const clonedTable = originalTable.cloneNode(false); // false para pegar apenas a estrutura
     const clonedThead = originalTable.querySelector('thead').cloneNode(true);
     const clonedTbody = document.createElement('tbody');
     clonedTable.appendChild(clonedThead);
@@ -182,28 +181,56 @@ window.captureAndShareSelected = async () => {
       }
     });
 
-    // Configurações para ocultar colunas
-    const hiddenColumns = ["Telefone", "Motorista", "Comentario", "Ações", "Selecionar"];
-    const clonedThs = clonedTable.querySelectorAll("thead th");
-    const clonedTrs = clonedTable.querySelectorAll("tbody tr");
-    const hiddenColumnIndices = [];
+    // Colunas que devem ser mantidas (em ordem)
+    const columnsToKeep = [
+      "Emissão da nfe",
+      "Placa",
+      "Localização",
+      "Observação",
+      "Mercadoria",
+      "N° da nfe",
+      "N° Conhecimento",
+      "Previsão"
+    ];
 
-    // Identifica colunas para ocultar
-    hiddenColumns.push("Status Diário");
+    // Obter todos os cabeçalhos da tabela clonada
+    const clonedThs = clonedTable.querySelectorAll("thead th");
+    const columnsToHide = [];
+
+    // Identificar índices das colunas que NÃO estão na lista de colunas para manter
     clonedThs.forEach((th, index) => {
-      if (hiddenColumns.includes(th.textContent.trim())) {
-        hiddenColumnIndices.push(index);
-        th.style.display = "none";
+      const columnName = th.textContent.trim();
+      if (!columnsToKeep.includes(columnName)) {
+        columnsToHide.push(index);
       }
     });
 
-    // Oculta células nas linhas
-    clonedTrs.forEach((tr) => {
-      hiddenColumnIndices.forEach((index) => {
+    // Ordenar em ordem decrescente para evitar problemas ao remover
+    columnsToHide.sort((a, b) => b - a);
+
+    // Remover cabeçalhos das colunas não desejadas
+    columnsToHide.forEach(index => {
+      if (clonedThead.rows[0].cells[index]) {
+        clonedThead.rows[0].cells[index].remove();
+      }
+    });
+
+    // Remover células correspondentes nas linhas de dados
+    clonedTbody.querySelectorAll('tr').forEach(tr => {
+      columnsToHide.forEach(index => {
         if (tr.cells[index]) {
-          tr.cells[index].style.display = "none";
+          tr.cells[index].remove();
         }
       });
+    });
+
+    // Ajustar nomes dos cabeçalhos conforme necessário
+    const finalThs = clonedTable.querySelectorAll("thead th");
+    finalThs.forEach(th => {
+      const text = th.textContent.trim();
+      if (text === "Previsão") {
+        th.textContent = "Previsão de entrega";
+      }
     });
 
     // Posiciona o clone fora da tela
@@ -231,11 +258,12 @@ window.captureAndShareSelected = async () => {
           text: "Relatório de Monitoramento de Cargas",
         });
       } catch (error) {
-        // Se der erro na API de compartilhamento, usa o fallback do WhatsApp Web
+        console.error("Erro ao compartilhar via Web Share API:", error);
+        // Fallback para WhatsApp
         shareViaWhatsApp(canvas.toDataURL());
       }
     } else {
-      // Fallback para WhatsApp Web direto
+      // Fallback para WhatsApp direto
       shareViaWhatsApp(canvas.toDataURL());
     }
 
@@ -245,34 +273,63 @@ window.captureAndShareSelected = async () => {
   }
 };
 
+// Função para compartilhar toda a tabela
 window.captureAndShare = async () => {
   try {
     // Cria um clone da tabela original
     const originalTable = document.querySelector("table");
     const clonedTable = originalTable.cloneNode(true);
 
-    // Configurações para ocultar colunas
-    const hiddenColumns = ["Telefone", "Motorista", "Comentario", "Ações"];
-    const clonedThs = clonedTable.querySelectorAll("thead th");
-    const clonedTrs = clonedTable.querySelectorAll("tbody tr");
-    const hiddenColumnIndices = [];
+    // Colunas que devem ser mantidas
+    const columnsToKeep = [
+      "Emissão da nfe",
+      "Placa",
+      "Localização",
+      "Observação",
+      "Mercadoria",
+      "N° da nfe",
+      "N° Conhecimento",
+      "Previsão"
+    ];
 
-    // Identifica colunas para ocultar
-    hiddenColumns.push("Status Diário");
+    // Obter todos os cabeçalhos da tabela clonada
+    const clonedThs = clonedTable.querySelectorAll("thead th");
+    const columnsToHide = [];
+
+    // Identificar índices das colunas que NÃO estão na lista de colunas para manter
     clonedThs.forEach((th, index) => {
-      if (hiddenColumns.includes(th.textContent.trim())) {
-        hiddenColumnIndices.push(index);
-        th.style.display = "none";
+      const columnName = th.textContent.trim();
+      if (!columnsToKeep.includes(columnName)) {
+        columnsToHide.push(index);
       }
     });
 
-    // Oculta células nas linhas
-    clonedTrs.forEach((tr) => {
-      hiddenColumnIndices.forEach((index) => {
+    // Ordenar em ordem decrescente para evitar problemas ao remover
+    columnsToHide.sort((a, b) => b - a);
+
+    // Remover cabeçalhos das colunas não desejadas
+    columnsToHide.forEach(index => {
+      if (clonedTable.querySelector("thead tr").cells[index]) {
+        clonedTable.querySelector("thead tr").cells[index].remove();
+      }
+    });
+
+    // Remover células correspondentes nas linhas de dados
+    clonedTable.querySelectorAll('tbody tr').forEach(tr => {
+      columnsToHide.forEach(index => {
         if (tr.cells[index]) {
-          tr.cells[index].style.display = "none";
+          tr.cells[index].remove();
         }
       });
+    });
+
+    // Ajustar nomes dos cabeçalhos conforme necessário
+    const finalThs = clonedTable.querySelectorAll("thead th");
+    finalThs.forEach(th => {
+      const text = th.textContent.trim();
+      if (text === "Previsão") {
+        th.textContent = "Previsão de entrega";
+      }
     });
 
     // Posiciona o clone fora da tela
@@ -300,39 +357,33 @@ window.captureAndShare = async () => {
           text: "Relatório de Monitoramento de Cargas",
         });
       } catch (error) {
-        // Se der erro na API de compartilhamento, usa o fallback do WhatsApp Web
+        console.error("Erro ao compartilhar via Web Share API:", error);
+        // Fallback para WhatsApp
         shareViaWhatsApp(canvas.toDataURL());
       }
     } else {
-      // Fallback para WhatsApp Web direto
+      // Fallback para WhatsApp direto
       shareViaWhatsApp(canvas.toDataURL());
     }
-
-    // Adiciona a funcionalidade de download
-    downloadImage(blob, "monitoramento_cargas.png");
   } catch (error) {
     console.error("Erro ao capturar ou compartilhar:", error);
-    alert("Erro ao compartilhar ou baixar a imagem");
+    alert("Erro ao compartilhar a imagem: " + error.message);
   }
 };
 
+// Função para compartilhar via WhatsApp
 function shareViaWhatsApp(imageData) {
-  const imageDataWithoutHeader = imageData.replace(
-    "data:image/png;base64,",
-    ""
-  );
-  const text = "Relatório de Monitoramento de Cargas";
-  const whatsappUrl = `https://web.whatsapp.com/send?text=${encodeURIComponent(
-    text
-  )}`;
-  window.open(whatsappUrl, "_blank");
-}
-
-// Função para baixar a imagem
-function downloadImage(blob, fileName) {
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
+  // Criar um link temporário para download da imagem
+  const link = document.createElement('a');
+  link.href = imageData;
+  link.download = 'monitoramento_cargas.png';
+  
+  document.body.appendChild(link);
   link.click();
-  URL.revokeObjectURL(link.href);
+  document.body.removeChild(link);
+  
+  // Abrir o WhatsApp Web com uma mensagem padrão
+  const text = "Relatório de Monitoramento de Cargas";
+  const whatsappUrl = `https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+  window.open(whatsappUrl, "_blank");
 }
