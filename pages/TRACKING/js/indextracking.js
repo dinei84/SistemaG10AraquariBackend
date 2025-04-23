@@ -83,7 +83,7 @@ async function carregarCarregamentos() {
             }; cursor: pointer;">
                 ${carga.statusdiario || "Not Check"}
             </td>
-            <td>${carga.clNESSiente || ""}</td>
+            <td>${carga.cliente || ""}</td>
             <td>
                 ${
                   carga.telefone
