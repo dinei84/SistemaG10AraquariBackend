@@ -4,6 +4,7 @@ import {
   getDocs,
   doc,
   deleteDoc,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 import { auth } from "../../../js/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
@@ -75,14 +76,14 @@ async function carregarCarregamentos() {
             <td>${carga.nfe || ""}</td>
             <td>${carga.cte || ""}</td>
             <td>${carga.previsao || ""}</td>
-            <td style="background-color: ${
-              carga.statusdiario?.trim().toLowerCase() === "sim"
+            <td data-id="${carga.id}" onclick="toggleStatus('${carga.id}')" style="background-color: ${
+              carga.statusdiario?.trim().toLowerCase() === "checked"
                 ? "green"
                 : "red"
-            };">
-                ${carga.statusdiario || ""}
+            }; cursor: pointer;">
+                ${carga.statusdiario || "Not Checked"}
             </td>
-            <td>${carga.cliente || ""}</td>
+            <td>${carga.clNESSiente || ""}</td>
             <td>
                 ${
                   carga.telefone
@@ -137,6 +138,30 @@ window.excluirCarga = async (id) => {
     } finally {
       loadingManager.hide();
     }
+  }
+};
+
+// Nova função para alternar o status
+window.toggleStatus = async (id) => {
+  try {
+    const statusCell = document.querySelector(`td[data-id="${id}"]`);
+    const currentStatus = statusCell.textContent.trim().toLowerCase();
+    const newStatus = currentStatus === "checked" ? "Not Checked" : "Checked";
+    const newColor = newStatus === "Checked" ? "green" : "red";
+
+    // Atualizar o Firestore
+    const cargaRef = doc(db, "trael", id);
+    await updateDoc(cargaRef, {
+      statusdiario: newStatus
+    });
+
+    // Atualizar a célula na interface
+    statusCell.textContent = newStatus;
+    statusCell.style.backgroundColor = newColor;
+
+  } catch (error) {
+    console.error("Erro ao atualizar status: ", error);
+    alert("Erro ao atualizar status");
   }
 };
 
