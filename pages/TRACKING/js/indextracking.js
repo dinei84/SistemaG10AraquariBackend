@@ -77,11 +77,11 @@ async function carregarCarregamentos() {
             <td>${carga.cte || ""}</td>
             <td>${carga.previsao || ""}</td>
             <td data-id="${carga.id}" onclick="toggleStatus('${carga.id}')" style="background-color: ${
-              carga.statusdiario?.trim().toLowerCase() === "checked"
+              carga.statusdiario?.trim().toLowerCase() === "check"
                 ? "green"
                 : "red"
             }; cursor: pointer;">
-                ${carga.statusdiario || "Not Checked"}
+                ${carga.statusdiario || "Not Check"}
             </td>
             <td>${carga.clNESSiente || ""}</td>
             <td>
@@ -146,8 +146,8 @@ window.toggleStatus = async (id) => {
   try {
     const statusCell = document.querySelector(`td[data-id="${id}"]`);
     const currentStatus = statusCell.textContent.trim().toLowerCase();
-    const newStatus = currentStatus === "checked" ? "Not Checked" : "Checked";
-    const newColor = newStatus === "Checked" ? "green" : "red";
+    const newStatus = currentStatus === "check" ? "Not Check" : "Check";
+    const newColor = newStatus === "Check" ? "green" : "red";
 
     // Atualizar o Firestore
     const cargaRef = doc(db, "trael", id);
