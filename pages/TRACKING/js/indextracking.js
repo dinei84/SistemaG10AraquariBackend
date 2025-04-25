@@ -71,7 +71,8 @@ async function carregarCarregamentos() {
             <td>${carga.datanfe || ""}</td>
             <td>${carga.placa || ""}</td>
             <td>${carga.localizacao || ""}</td>
-            <td>${carga.comentario || ""}</td> <!-- Observação mapeada para comentario -->
+            <td>${carga.status || ""}</td>
+            
             <td>${carga.mercadoria || ""}</td>
             <td>${carga.nfe || ""}</td>
             <td>${carga.cte || ""}</td>
