@@ -8,7 +8,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 import { auth } from "../../../js/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import importManager from "../../../js/loading.js";
 import loadingManager from "../../../js/loading.js";
 
 onAuthStateChanged(auth, (user) => {
@@ -16,6 +15,7 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "/login.html";
   } else {
     console.log("Usuário autenticado:", user.email);
+    carregarCarregamentos();
   }
 });
 
@@ -71,8 +71,7 @@ async function carregarCarregamentos() {
             <td>${carga.datanfe || ""}</td>
             <td>${carga.placa || ""}</td>
             <td>${carga.localizacao || ""}</td>
-            <td>${carga.status || ""}</td>
-            
+            <td>${carga.status || ""}</td>            
             <td>${carga.mercadoria || ""}</td>
             <td>${carga.nfe || ""}</td>
             <td>${carga.cte || ""}</td>
@@ -116,13 +115,19 @@ async function carregarCarregamentos() {
     });
   } catch (error) {
     console.error("Erro ao carregar cargas: ", error);
-    alert("Erro ao carregar cargas");
+    alert("Erro ao carregar cargas: " + error.message);
   } finally {
     loadingManager.hide();
   }
 }
 
 window.editarCarga = (id) => {
+  if (!id) {
+    console.error("ID do carregamento não fornecido!");
+    alert("Erro: ID do carregamento não encontrado.");
+    return;
+  }
+  console.log("Editando carga com ID:", id);
   window.location.href = `cadastro.html?carregamentoId=${id}`;
 };
 
@@ -135,14 +140,13 @@ window.excluirCarga = async (id) => {
       carregarCarregamentos();
     } catch (error) {
       console.error("Erro ao excluir carga: ", error);
-      alert("Erro ao excluir carga");
+      alert("Erro ao excluir carga: " + error.message);
     } finally {
       loadingManager.hide();
     }
   }
 };
 
-// Nova função para alternar o status
 window.toggleStatus = async (id) => {
   try {
     const statusCell = document.querySelector(`td[data-id="${id}"]`);
@@ -162,13 +166,10 @@ window.toggleStatus = async (id) => {
 
   } catch (error) {
     console.error("Erro ao atualizar status: ", error);
-    alert("Erro ao atualizar status");
+    alert("Erro ao atualizar status: " + error.message);
   }
 };
 
-window.addEventListener("load", carregarCarregamentos);
-
-// Função para selecionar/deselecionar todos os checkboxes
 window.toggleSelectAll = () => {
   const selectAllCheckbox = document.getElementById('selectAll');
   const checkboxes = document.querySelectorAll('.row-checkbox');
@@ -177,7 +178,6 @@ window.toggleSelectAll = () => {
   });
 };
 
-// Função para capturar e compartilhar apenas os motoristas selecionados
 window.captureAndShareSelected = async () => {
   try {
     const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
@@ -191,7 +191,7 @@ window.captureAndShareSelected = async () => {
 
     // Cria um clone da tabela original (apenas cabeçalho)
     const originalTable = document.querySelector("table");
-    const clonedTable = originalTable.cloneNode(false); // false para pegar apenas a estrutura
+    const clonedTable = originalTable.cloneNode(false);
     const clonedThead = originalTable.querySelector('thead').cloneNode(true);
     const clonedTbody = document.createElement('tbody');
     clonedTable.appendChild(clonedThead);
@@ -201,13 +201,12 @@ window.captureAndShareSelected = async () => {
     const originalRows = document.querySelectorAll('tbody tr');
     originalRows.forEach(row => {
       const checkbox = row.querySelector('.row-checkbox');
-      // Verifica se é uma linha de dados (tem checkbox) e se está selecionada
       if (checkbox && selectedIds.includes(checkbox.dataset.id)) {
         clonedTbody.appendChild(row.cloneNode(true));
       }
     });
 
-    // Colunas que devem ser mantidas (em ordem)
+    // Colunas que devem ser mantidas
     const columnsToKeep = [
       "Emissão da nfe",
       "Placa",
@@ -250,7 +249,7 @@ window.captureAndShareSelected = async () => {
       });
     });
 
-    // Ajustar nomes dos cabeçalhos conforme necessário
+    // Ajustar nomes dos cabeçalhos
     const finalThs = clonedTable.querySelectorAll("thead th");
     finalThs.forEach(th => {
       const text = th.textContent.trim();
@@ -275,7 +274,6 @@ window.captureAndShareSelected = async () => {
       type: "image/png",
     });
 
-    // Verifica se o navegador suporta o Web Share API
     if (navigator.share) {
       try {
         await navigator.share({
@@ -285,11 +283,9 @@ window.captureAndShareSelected = async () => {
         });
       } catch (error) {
         console.error("Erro ao compartilhar via Web Share API:", error);
-        // Fallback para WhatsApp
         shareViaWhatsApp(canvas.toDataURL());
       }
     } else {
-      // Fallback para WhatsApp direto
       shareViaWhatsApp(canvas.toDataURL());
     }
 
@@ -299,14 +295,11 @@ window.captureAndShareSelected = async () => {
   }
 };
 
-// Função para compartilhar toda a tabela
 window.captureAndShare = async () => {
   try {
-    // Cria um clone da tabela original
     const originalTable = document.querySelector("table");
     const clonedTable = originalTable.cloneNode(true);
 
-    // Colunas que devem ser mantidas
     const columnsToKeep = [
       "Emissão da nfe",
       "Placa",
@@ -318,11 +311,9 @@ window.captureAndShare = async () => {
       "Previsão"
     ];
 
-    // Obter todos os cabeçalhos da tabela clonada
     const clonedThs = clonedTable.querySelectorAll("thead th");
     const columnsToHide = [];
 
-    // Identificar índices das colunas que NÃO estão na lista de colunas para manter
     clonedThs.forEach((th, index) => {
       const columnName = th.textContent.trim();
       if (!columnsToKeep.includes(columnName)) {
@@ -330,17 +321,14 @@ window.captureAndShare = async () => {
       }
     });
 
-    // Ordenar em ordem decrescente para evitar problemas ao remover
     columnsToHide.sort((a, b) => b - a);
 
-    // Remover cabeçalhos das colunas não desejadas
     columnsToHide.forEach(index => {
       if (clonedTable.querySelector("thead tr").cells[index]) {
         clonedTable.querySelector("thead tr").cells[index].remove();
       }
     });
 
-    // Remover células correspondentes nas linhas de dados
     clonedTable.querySelectorAll('tbody tr').forEach(tr => {
       columnsToHide.forEach(index => {
         if (tr.cells[index]) {
@@ -349,7 +337,6 @@ window.captureAndShare = async () => {
       });
     });
 
-    // Ajustar nomes dos cabeçalhos conforme necessário
     const finalThs = clonedTable.querySelectorAll("thead th");
     finalThs.forEach(th => {
       const text = th.textContent.trim();
@@ -358,12 +345,10 @@ window.captureAndShare = async () => {
       }
     });
 
-    // Posiciona o clone fora da tela
     clonedTable.style.position = "absolute";
     clonedTable.style.left = "-9999px";
     document.body.appendChild(clonedTable);
 
-    // Captura a imagem do clone
     const canvas = await html2canvas(clonedTable);
     document.body.removeChild(clonedTable);
 
@@ -374,7 +359,6 @@ window.captureAndShare = async () => {
       type: "image/png",
     });
 
-    // Verifica se o navegador suporta o Web Share API
     if (navigator.share) {
       try {
         await navigator.share({
@@ -384,11 +368,9 @@ window.captureAndShare = async () => {
         });
       } catch (error) {
         console.error("Erro ao compartilhar via Web Share API:", error);
-        // Fallback para WhatsApp
         shareViaWhatsApp(canvas.toDataURL());
       }
     } else {
-      // Fallback para WhatsApp direto
       shareViaWhatsApp(canvas.toDataURL());
     }
   } catch (error) {
@@ -397,19 +379,90 @@ window.captureAndShare = async () => {
   }
 };
 
-// Função para compartilhar via WhatsApp
 function shareViaWhatsApp(imageData) {
-  // Criar um link temporário para download da imagem
   const link = document.createElement('a');
   link.href = imageData;
   link.download = 'monitoramento_cargas.png';
-  
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  
-  // Abrir o WhatsApp Web com uma mensagem padrão
+
   const text = "Relatório de Monitoramento de Cargas";
   const whatsappUrl = `https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`;
   window.open(whatsappUrl, "_blank");
 }
+
+window.captureAndDownload = async () => {
+  try {
+    loadingManager.show();
+    const originalTable = document.querySelector("table");
+    const clonedTable = originalTable.cloneNode(true);
+
+    const columnsToKeep = [
+      "Emissão da nfe",
+      "Placa",
+      "Localização",
+      "Observação",
+      "Mercadoria",
+      "N° da nfe",
+      "N° Conhecimento",
+      "Previsão"
+    ];
+
+    const clonedThs = clonedTable.querySelectorAll("thead th");
+    const columnsToHide = [];
+
+    clonedThs.forEach((th, index) => {
+      const columnName = th.textContent.trim();
+      if (!columnsToKeep.includes(columnName)) {
+        columnsToHide.push(index);
+      }
+    });
+
+    columnsToHide.sort((a, b) => b - a);
+
+    columnsToHide.forEach(index => {
+      if (clonedTable.querySelector("thead tr").cells[index]) {
+        clonedTable.querySelector("thead tr").cells[index].remove();
+      }
+    });
+
+    clonedTable.querySelectorAll('tbody tr').forEach(tr => {
+      columnsToHide.forEach(index => {
+        if (tr.cells[index]) {
+          tr.cells[index].remove();
+        }
+      });
+    });
+
+    const finalThs = clonedTable.querySelectorAll("thead th");
+    finalThs.forEach(th => {
+      const text = th.textContent.trim();
+      if (text === "Previsão") {
+        th.textContent = "Previsão de entrega";
+      }
+    });
+
+    clonedTable.style.position = "absolute";
+    clonedTable.style.left = "-9999px";
+    document.body.appendChild(clonedTable);
+
+    const canvas = await html2canvas(clonedTable);
+    document.body.removeChild(clonedTable);
+
+    const dataUrl = canvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'monitoramento_cargas.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    alert("Imagem baixada com sucesso!");
+  } catch (error) {
+    console.error("Erro ao baixar imagem:", error);
+    alert("Erro ao baixar imagem: " + error.message);
+  } finally {
+    loadingManager.hide();
+  }
+};

@@ -48,7 +48,6 @@ document.getElementById(
 
 async function carregarCarregamentos() {
   try {
-    // Carrega informações do frete específico
     loadingManager.show();
     const freteDoc = await getDoc(doc(db, "fretes", freteId));
     if (freteDoc.exists()) {
@@ -59,6 +58,20 @@ async function carregarCarregamentos() {
       const cabecalhoFretes = tabelaFretes.querySelector("thead");
       tabelaFretes.innerHTML = "";
       tabelaFretes.appendChild(cabecalhoFretes);
+
+      // Calcular o valor de 'marcado' (liberado - saldo)
+      let marcado = "N/A";
+      if (freteData.liberado && freteData.saldo) {
+        // Converter valores formatados para números
+        const liberado = typeof freteData.liberado === "string" 
+          ? parseFormattedNumber(freteData.liberado) 
+          : freteData.liberado;
+        const saldo = typeof freteData.saldo === "string" 
+          ? parseFormattedNumber(freteData.saldo) 
+          : freteData.saldo;
+        const marcadoCalculado = liberado - saldo;
+        marcado = formatNumber(marcadoCalculado); // Formatar para exibição
+      }
 
       // Cria corpo da tabela e adiciona os dados do frete
       const corpoFretes = document.createElement("tbody");
@@ -74,7 +87,7 @@ async function carregarCarregamentos() {
                     <td>${freteData.produto || "N/A"}</td>
                     <td>${freteData.embalagem || "N/A"}</td>
                     <td>${freteData.liberado || "N/A"}</td>
-                    <td>${freteData.marcado || "N/A"}</td>
+                    <td>${marcado}</td> <!-- Usar o valor calculado -->
                     <td>${freteData.saldo || "00.000"}</td>
                     <td>${freteData.frempresa || "N/A"}</td>
                     <td>${freteData.motorista || "N/A"}</td>
@@ -139,7 +152,7 @@ async function carregarCarregamentos() {
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
     alert("Erro ao carregar dados. Verifique o console para mais detalhes.");
-  } finally{
+  } finally {
     loadingManager.hide();
   }
 }
