@@ -163,7 +163,6 @@ window.toggleStatus = async (id) => {
     // Atualizar a célula na interface
     statusCell.textContent = newStatus;
     statusCell.style.backgroundColor = newColor;
-
   } catch (error) {
     console.error("Erro ao atualizar status: ", error);
     alert("Erro ao atualizar status: " + error.message);
@@ -186,10 +185,12 @@ window.captureAndShareSelected = async () => {
       return;
     }
 
+    loadingManager.show();
+
     // Obter os IDs dos itens selecionados
     const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.dataset.id);
 
-    // Cria um clone da tabela original (apenas cabeçalho)
+    // Cria um clone da tabela original (apenas estrutura)
     const originalTable = document.querySelector("table");
     const clonedTable = originalTable.cloneNode(false);
     const clonedThead = originalTable.querySelector('thead').cloneNode(true);
@@ -197,11 +198,11 @@ window.captureAndShareSelected = async () => {
     clonedTable.appendChild(clonedThead);
     clonedTable.appendChild(clonedTbody);
 
-    // Adicionar apenas as linhas selecionadas
+    // Adicionar apenas as linhas selecionadas, excluindo cabeçalhos de cliente
     const originalRows = document.querySelectorAll('tbody tr');
     originalRows.forEach(row => {
       const checkbox = row.querySelector('.row-checkbox');
-      if (checkbox && selectedIds.includes(checkbox.dataset.id)) {
+      if (checkbox && selectedIds.includes(checkbox.dataset.id) && !row.classList.contains('cliente-header')) {
         clonedTbody.appendChild(row.cloneNode(true));
       }
     });
@@ -225,10 +226,13 @@ window.captureAndShareSelected = async () => {
     // Identificar índices das colunas que NÃO estão na lista de colunas para manter
     clonedThs.forEach((th, index) => {
       const columnName = th.textContent.trim();
+      console.log(`Verificando coluna: ${columnName}, manter: ${columnsToKeep.includes(columnName)}`);
       if (!columnsToKeep.includes(columnName)) {
         columnsToHide.push(index);
       }
     });
+
+    console.log("Colunas a ocultar:", columnsToHide);
 
     // Ordenar em ordem decrescente para evitar problemas ao remover
     columnsToHide.sort((a, b) => b - a);
@@ -257,6 +261,9 @@ window.captureAndShareSelected = async () => {
         th.textContent = "Previsão de entrega";
       }
     });
+
+    // Verificar as colunas finais
+    console.log("Colunas finais mantidas:", Array.from(finalThs).map(th => th.textContent.trim()));
 
     // Posiciona o clone fora da tela
     clonedTable.style.position = "absolute";
@@ -288,17 +295,31 @@ window.captureAndShareSelected = async () => {
     } else {
       shareViaWhatsApp(canvas.toDataURL());
     }
-
   } catch (error) {
     console.error("Erro ao capturar ou compartilhar:", error);
     alert("Erro ao compartilhar a imagem: " + error.message);
+  } finally {
+    loadingManager.hide();
   }
 };
 
 window.captureAndShare = async () => {
   try {
+    loadingManager.show();
     const originalTable = document.querySelector("table");
-    const clonedTable = originalTable.cloneNode(true);
+    const clonedTable = originalTable.cloneNode(false);
+    const clonedThead = originalTable.querySelector('thead').cloneNode(true);
+    const clonedTbody = document.createElement('tbody');
+    clonedTable.appendChild(clonedThead);
+    clonedTable.appendChild(clonedTbody);
+
+    // Adicionar apenas linhas de dados, excluindo cabeçalhos de cliente
+    const originalRows = document.querySelectorAll('tbody tr');
+    originalRows.forEach(row => {
+      if (!row.classList.contains('cliente-header')) {
+        clonedTbody.appendChild(row.cloneNode(true));
+      }
+    });
 
     const columnsToKeep = [
       "Emissão da nfe",
@@ -316,20 +337,23 @@ window.captureAndShare = async () => {
 
     clonedThs.forEach((th, index) => {
       const columnName = th.textContent.trim();
+      console.log(`Verificando coluna: ${columnName}, manter: ${columnsToKeep.includes(columnName)}`);
       if (!columnsToKeep.includes(columnName)) {
         columnsToHide.push(index);
       }
     });
 
+    console.log("Colunas a ocultar:", columnsToHide);
+
     columnsToHide.sort((a, b) => b - a);
 
     columnsToHide.forEach(index => {
-      if (clonedTable.querySelector("thead tr").cells[index]) {
-        clonedTable.querySelector("thead tr").cells[index].remove();
+      if (clonedThead.rows[0].cells[index]) {
+        clonedThead.rows[0].cells[index].remove();
       }
     });
 
-    clonedTable.querySelectorAll('tbody tr').forEach(tr => {
+    clonedTbody.querySelectorAll('tr').forEach(tr => {
       columnsToHide.forEach(index => {
         if (tr.cells[index]) {
           tr.cells[index].remove();
@@ -344,6 +368,8 @@ window.captureAndShare = async () => {
         th.textContent = "Previsão de entrega";
       }
     });
+
+    console.log("Colunas finais mantidas:", Array.from(finalThs).map(th => th.textContent.trim()));
 
     clonedTable.style.position = "absolute";
     clonedTable.style.left = "-9999px";
@@ -376,6 +402,8 @@ window.captureAndShare = async () => {
   } catch (error) {
     console.error("Erro ao capturar ou compartilhar:", error);
     alert("Erro ao compartilhar a imagem: " + error.message);
+  } finally {
+    loadingManager.hide();
   }
 };
 
@@ -396,7 +424,19 @@ window.captureAndDownload = async () => {
   try {
     loadingManager.show();
     const originalTable = document.querySelector("table");
-    const clonedTable = originalTable.cloneNode(true);
+    const clonedTable = originalTable.cloneNode(false);
+    const clonedThead = originalTable.querySelector('thead').cloneNode(true);
+    const clonedTbody = document.createElement('tbody');
+    clonedTable.appendChild(clonedThead);
+    clonedTable.appendChild(clonedTbody);
+
+    // Adicionar apenas linhas de dados, excluindo cabeçalhos de cliente
+    const originalRows = document.querySelectorAll('tbody tr');
+    originalRows.forEach(row => {
+      if (!row.classList.contains('cliente-header')) {
+        clonedTbody.appendChild(row.cloneNode(true));
+      }
+    });
 
     const columnsToKeep = [
       "Emissão da nfe",
@@ -414,20 +454,23 @@ window.captureAndDownload = async () => {
 
     clonedThs.forEach((th, index) => {
       const columnName = th.textContent.trim();
+      console.log(`Verificando coluna: ${columnName}, manter: ${columnsToKeep.includes(columnName)}`);
       if (!columnsToKeep.includes(columnName)) {
         columnsToHide.push(index);
       }
     });
 
+    console.log("Colunas a ocultar:", columnsToHide);
+
     columnsToHide.sort((a, b) => b - a);
 
     columnsToHide.forEach(index => {
-      if (clonedTable.querySelector("thead tr").cells[index]) {
-        clonedTable.querySelector("thead tr").cells[index].remove();
+      if (clonedThead.rows[0].cells[index]) {
+        clonedThead.rows[0].cells[index].remove();
       }
     });
 
-    clonedTable.querySelectorAll('tbody tr').forEach(tr => {
+    clonedTbody.querySelectorAll('tr').forEach(tr => {
       columnsToHide.forEach(index => {
         if (tr.cells[index]) {
           tr.cells[index].remove();
@@ -442,6 +485,8 @@ window.captureAndDownload = async () => {
         th.textContent = "Previsão de entrega";
       }
     });
+
+    console.log("Colunas finais mantidas:", Array.from(finalThs).map(th => th.textContent.trim()));
 
     clonedTable.style.position = "absolute";
     clonedTable.style.left = "-9999px";
