@@ -43,6 +43,21 @@ document.querySelectorAll("#valordoFrete, #pedagio").forEach((input) => {
   });
 });
 
+function verificarFreteAntigo(dataString) {
+  if (!dataString || dataString === "N/A") return false;
+  
+  try {
+    const dataFrete = new Date(dataString);
+    const dataAtual = new Date();
+    const diferencaDias = Math.floor((dataAtual - dataFrete) / (1000 * 60 * 60 * 24));
+    
+    return diferencaDias > 30;
+  } catch (error) {
+    console.error("Erro ao verificar idade do frete:", error);
+    return false;
+  }
+}
+
 async function carregarFretes() {
   try {
     loadingManager.show();
@@ -59,9 +74,12 @@ async function carregarFretes() {
         const carregado = parseFloat(frete.carregado) || 0;
         const saldo = liberado - carregado;
         totalSaldo += saldo;
+        
+        const isFreteAntigo = verificarFreteAntigo(frete.data);
+        const estiloLinha = isFreteAntigo ? 'style="background-color:rgb(249, 192, 200);"' : '';
 
       const linha = `
-        <tr class="linha-clicavel" data-frete-id="${doc.id}">
+        <tr class="linha-clicavel" data-frete-id="${doc.id}" ${estiloLinha}>
           <td>${formatarData(frete.data)}</td>
           <td>${frete.cliente}</td>
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
@@ -168,7 +186,7 @@ window.visualizarFrete = async (freteId, event) => {
         (parseFloat(frete.liberado) || 0) - (parseFloat(frete.carregado) || 0);
 
       const popupContent = `
-                <p><strong>Data:</strong> ${formatarData(frete.data)}</p>
+                <p><strong>Data:</strong> ${frete.data}</p>
                 <p><strong>Cliente:</strong> ${frete.cliente}</p>
                 <p><strong>Destino:</strong> ${frete.destino}</p>
                 <P><strong>Troca de NFe: </strong>${frete.destinotroca || "Sem Troca de NFe"}</p>
@@ -246,7 +264,5 @@ function formatarData(dataString) {
     return dataString;
   }
 }
-
-
 
 carregarFretes();
