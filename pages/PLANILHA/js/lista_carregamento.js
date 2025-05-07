@@ -140,7 +140,7 @@ async function carregarCarregamentos() {
           carregamento.cte && 
           carregamento["data-manifesto"];
         
-          const linha = `
+        const linha = `
           <tr class="${isManifestado ? 'manifestado' : ''}">
             <td>${formatarData(carregamento.dataoc) || "N/A"}</td>
             <td>${carregamento.placa || "N/A"}</td>
@@ -156,7 +156,7 @@ async function carregarCarregamentos() {
             <td>${formatarData(carregamento["data-entrega"]) || "N/A"}</td>
             <td>${carregamento.nfe || "N/A"}</td>
             <td>${carregamento.observacao || "N/A"}</td>
-            <td>${carregamento.telefone || "N/A"}</td>
+            <td>${formatarTelefoneWhatsApp(carregamento.telefone)}</td>
             <td class="acoes">
               <button class="btn-editar" onclick="editarCarregamento('${
                 carregamento.id
@@ -176,6 +176,57 @@ async function carregarCarregamentos() {
   } finally {
     loadingManager.hide();
   }
+}
+
+// Função para formatar datas para o padrão brasileiro (dd/MM/yy)
+function formatarData(dataString) {
+  if (!dataString || dataString === "N/A") return "N/A";
+  
+  try {
+    // Verifica se a data já está no formato brasileiro
+    if (/^\d{2}\/\d{2}\/\d{2,4}$/.test(dataString)) {
+      return dataString;
+    }
+    
+    // Converte a string para um objeto Date
+    const data = new Date(dataString);
+    
+    // Verifica se a data é válida
+    if (isNaN(data.getTime())) return dataString;
+    
+    // Formata para dd/MM/yy
+    const dia = data.getDate().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear().toString().slice(-2);
+    
+    return `${dia}/${mes}/${ano}`;
+  } catch (error) {
+    console.error("Erro ao formatar data:", error);
+    return dataString;
+  }
+}
+
+// Função para formatar número de telefone como link do WhatsApp com mensagem predefinida
+function formatarTelefoneWhatsApp(telefone) {
+  if (!telefone || telefone === "N/A") return "N/A";
+  
+  // Remove caracteres não numéricos
+  const numeroLimpo = telefone.replace(/\D/g, '');
+  
+  // Verifica se o número tem pelo menos 8 dígitos
+  if (numeroLimpo.length < 8) return telefone;
+  
+  // Adiciona o código do país (55 para Brasil) se não estiver presente
+  let numeroCompleto = numeroLimpo;
+  if (!numeroLimpo.startsWith('55') && numeroLimpo.length <= 11) {
+    numeroCompleto = '55' + numeroLimpo;
+  }
+  
+  // Mensagem predefinida (deve ser codificada para URL)
+  const mensagem = encodeURIComponent("Olá! Estou entrando em contato através do sistema de gerenciamento de fretes.");
+  
+  // Cria o link do WhatsApp com a mensagem
+  return `<a href="https://wa.me/${numeroCompleto}?text=${mensagem}" target="_blank" class="whatsapp-link">${telefone}</a>`;
 }
 
 window.editarCarregamento = (carregamentoId) => {
@@ -304,34 +355,6 @@ window.captureAndDownload = async () => {
     alert("Falha ao gerar imagem")
   }
 };
-
-// Função para formatar a data
-function formatarData(dataString) {
-  if (!dataString || dataString === "N/A") return "N/A";
-  
-  try {
-    // Verifica se a data já está no formato brasileiro
-    if (/^\d{2}\/\d{2}\/\d{2,4}$/.test(dataString)) {
-      return dataString;
-    }
-    
-    // Converte a string para um objeto Date
-    const data = new Date(dataString);
-    
-    // Verifica se a data é válida
-    if (isNaN(data.getTime())) return dataString;
-    
-    // Formata para dd/MM/yy
-    const dia = data.getDate().toString().padStart(2, '0');
-    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
-    const ano = data.getFullYear().toString().slice(-2);
-    
-    return `${dia}/${mes}/${ano}`;
-  } catch (error) {
-    console.error("Erro ao formatar data:", error);
-    return dataString;
-  }
-}
 
 // Carrega os carregamentos quando a página é aberta
 carregarCarregamentos();

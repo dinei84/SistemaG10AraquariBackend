@@ -122,3 +122,16 @@ tr:hover {
 .manifestado:hover {
     background-color: #ffe066 !important; /* Amarelo um pouco mais escuro no hover */
 }
+
+/* Estilo para links do WhatsApp */
+.whatsapp-link {
+    color: #25D366;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.whatsapp-link:hover {
+    color: #128C7E;
+    text-decoration: underline;
+}
