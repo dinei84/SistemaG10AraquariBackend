@@ -28,6 +28,8 @@ function getSaudacao() {
   return "Boa noite";
 }
 
+
+
 async function carregarCarregamentos() {
   try {
     loadingManager.show();
@@ -420,6 +422,7 @@ function shareViaWhatsApp(imageData) {
   window.open(whatsappUrl, "_blank");
 }
 
+
 window.captureAndDownload = async () => {
   try {
     loadingManager.show();
@@ -511,3 +514,4 @@ window.captureAndDownload = async () => {
     loadingManager.hide();
   }
 };
+
