@@ -63,11 +63,11 @@ async function carregarCarregamentos() {
       let marcado = "N/A";
       if (freteData.liberado && freteData.saldo) {
         // Converter valores formatados para números
-        const liberado = typeof freteData.liberado === "string" 
-          ? parseFormattedNumber(freteData.liberado) 
+        const liberado = typeof freteData.liberado === "string"
+          ? parseFormattedNumber(freteData.liberado)
           : freteData.liberado;
-        const saldo = typeof freteData.saldo === "string" 
-          ? parseFormattedNumber(freteData.saldo) 
+        const saldo = typeof freteData.saldo === "string"
+          ? parseFormattedNumber(freteData.saldo)
           : freteData.saldo;
         const marcadoCalculado = liberado - saldo;
         marcado = formatNumber(marcadoCalculado); // Formatar para exibição
@@ -118,34 +118,55 @@ async function carregarCarregamentos() {
       corpoTabelaCarregamentos.innerHTML =
         "Ainda nenhum Carregamento cadastrado para este Frete.";
     } else {
+      // Converter para array para poder ordenar
+      const carregamentos = [];
       querySnapshot.forEach((doc) => {
-        const carregamento = doc.data();
-        const linha = `
-                    <tr>
-                        <td>${carregamento.dataoc || "N/A"}</td>
-                        <td>${carregamento.placa || "N/A"}</td>
-                        <td>${carregamento.motorista || "N/A"}</td>
-                        <td>${carregamento["tipo-veiculo"] || "N/A"}</td>
-                        <td>${formatNumber(
-                          carregamento["peso-carregado"] || "N/A"
-                        )}</td>
-                        <td>${carregamento.fretemotorista || "N/A"}</td>
-                        <td>${carregamento.emissor || "N/A"}</td>
-                        <td>${carregamento["data-manifesto"] || "N/A"}</td>
-                        <td>${carregamento.cte || "N/A"}</td>
-                        <td>${carregamento["data-entrega"] || "N/A"}</td>
-                        <td>${carregamento.nfe || "N/A"}</td>
-                        <td>${carregamento.observacao || "N/A"}</td>
-                        <td class="acoes">
-                            <button class="btn-editar" onclick="editarCarregamento('${
-                              doc.id
-                            }')">Editar</button>
-                            <button class="btn-excluir" onclick="excluirCarregamento('${
-                              doc.id
-                            }')">Excluir</button>
-                        </td>
-                    </tr>
-                `;
+        carregamentos.push({
+          id: doc.id,
+          ...doc.data(),
+          // Adicionar timestamp para ordenação (se não existir, usar Date.now())
+          timestamp: doc.data().timestamp || Date.now()
+        });
+      });
+
+      // Ordenar por timestamp decrescente (mais recente primeiro)
+      carregamentos.sort((a, b) => b.timestamp - a.timestamp);
+
+      // Renderizar os carregamentos ordenados
+      carregamentos.forEach((carregamento) => {
+        // Verificar se tem NFe, CTe e data do manifesto preenchidos
+        const isManifestado = 
+          carregamento.nfe && 
+          carregamento.cte && 
+          carregamento["data-manifesto"];
+        
+          const linha = `
+          <tr class="${isManifestado ? 'manifestado' : ''}">
+            <td>${formatarData(carregamento.dataoc) || "N/A"}</td>
+            <td>${carregamento.placa || "N/A"}</td>
+            <td>${carregamento.motorista || "N/A"}</td>
+            <td>${carregamento["tipo-veiculo"] || "N/A"}</td>
+            <td>${formatNumber(
+              carregamento["peso-carregado"] || "N/A"
+            )}</td>
+            <td>${carregamento.fretemotorista || "N/A"}</td>
+            <td>${carregamento.emissor || "N/A"}</td>
+            <td>${formatarData(carregamento["data-manifesto"]) || "N/A"}</td>
+            <td>${carregamento.cte || "N/A"}</td>
+            <td>${formatarData(carregamento["data-entrega"]) || "N/A"}</td>
+            <td>${carregamento.nfe || "N/A"}</td>
+            <td>${carregamento.observacao || "N/A"}</td>
+            <td>${carregamento.telefone || "N/A"}</td>
+            <td class="acoes">
+              <button class="btn-editar" onclick="editarCarregamento('${
+                carregamento.id
+              }')">Editar</button>
+              <button class="btn-excluir" onclick="excluirCarregamento('${
+                carregamento.id
+              }')">Excluir</button>
+            </td>
+          </tr>
+        `;
         corpoTabelaCarregamentos.innerHTML += linha;
       });
     }
@@ -230,7 +251,7 @@ window.captureAndDownload = async () => {
       year: 'numeric'
     }).replace(/\//g, '-');
 
-    // Elementos a serem ocultados 
+    // Elementos a serem ocultados
     const elementsToHide = [
       document.getElementById('btnNovoCarregamento'),
       document.getElementById('btn-voltar-fretes'),
@@ -275,7 +296,7 @@ window.captureAndDownload = async () => {
     elementsToHide.forEach((e)=>{
       if(e) e.classList.remove("hide-for-print");
     });
-    
+   
     alert("Imagem gerada com sucesso!");
 
   } catch (error) {
@@ -283,7 +304,34 @@ window.captureAndDownload = async () => {
     alert("Falha ao gerar imagem")
   }
 };
+
+// Função para formatar a data
+function formatarData(dataString) {
+  if (!dataString || dataString === "N/A") return "N/A";
   
+  try {
+    // Verifica se a data já está no formato brasileiro
+    if (/^\d{2}\/\d{2}\/\d{2,4}$/.test(dataString)) {
+      return dataString;
+    }
+    
+    // Converte a string para um objeto Date
+    const data = new Date(dataString);
+    
+    // Verifica se a data é válida
+    if (isNaN(data.getTime())) return dataString;
+    
+    // Formata para dd/MM/yy
+    const dia = data.getDate().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear().toString().slice(-2);
+    
+    return `${dia}/${mes}/${ano}`;
+  } catch (error) {
+    console.error("Erro ao formatar data:", error);
+    return dataString;
+  }
+}
 
 // Carrega os carregamentos quando a página é aberta
 carregarCarregamentos();

@@ -9,7 +9,7 @@ body {
 .container {
     max-width: 98%;
     margin: 0 auto;
-    padding-left: 50px; 
+    padding-left: 50px;
     margin-top: 20px;
 }
 
@@ -29,7 +29,7 @@ h1 {
     margin-bottom: 20px;
     text-decoration: none;
     display: inline-block;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
 .btn-novo-carregamento {
@@ -44,11 +44,11 @@ h1 {
 
 /* Table styles */
 table {
-    width: 95%; 
+    width: 95%;
     border-collapse: collapse;
     background-color: white;
     box-shadow: 0 0 15px rgba(86, 14, 36, 0.1);
-    margin: 0 auto; 
+    margin: 0 auto;
     margin-bottom: 20px;
 }
 
@@ -111,4 +111,14 @@ tr:hover {
         overflow-x: auto;
         padding-bottom: 20px;
     }
+}
+
+/* Estilo para carregamentos manifestados */
+.manifestado {
+    background-color: #fff2b2 !important; /* Amarelo claro */
+}
+
+/* Garantir que o hover não sobreponha a cor de fundo dos manifestados */
+.manifestado:hover {
+    background-color: #ffe066 !important; /* Amarelo um pouco mais escuro no hover */
 }
