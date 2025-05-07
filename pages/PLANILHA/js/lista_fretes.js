@@ -62,7 +62,7 @@ async function carregarFretes() {
 
       const linha = `
         <tr class="linha-clicavel" data-frete-id="${doc.id}">
-          <td>${frete.data}</td>
+          <td>${formatarData(frete.data)}</td>
           <td>${frete.cliente}</td>
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
           <td>${frete.pedido}</td>
@@ -168,7 +168,7 @@ window.visualizarFrete = async (freteId, event) => {
         (parseFloat(frete.liberado) || 0) - (parseFloat(frete.carregado) || 0);
 
       const popupContent = `
-                <p><strong>Data:</strong> ${frete.data}</p>
+                <p><strong>Data:</strong> ${formatarData(frete.data)}</p>
                 <p><strong>Cliente:</strong> ${frete.cliente}</p>
                 <p><strong>Destino:</strong> ${frete.destino}</p>
                 <P><strong>Troca de NFe: </strong>${frete.destinotroca || "Sem Troca de NFe"}</p>
@@ -218,5 +218,35 @@ document.getElementById("fretePopup").addEventListener("click", (e) => {
     fecharPopup();
   }
 });
+
+// Função para formatar a data
+function formatarData(dataString) {
+  if (!dataString || dataString === "N/A") return "N/A";
+  
+  try {
+    // Verifica se a data já está no formato brasileiro
+    if (/^\d{2}\/\d{2}\/\d{2,4}$/.test(dataString)) {
+      return dataString;
+    }
+    
+    // Converte a string para um objeto Date
+    const data = new Date(dataString);
+    
+    // Verifica se a data é válida
+    if (isNaN(data.getTime())) return dataString;
+    
+    // Formata para dd/MM/yy
+    const dia = data.getDate().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear().toString().slice(-2);
+    
+    return `${dia}/${mes}/${ano}`;
+  } catch (error) {
+    console.error("Erro ao formatar data:", error);
+    return dataString;
+  }
+}
+
+
 
 carregarFretes();
