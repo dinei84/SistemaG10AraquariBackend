@@ -381,3 +381,30 @@ tr:hover {
     min-width: 70px;
 }
 }
+
+.btn-compartilhar {
+    background-color: #25D366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.btn-compartilhar:hover {
+    background-color: #128C7E;
+}
+
+.popup-content {
+    max-width: 500px;
+    width: 90%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+}

@@ -201,15 +201,13 @@ window.visualizarFrete = async (freteId, event) => {
                 <p><strong>Valor do Frete:</strong> ${
                   frete.frempresa || "00,00"
                 }</p>
-                <p><strong>Frete Motorista:</strong> ${
-                  frete.motorista || "00,00"
-                }</p>
                 <p><strong>Localização:</strong> ${
                   frete.localizacao || "Nenhuma"
                 }</p>
                 <p><strong>Observações:</strong> ${
                   frete.observacao || "Nenhuma"
                 }</p>
+                <button class="btn-compartilhar" onclick="compartilharFrete('${freteId}')">Compartilhar via WhatsApp</button>
             `;
 
       document.getElementById("popupBody").innerHTML = popupContent;
@@ -218,6 +216,40 @@ window.visualizarFrete = async (freteId, event) => {
   } catch (error) {
     console.error("Erro ao carregar frete:", error);
     alert("Erro ao carregar detalhes do frete");
+  } finally {
+    loadingManager.hide();
+  }
+};
+
+window.compartilharFrete = async (freteId) => {
+  try {
+    loadingManager.show();
+    const docRef = doc(db, "fretes", freteId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const frete = docSnap.data();
+      const saldo = (parseFloat(frete.liberado) || 0) - (parseFloat(frete.carregado) || 0);
+
+      const mensagem = `*Informações do Frete*\n\n` +
+        `📅 Data: ${frete.data}\n` +
+        `👤 Cliente: ${frete.cliente}\n` +
+        `📍 Destino: ${frete.destino}\n` +
+        `📝 Troca de NFe: ${frete.destinotroca || "Sem Troca de NFe"}\n` +
+        `🔢 Pedido: ${frete.pedido}\n` +
+        `⚖️ Liberado: ${parseFloat(frete.liberado).toFixed(2)} Ton\n` +
+        `🚛 Carregado: ${parseFloat(frete.carregado).toFixed(2)} Ton\n` +
+        `📊 Saldo: ${saldo.toFixed(2)} Ton\n` +
+        `💰 Valor do Frete: ${frete.frempresa || "00,00"}\n` +
+        `📍 Localização: ${frete.localizacao || "Nenhuma"}\n` +
+        `📌 Observações: ${frete.observacao || "Nenhuma"}`;
+
+      const mensagemCodificada = encodeURIComponent(mensagem);
+      window.open(`https://wa.me/?text=${mensagemCodificada}`, '_blank');
+    }
+  } catch (error) {
+    console.error("Erro ao compartilhar frete:", error);
+    alert("Erro ao compartilhar informações do frete");
   } finally {
     loadingManager.hide();
   }
