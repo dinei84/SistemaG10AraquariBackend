@@ -36,21 +36,24 @@
         /* Definição da animação com pausa */
         @keyframes rowRotate {
             0% {
-                transform: rotateX(0deg);
+                transform: translateY(0);
+                opacity: 1;
             }
-
+            5% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            10% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
             15% {
-                transform: rotateX(180deg);
+                transform: translateY(0);
+                opacity: 1;
             }
-
-            30% {
-                transform: rotateX(360deg);
-            }
-
-            /* Estado de pausa de 30% até 100% */
-            30%,
             100% {
-                transform: rotateX(360deg);
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
@@ -58,7 +61,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            perspective: 1000px;
         }
 
         th,
@@ -80,96 +82,15 @@
         tbody tr {
             background-color: #f9f2f4;
             color: #495057;
-            transform-style: preserve-3d;
-            backface-visibility: visible;
-            animation: rowRotate 5.0s infinite;
-            animation-timing-function: ease-in-out;
+            transition: all 0.3s ease;
         }
 
-        /* Delays em cascata para cada linha */
-        tbody tr:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        tbody tr:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        tbody tr:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        tbody tr:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        tbody tr:nth-child(5) {
-            animation-delay: 0.5s;
-        }
-
-        tbody tr:nth-child(6) {
-            animation-delay: 0.6s;
-        }
-
-        tbody tr:nth-child(7) {
-            animation-delay: 0.7s;
-        }
-
-        tbody tr:nth-child(8) {
-            animation-delay: 0.8s;
-        }
-
-        tbody tr:nth-child(9) {
-            animation-delay: 0.9s;
-        }
-
-        tbody tr:nth-child(10) {
-            animation-delay: 1.0s;
-        }
-
-        tbody tr:nth-child(11) {
-            animation-delay: 1.1s;
-        }
-
-        tbody tr:nth-child(12) {
-            animation-delay: 1.2s;
-        }
-
-        tbody tr:nth-child(13) {
-            animation-delay: 1.3s;
-        }
-
-        tbody tr:nth-child(14) {
-            animation-delay: 1.4s;
-        }
-
-        tbody tr:nth-child(15) {
-            animation-delay: 1.5s;
-        }
-
-        tbody tr:nth-child(16) {
-            animation-delay: 1.6s;
-        }
-
-        tbody tr:nth-child(17) {
-            animation-delay: 1.7s;
-        }
-
-        tbody tr:nth-child(18) {
-            animation-delay: 1.8s;
-        }
-
-        tbody tr:nth-child(19) {
-            animation-delay: 1.9s;
-        }
-
-        tbody tr:nth-child(20) {
-            animation-delay: 2.0s;
+        tbody tr.animating {
+            animation: rowRotate 1s ease-in-out;
         }
 
         tbody tr:hover {
             background-color: #f5f5f5;
-            animation-play-state: paused;
         }
 
         .btn-primary,
@@ -274,6 +195,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         const fretesOriginal = JSON.parse(localStorage.getItem('fretes')) || [];
+        let animationTimeout;
 
         function renderFretes(fretes) {
             const tbody = document.getElementById('listaFretes');
@@ -297,6 +219,31 @@
             });
         }
 
+        function animateRows() {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+                setTimeout(() => {
+                    row.classList.add('animating');
+                    setTimeout(() => {
+                        row.classList.remove('animating');
+                    }, 1000);
+                }, index * 100);
+            });
+        }
+
+        function startAnimationCycle() {
+            // Limpa qualquer timeout existente
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+            }
+
+            // Inicia a animação
+            animateRows();
+
+            // Agenda a próxima animação em 1 minuto
+            animationTimeout = setTimeout(startAnimationCycle, 60000);
+        }
+
         function editarFrete(id) {
             window.location.href = `index1.html?edit=${id}`;
         }
@@ -316,12 +263,10 @@
                 useCORS: true,
                 logging: false,
                 onclone: function (clonedDoc) {
-                    // Remover coluna de ações e botões
                     clonedDoc.querySelectorAll('.acoes-column, .botoes-acao').forEach(el => {
                         el.style.display = 'none';
                     });
 
-                    // Aplicar estilos para fundo na imagem exportada
                     const style = clonedDoc.createElement('style');
                     style.textContent = `
                         .container {
@@ -352,7 +297,9 @@
             });
         }
 
+        // Inicializa a renderização e o ciclo de animação
         renderFretes(fretesOriginal);
+        startAnimationCycle();
     </script>
 </body>
 
