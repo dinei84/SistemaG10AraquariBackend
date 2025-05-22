@@ -1,0 +1,458 @@
+/* Estilos Globais (global.css) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+/* Nota: Você importou 'Roboto', mas usou 'Lato' no body. Ajuste font-family abaixo se 'Roboto' for o desejado. */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Lato", sans-serif; /* Ou "Roboto", sans-serif se preferir */
+    background-image: url(../../../assets/g10ok.jpeg); /* ATENÇÃO: Verifique este caminho! */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.562);
+    background-blend-mode: lighten;
+}
+
+/* Estilos do Cabeçalho (header.css) */
+header {
+    margin-top: 30px;
+    display: flex;
+    min-height: 226px; 
+    border-top: 12px solid rgb(116, 27, 58);
+    border-bottom: 12px solid rgb(116, 27, 58);
+    padding: 10px 0; 
+    align-items: center; 
+}
+
+header .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    margin-right: 20px; 
+    padding-left: 75px; 
+}
+
+header .logo img {
+    width: 280px;
+    height: 107px;
+    margin-bottom: 20px; 
+}
+
+header .logo h2 { 
+    max-width: 485px;
+    font-size: 27px;
+    font-weight: bold; 
+}
+
+header .info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+    padding-top: 10px; 
+    align-items: center; 
+}
+
+header .info h3 { 
+    text-align: center;
+    font-size: 1em; 
+    line-height: 1.4; 
+    margin-bottom: 15px; 
+}
+
+header .number { 
+    max-width: 100%;
+    background-color: rgba(170, 166, 166, 0.442);
+    text-align: center;
+    padding: 10px; 
+    border-radius: 5px; 
+}
+
+header .number input[type="number"] {
+    height: 38px;
+    border: none;
+    background-color: transparent; /* Para herdar do .number ou ser transparente */
+    font-size: 41px;
+    text-align: center;
+    color: red;
+    width: auto; 
+    max-width: 200px; 
+    -moz-appearance: textfield; 
+}
+header .number input[type="number"]::-webkit-outer-spin-button,
+header .number input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; 
+}
+
+
+/* Estilos da Seção Principal (section.css) */
+section {
+    max-width: 1200px; 
+    margin: 20px auto; 
+    padding: 0 15px; 
+}
+
+.blk1, .blk2, .blk3 {
+    display: flex;
+    width: 100%;
+    margin-bottom: 5px;
+    margin-top: 3px;
+    align-items: stretch; 
+}
+
+/* Para a div interna que contém os campos (ex: dentro de .blk3.stretched) */
+.stretched > div { 
+    display: flex;
+    flex-wrap: wrap; 
+    align-items: stretch; 
+    flex-grow: 1;
+}
+/* Espaçamento entre os campos dentro de .stretched > div */
+.stretched > div > .content1,
+.stretched > div > .content2 {
+    margin-bottom: 5px; /* Adiciona espaço inferior se quebrar linha */
+}
+.stretched > div > .content1:not(:last-child),
+.stretched > div > .content2:not(:last-child) {
+    margin-right: 5px; /* Adiciona espaço à direita, exceto no último item da linha */
+}
+
+
+.title {
+    width: 22%; 
+    text-align: right;
+    padding-right: 10px;
+    font-weight: bold; 
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; 
+}
+.title p {
+    margin: 0; 
+}
+
+
+.content, .content1, .content2 {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(170, 166, 166, 0.442);
+    padding: 5px 8px; 
+    box-sizing: border-box;
+    border-radius: 5px;
+    word-wrap: break-word; 
+    overflow: hidden;
+    min-height: 30px; 
+    /* margin-left: 5px;  Removido para controle mais granular */
+}
+
+/* Adiciona margem à esquerda para content/content1/content2 que não são o primeiro filho direto após um .title ou em um container de múltiplos campos */
+.blk1 > .content, 
+.blk2 > div > .content1, .blk2 > div > .content2,
+.blk3 > div > .content1, .blk3 > div > .content2 {
+    margin-left: 5px;
+}
+/* Remove a margem esquerda do primeiro item em um container de múltiplos campos se ele já tem um .title antes */
+.title + div > .content1:first-child,
+.title + div > .content2:first-child {
+    margin-left: 0;
+}
+/* Adiciona margem entre itens irmãos em containers de múltiplos campos */
+.blk2 > div > .content1 + .content1, 
+.blk2 > div > .content1 + .content2,
+.blk2 > div > .content2 + .content2,
+.blk3:not(.stretched) > div > .content1 + .content2 { /* Para blk3 não stretched */
+    margin-left: 5px;
+}
+
+
+.content span, .content1 span, .content2 span {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+}
+
+.separacao {
+    border-bottom: 12px solid rgb(116, 27, 58);
+    max-width: 1200px; 
+    margin: 20px auto; 
+}
+
+/* Estilos do Artigo (article.css) */
+article {
+    display: flex;
+    flex-direction: column;
+    text-align: justify; 
+    max-width: 1200px; 
+    margin: 20px auto; 
+    padding: 0 15px; 
+}
+
+.autorizacao {
+    margin-top: 15px;
+    text-align: center; 
+}
+
+.autorizacao p {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.declaracao {
+    margin-top: 13px;
+    font-size: 16px; 
+    line-height: 1.5; 
+}
+.declaracao p {
+    font-size: 16px; /* Mantido 16px conforme original */
+}
+
+
+.validade {
+    margin-top: 10px;
+    text-align: center; 
+}
+
+.validade h2 {
+    font-size: 17px;
+    font-weight: bold; 
+}
+
+/* Estilos para Assinaturas e QR Code (aside.css) */
+aside.assinatura, aside.qrcode {
+    display: flex;
+    justify-content: space-around; 
+    align-items: flex-start; 
+    width: 100%;
+    max-width: 1200px; 
+    margin: 20px auto; 
+    padding: 0 15px; 
+}
+
+aside.assinatura .box, aside.qrcode .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1; 
+    margin: 10px; 
+    text-align: center; 
+}
+
+aside.assinatura .box p {
+    margin: 10px 0; 
+}
+
+aside.qrcode .box img { 
+    width: 100px; 
+    height: 100px; 
+    margin-bottom: 5px; 
+}
+
+/* Botões de Imprimir e Voltar */
+.imprimir, .voltar {
+    display: flex;
+    justify-content: center; 
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 0 15px;
+}
+.voltar {
+    margin-bottom: 30px; 
+}
+
+button, .button { 
+    width: auto; 
+    min-width: 90px; 
+    height: 40px;
+    padding: 0 15px; 
+    border-radius: 8px;
+    background-color: rgb(116, 27, 58);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em; 
+    transition: background-color 0.3s ease;
+    text-align: center;
+    line-height: 40px; 
+}
+.button a { 
+    text-decoration: none;
+    color: white;
+    display: block; 
+    line-height: inherit; 
+}
+
+button:hover, .button:hover {
+    background-color: #4e2639; 
+}
+
+/* Estilos para Impressão */
+@media print {
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-image: none !important; 
+        background-color: #fff !important; 
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+        font-size: 10pt; 
+    }
+
+    header, section, article, aside, .separacao {
+        max-width: 100% !important;
+        margin: 10px 0 !important;
+        padding: 0 !important;
+        border-color: #333 !important; 
+    }
+    header {
+        border-width: 6px !important; 
+    }
+    .separacao {
+        border-width: 6px !important;
+    }
+
+    header .logo img { 
+        width: 200px;
+        height: auto;
+    }
+     header .logo h2 {
+        font-size: 20px;
+    }
+    header .info h3 {
+        font-size: 0.9em;
+    }
+    header .number input[type="number"] {
+        font-size: 24px;
+        color: black !important; 
+        background-color: #f0f0f0 !important; 
+    }
+
+    .content, .content1, .content2 {
+        background-color: #f0f0f0 !important; 
+        border: 1px solid #ccc !important; 
+        color: black !important;
+    }
+    .content span, .content1 span, .content2 span {
+         font-size: 10pt !important;
+         color: black !important;
+    }
+
+    .title p {
+        font-size: 10pt !important;
+    }
+
+    .autorizacao p { font-size: 12pt !important; }
+    .declaracao p { font-size: 9pt !important; line-height: 1.3; }
+    .validade h2 { font-size: 12pt !important; }
+
+    aside.assinatura .box p { font-size: 9pt !important; }
+    aside.qrcode .box img {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    button, .button, .imprimir, .voltar, #imprimir, .voltar > a > button {
+        display: none !important; 
+    }
+
+    html, body {
+        height: auto;
+    }
+}
+
+
+/* ---- Form Styles (from global.css) ---- */
+/* Estes estilos são para um elemento #form que NÃO está no HTML da ordem de carregamento. */
+/* Se for para outra página, considere um CSS separado. */
+
+#form {
+    margin-top: 150px; 
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* A estilização original do body para centralizar este form conflitava com o body principal. */
+    /* Exemplo: body { display: flex; justify-content: center; align-items: center; height: 100%; background-color: #f4f4f4; } */
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.order-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input { 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.submit-btn, .limpar { 
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: white;
+    border: none;
+}
+
+.submit-btn {
+    background-color: #007BFF; 
+}
+
+.submit-btn:hover {
+    background-color: #0056b3; 
+}
+
+.limpar {
+    background-color: #743b58; 
+    margin-top: 15px; 
+}
+
+.limpar:hover {
+    background-color: #4e2639; 
+}
+
+/* Responsivo para o formulário */
+@media (max-width: 600px) {
+    #form {
+        padding: 15px;
+    }
+    .order-form {
+        grid-template-columns: 1fr;
+    }
+    .form-group input {
+        font-size: 14px;
+    }
+    .submit-btn, .limpar {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

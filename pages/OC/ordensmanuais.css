@@ -92,3 +92,48 @@ h1{
         margin-bottom: 20px;
     }
 }
+
+/* Estilos para a lista de ordens */
+.lista-ordens {
+    margin-top: 60px;
+    width: 350px;
+    background-color: var(--quintenary-color);
+    border-radius: 15px;
+    padding: 20px;
+    flex: 1;
+}
+
+.lista-ordens h1 {
+    color: var(--quaternary-color);
+    margin-bottom: 20px;
+}
+
+.ordens-lista {
+    list-style-position: inside;
+    padding: 0;
+    margin: 0;
+}
+
+.ordens-lista li {
+    margin-bottom: 15px;
+    color: var(--quaternary-color);
+}
+
+.ordens-lista a {
+    color: var(--quaternary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.ordens-lista a:hover {
+    color: #ffd700;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .lista-ordens {
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 20px;
+    }
+}
