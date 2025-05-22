@@ -74,6 +74,13 @@ async function carregarFretes() {
         const carregado = parseFloat(frete.carregado) || 0;
         const saldo = liberado - carregado;
         totalSaldo += saldo;
+
+        // VERIFICA SE O CLIENTE É OUROFERTIL PARA ADICIONAR O BOTÃO
+        let botaoOrdem = '';
+        console.log('Nome do cliente:', frete.cliente.toLowerCase());
+        if (frete.cliente.toLowerCase().includes('ourofertil nordeste')) {
+            botaoOrdem = `<button class="btn-gerar-ordem" onclick="gerarOrdemCarregamento('${doc.id}', event)">Gerar Ordem</button>`;
+        }
         
         const isFreteAntigo = verificarFreteAntigo(frete.data);
         const estiloLinha = isFreteAntigo ? 'style="background-color:rgb(249, 192, 200);"' : '';
@@ -93,6 +100,7 @@ async function carregarFretes() {
             <button class="btn-editar" onclick="editarFrete('${doc.id}', event)">Editar</button>
             <button class="btn-excluir" onclick="excluirFrete('${doc.id}', event)">Excluir</button>            
             <button class="btn-carregamento" onclick="listarCarregamentos('${doc.id}', event)">Carregamentos</button>
+            ${botaoOrdem}
           </td>
         </tr>
       `;
@@ -188,6 +196,10 @@ window.visualizarFrete = async (freteId, event) => {
       const popupContent = `
                 <p><strong>Data:</strong> ${frete.data}</p>
                 <p><strong>Cliente:</strong> ${frete.cliente}</p>
+                <p><strong>Representante:</strong> ${frete.representante}</p>
+                <p><strong>CNPJ:</strong> ${frete.cnpj}</p>
+                <p><strong>IE:</strong> ${frete.ie}</p>
+                <p><strong>Telefone:</strong> ${frete.telefone}</p>
                 <p><strong>Destino:</strong> ${frete.destino}</p>
                 <P><strong>Troca de NFe: </strong>${frete.destinotroca || "Sem Troca de NFe"}</p>
                 <p><strong>Pedido:</strong> ${frete.pedido}</p>                
@@ -296,5 +308,84 @@ function formatarData(dataString) {
     return dataString;
   }
 }
+
+window.gerarOrdemCarregamento = async (freteId, event) => {
+    event.stopPropagation(); // Impede que o clique na linha seja acionado
+    loadingManager.show();
+
+    try {
+        // 1. Obter os dados do frete específico do Firestore
+        const docRef = doc(db, "fretes", freteId);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            throw new Error("Frete não encontrado!");
+        }
+        const freteData = docSnap.data();
+
+        // 2. Carregar o arquivo de template .docx
+        console.log('Tentando carregar o template...');
+        const response = await fetch('./downloads/ourofertil.docx');
+        console.log('Status da resposta:', response.status);
+        if (!response.ok) {
+            console.error('Erro ao carregar template:', response.statusText);
+            throw new Error("Template da ordem de carregamento não encontrado. Verifique o caminho do arquivo.");
+        }
+        const templateContent = await response.arrayBuffer();
+
+        // 3. Usar PizZip e Docxtemplater
+        const zip = new PizZip(templateContent);
+        const docx = new docxtemplater(zip, {
+            paragraphLoop: true,
+            linebreaks: true,
+        });
+
+        // 4. Mapear os dados do frete para as tags do template
+        console.log('Dados do frete:', freteData);
+        const templateData = {
+            representante: freteData.representante || 'N/A',
+            destinatario: freteData.destinatario || 'N/A',
+            cnpj: freteData.cnpj || 'N/A',
+            ie: freteData.ie || 'N/A',
+            cidade: freteData.destino || 'N/A',
+            telefone: freteData.telefone || 'N/A',
+            pedido: freteData.pedido || 'N/A'
+        };
+        console.log('Dados que serão usados no template:', {
+          representante: freteData.representante,
+          cliente: freteData.cliente,
+          cnpj: freteData.cnpj,
+          ie: freteData.ie,
+          cidade: freteData.destino,
+          telefone: freteData.telefone,
+          pedido: freteData.pedido
+      });
+        
+        try {
+            docx.render(templateData);
+        } catch (error) {
+            console.error('Erro ao renderizar o template:', error);
+            if (error.properties && error.properties.errors) {
+                console.error('Erros específicos:', error.properties.errors);
+            }
+            throw error;
+        }
+
+        // 5. Gerar o arquivo final e forçar o download
+        const out = docx.getZip().generate({
+            type: "blob",
+            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
+
+        // Use o FileSaver para salvar o arquivo
+        saveAs(out, `Ordem_Carregamento_${freteData.cliente}_${freteData.pedido}.docx`);
+
+    } catch (error) {
+        console.error("Erro ao gerar a ordem de carregamento:", error);
+        alert("Falha ao gerar o documento: " + error.message);
+    } finally {
+        loadingManager.hide();
+    }
+};
 
 carregarFretes();

@@ -357,6 +357,22 @@ tr:hover {
 }
 }
 
+/* Em lista_fretes.css */
+.btn-gerar-ordem {
+  background-color: #2196F3; /* Azul */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.btn-gerar-ordem:hover {
+  background-color: #1976D2;
+}
+
 /* Scroll horizontal para tabelas largas em mobile */
 @media (max-width: 320px) {
   table {
