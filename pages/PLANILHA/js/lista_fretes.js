@@ -200,6 +200,7 @@ window.visualizarFrete = async (freteId, event) => {
                 <p><strong>CNPJ:</strong> ${frete.cnpj}</p>
                 <p><strong>IE:</strong> ${frete.ie}</p>
                 <p><strong>Telefone:</strong> ${frete.telefone}</p>
+                <p><strong>Destinatário:</strong> ${frete.destinatario}</p>
                 <p><strong>Destino:</strong> ${frete.destino}</p>
                 <P><strong>Troca de NFe: </strong>${frete.destinotroca || "Sem Troca de NFe"}</p>
                 <p><strong>Pedido:</strong> ${frete.pedido}</p>                
@@ -310,82 +311,72 @@ function formatarData(dataString) {
 }
 
 window.gerarOrdemCarregamento = async (freteId, event) => {
-    event.stopPropagation(); // Impede que o clique na linha seja acionado
-    loadingManager.show();
+  event.stopPropagation();
+  loadingManager.show();
 
-    try {
-        // 1. Obter os dados do frete específico do Firestore
-        const docRef = doc(db, "fretes", freteId);
-        const docSnap = await getDoc(docRef);
+  try {
+      // 1. Obter os dados do frete
+      const docRef = doc(db, "fretes", freteId);
+      const docSnap = await getDoc(docRef);
 
-        if (!docSnap.exists()) {
-            throw new Error("Frete não encontrado!");
-        }
-        const freteData = docSnap.data();
+      if (!docSnap.exists()) {
+          throw new Error("Frete não encontrado!");
+      }
+      const freteData = docSnap.data();
+      
+      console.log('Dados do frete:', freteData); // Log detalhado
 
-        // 2. Carregar o arquivo de template .docx
-        console.log('Tentando carregar o template...');
-        const response = await fetch('./downloads/ourofertil.docx');
-        console.log('Status da resposta:', response.status);
-        if (!response.ok) {
-            console.error('Erro ao carregar template:', response.statusText);
-            throw new Error("Template da ordem de carregamento não encontrado. Verifique o caminho do arquivo.");
-        }
-        const templateContent = await response.arrayBuffer();
+      // 2. Carregar o template
+      const response = await fetch('./downloads/ourofertil.docx');
+      if (!response.ok) {
+          throw new Error("Template não encontrado. Status: " + response.status);
+      }
+      const templateContent = await response.arrayBuffer();
 
-        // 3. Usar PizZip e Docxtemplater
-        const zip = new PizZip(templateContent);
-        const docx = new docxtemplater(zip, {
-            paragraphLoop: true,
-            linebreaks: true,
-        });
-
-        // 4. Mapear os dados do frete para as tags do template
-        console.log('Dados do frete:', freteData);
-        const templateData = {
-            representante: freteData.representante || 'N/A',
-            destinatario: freteData.destinatario || 'N/A',
-            cnpj: freteData.cnpj || 'N/A',
-            ie: freteData.ie || 'N/A',
-            cidade: freteData.destino || 'N/A',
-            telefone: freteData.telefone || 'N/A',
-            pedido: freteData.pedido || 'N/A'
-        };
-        console.log('Dados que serão usados no template:', {
-          representante: freteData.representante,
-          cliente: freteData.cliente,
-          cnpj: freteData.cnpj,
-          ie: freteData.ie,
-          cidade: freteData.destino,
-          telefone: freteData.telefone,
-          pedido: freteData.pedido
+      // 3. Preparar o docxtemplater
+      const zip = new PizZip(templateContent);
+      const docx = new docxtemplater(zip, {
+          paragraphLoop: true,
+          linebreaks: true,
       });
-        
-        try {
-            docx.render(templateData);
-        } catch (error) {
-            console.error('Erro ao renderizar o template:', error);
-            if (error.properties && error.properties.errors) {
-                console.error('Erros específicos:', error.properties.errors);
-            }
-            throw error;
-        }
 
-        // 5. Gerar o arquivo final e forçar o download
-        const out = docx.getZip().generate({
-            type: "blob",
-            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
+      // 4. Mapear os dados - ajuste conforme as tags reais no template
+      const templateData = {
+        representante: freteData.representante || 'N/A',
+        destinatario: freteData.destinatario || 'N/A',
+        cnpj: freteData.cnpj || 'N/A',
+        ie: freteData.ie || 'N/A',
+        destino: freteData.destino || 'N/A', // freteData.destino é usado para a tag {cidade}
+        telefone: freteData.telefone || 'N/A',
+        pedido: freteData.pedido || 'N/A'
+    };
+      
+      console.log('Dados para o template:', templateData); // Log dos dados mapeados
 
-        // Use o FileSaver para salvar o arquivo
-        saveAs(out, `Ordem_Carregamento_${freteData.cliente}_${freteData.pedido}.docx`);
+      try {
+          docx.render(templateData);
+      } catch (error) {
+          console.error('Erro ao renderizar:', error);
+          if (error.properties && error.properties.errors) {
+              console.error('Erros detalhados:', error.properties.errors);
+          }
+          throw error;
+      }
 
-    } catch (error) {
-        console.error("Erro ao gerar a ordem de carregamento:", error);
-        alert("Falha ao gerar o documento: " + error.message);
-    } finally {
-        loadingManager.hide();
-    }
+      // 5. Gerar e baixar o arquivo
+      const out = docx.getZip().generate({
+          type: "blob",
+          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+
+      saveAs(out, `Ordem_Carregamento_${freteData.cliente}_${freteData.pedido}.docx`);
+
+  } catch (error) {
+      console.error("Erro ao gerar ordem:", error);
+      alert("Erro: " + error.message);
+  } finally {
+      loadingManager.hide();
+  }
 };
 
 carregarFretes();
