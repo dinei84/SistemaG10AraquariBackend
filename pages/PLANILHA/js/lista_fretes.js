@@ -348,7 +348,9 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
         ie: freteData.ie || 'N/A',
         destino: freteData.destino || 'N/A', // freteData.destino é usado para a tag {cidade}
         telefone: freteData.telefone || 'N/A',
-        pedido: freteData.pedido || 'N/A'
+        pedido: freteData.pedido || 'N/A',
+        produto: freteData.produto || 'N/A',
+        embalagem: freteData.embalagem || 'N/A'
     };
       
       console.log('Dados para o template:', templateData); // Log dos dados mapeados
