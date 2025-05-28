@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", function () {
   
   function formatNumber(number) {
@@ -32,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const clean = document.getElementById("clean");
   const freteUnitario = document.getElementById("freteUnitario");
   const adiantamento = document.getElementById("adiantamento");
+  const valorTotalFrete = document.getElementById("valorTotalFrete");
 
   const getAdiantamentoPorcentagem = () => {
     const radios = document.getElementsByName("porcentagem_adiantamento");
@@ -64,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var adiantamentoAjusteComSeguro = adiantamentoAjuste * (1 - 0.018);
     var adiantamentoReal = adiantamentoAjusteComSeguro.toFixed(2);
 
-    return [resultadoParcial, adiantamentoReal];
+    return [resultadoParcial, adiantamentoReal, valorDoFreteSemDescontoAjusteQuatro];
   };
 
   botao.addEventListener("click", function () {
@@ -73,9 +72,10 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const [resultado, adiantamentoValue] = calculodosValores();
+    const [resultado, adiantamentoValue, valorTotalFreteValue] = calculodosValores();
     freteUnitario.value = resultado.toFixed(2);
     adiantamento.value = adiantamentoValue;
+    valorTotalFrete.value = valorTotalFreteValue.toFixed(2);
   });
 
   clean.addEventListener("click", function () {
@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("peso").value = "";
     document.getElementById("freteUnitario").value = "";
     document.getElementById("adiantamento").value = "";
+    document.getElementById("valorTotalFrete").value = "";
 
     const radios = document.getElementsByName("porcentagem_adiantamento");
     for (const radio of radios) {

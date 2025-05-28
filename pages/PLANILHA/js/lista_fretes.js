@@ -323,8 +323,8 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
           throw new Error("Frete não encontrado!");
       }
       const freteData = docSnap.data();
-      
-      console.log('Dados do frete:', freteData); // Log detalhado
+
+      console.log('Dados do frete:', freteData);
 
       // 2. Carregar o template
       const response = await fetch('./downloads/ourofertil.docx');
@@ -335,25 +335,37 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
 
       // 3. Preparar o docxtemplater
       const zip = new PizZip(templateContent);
-      const docx = new docxtemplater(zip, {
+      const docx = new window.docxtemplater(zip, {
           paragraphLoop: true,
           linebreaks: true,
+          nullGetter: function(part) {
+              // Mantém o nome da tag se o dado for ausente ou null
+              return `{${part.tag}}`;
+          }
       });
 
-      // 4. Mapear os dados - ajuste conforme as tags reais no template
+      // 4. Mapear os dados
       const templateData = {
-        representante: freteData.representante || 'N/A',
-        destinatario: freteData.destinatario || 'N/A',
-        cnpj: freteData.cnpj || 'N/A',
-        ie: freteData.ie || 'N/A',
-        destino: freteData.destino || 'N/A', // freteData.destino é usado para a tag {cidade}
-        telefone: freteData.telefone || 'N/A',
-        pedido: freteData.pedido || 'N/A',
-        produto: freteData.produto || 'N/A',
-        embalagem: freteData.embalagem || 'N/A'
-    };
-      
-      console.log('Dados para o template:', templateData); // Log dos dados mapeados
+          nome: freteData.nomeMotorista || "{nome}",
+          cpf: freteData.cpf || "{cpf}",
+          telefone: freteData.telefone || null,
+          tipoVeiculo: freteData.tipoVeiculo || "{tipo-veiculo}",
+          placa: freteData.placaCavalo || "{placa}",
+          placa2: freteData.placaReboque1 || "{placa2}",
+          placa3: freteData.placaReboque2 || "{placa3}",
+          placa4: freteData.placaReboque3 || "{placa4}",
+          pesoCarregado: freteData.pesoCarregado || "{peso-carregado}",
+          produto: freteData.produto || null,
+          embalagem: freteData.embalagem || null,
+          representante: freteData.representante || null,
+          destinatario: freteData.destinatario || null,
+          cnpj: freteData.cnpj || null,
+          ie: freteData.ie || null,
+          destino: freteData.destino || null,
+          pedido: freteData.pedido || null
+      };
+
+      console.log('Dados para o template:', templateData);
 
       try {
           docx.render(templateData);
@@ -371,7 +383,7 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
 
-      saveAs(out, `Ordem_Carregamento_${freteData.cliente}_${freteData.pedido}.docx`);
+      saveAs(out, `Ordem_Carregamento_${freteData.cliente || 'cliente'}_${freteData.pedido || 'pedido'}.docx`);
 
   } catch (error) {
       console.error("Erro ao gerar ordem:", error);
@@ -380,5 +392,6 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
       loadingManager.hide();
   }
 };
+
 
 carregarFretes();

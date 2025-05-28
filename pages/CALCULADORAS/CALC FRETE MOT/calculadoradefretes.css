@@ -1,152 +1,162 @@
 @charset "utf-8";
 
-
-body{    
+body {    
     font-family: "Noto Sans Mono", monospace;    
     font-optical-sizing: auto;
     font-weight: weight;
     font-style: normal;
-    font-variation-settings:"wdth" 100;
+    font-variation-settings: "wdth" 100;
+    margin: 0;
+    padding: 20px;
 }
 
-
-.container{
+.container {
     display: flex;  
     justify-content: center;  
     flex-direction: column;
     align-items: center;
-}
-
-.container{
-    margin: auto;
-    width: 400px;
-    height: 500px;    
+    margin: 20px auto;
+    width: 540px;
+    min-height: 600px;    
     border: 2px solid black;
     border-radius: 25px;
     box-shadow: 5px 5px 10px rgb(50, 26, 26);    
-    background: rgb(232, 228, 228);    
+    background: rgb(232, 228, 228);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-h1{
+h1 {
     font-family: sans-serif;
-    margin-bottom: 5px;
-    margin-top: 15px;
+    margin: 0 0 5px 0;
     text-align: center;
-    color: black;
+    color: white;
 }
 
-p{
-    font-family:sans-serif;
+p {
+    font-family: sans-serif;
     font-weight: 300;
-    color:black;
-    text-align: center;    
+    color: white;
+    text-align: center;
+    margin: 5px 0;    
 }
 
-input{
-    width: 85px;
-    height: 28px;
-    font-size: 20px;
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+    width: 100%;
+}
+
+input {
+    width: 200px;
+    height: 35px;
+    font-size: 18px;
     border-radius: 10px;    
     border: 1.5px solid rgb(4, 4, 4);
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-
-
-.bot1{
-    /* margin-left: 100px; */
-    font-weight: bolder;
-    cursor: pointer;
-}
-.bot2{
-    font-weight: bolder;
-    cursor: pointer;
+.ref {
+    width: auto;
+    height: auto;
+    margin: 5px 0;
+    border-radius: 8px;    
+    padding: 5px 0; 
+    color: black;   
 }
 
+.botoes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 20px 0;
+}
 
-#botao{    
+#botao {    
     background-color: green;
     border-radius: 30px;
+    width: 120px;
+    height: 40px;
+    color: white;
+    font-size: 16px;
 }
 
-#botao:hover{
+#botao:hover {
     background-color: lightgreen;
     color: green;
 }
 
-#clean{
+#clean {
     background-color: red;
     border-radius: 30px;
+    width: 120px;
+    height: 40px;
+    color: white;
+    font-size: 16px;
 }
 
-#clean:hover{
+#clean:hover {
     background-color: lightgoldenrodyellow;
     color: red;
 }
 
-/* Caixinhas de texto emcima dos inputs */
-.ref{
-    width: 105px;
-    height: 38px;
-    margin-top: 10px;
-    border-radius: 8px;    
-    padding-top: 5px; 
-    color: black;   
+.radio-group {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 10px 0;
+    width: 100%;
 }
 
-.botoes{
+.radio-option {
     display: flex;
     align-items: center;
-    flex-direction: row;    
-    justify-content: space-around;
-    width: 70%;
-    margin-right: 23px;
+    gap: 5px;
 }
 
-@media screen and (max-width: 800px) {
-    .container{
-        width: 350px;
-        height: 450px;
-    }
-    h1{
-        font-size: 25px;
-    }
-    p{
-        text-align: right;
-    }
-    input{
-        width: 85px;
-        height: 45px;
-        font-size: 20px;
-        border-radius: 10px;
-        /* margin-top: 15px; */
-        border: 3px solid black;        
-    }
-    .ref{
-        width: 105px;
-        height: 38px;
-        margin-top: 5PX;
-        border-radius: 8px;    
-        padding-top: 5px;
-    }
-    input.bot1{
-        font-size: 15px;
-        font-weight: bolder;  
-        margin-bottom: 3px;      
-    }
-    input.bot2{
-        font-size: 15px;
-        font-weight: bolder;
-    }
+.buttonback {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.bot3{
+.bot3 {
     background-color: rgb(255, 255, 255);
     border-radius: 30px;
-    margin-top: 15px;
-    margin-left: 800px;
+    padding: 10px 20px;
     cursor: pointer;
     font-weight: bolder;
     color: red;
+    border: 2px solid red;
+}
+
+@media screen and (max-width: 800px) {
+    .container {
+        width: 90%;
+        min-height: auto;
+        padding: 15px;
+    }
+
+    input {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .botoes {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #botao, #clean {
+        width: 100%;
+        max-width: 200px;
+    }
 }
 
 .imgback {

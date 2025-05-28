@@ -122,52 +122,66 @@
 
 
   <div class="container">
-    <label for="valordoFrete">
-      <p class="ref">Valor do Frete</p>
-    </label>
-    <input type="text" id="valordoFrete" placeholder="R$" />
+    <div class="input-group">
+      <label for="valordoFrete">
+        <p class="ref">Valor do Frete</p>
+      </label>
+      <input type="text" id="valordoFrete" placeholder="R$" />
+    </div>
 
-    <label for="pedagio">
-      <p class="ref">Pedágio</p>
-    </label>
-    <input type="text" class="item" id="pedagio" placeholder="R$" />
+    <div class="input-group">
+      <label for="pedagio">
+        <p class="ref">Pedágio</p>
+      </label>
+      <input type="text" class="item" id="pedagio" placeholder="R$" />
+    </div>
 
-    <label for="peso">
-      <p class="ref">Peso carregado</p>
-    </label>
-    <input type="text" class="item" id="peso" placeholder="00000" />
+    <div class="input-group">
+      <label for="peso">
+        <p class="ref">Peso carregado</p>
+      </label>
+      <input type="text" class="item" id="peso" placeholder="00000" />
+    </div>
 
-    <label for="porc_adiantamento70">Porcentagem de adiantamento:</label>
-    <div style="display: flex; align-items: center;">
-      <div style="margin-right: 60px;">
-        <input type="radio" name="porcentagem_adiantamento" id="porc_adiantamento70" value="0.7" />
-        <label for="porc_adiantamento70">70%</label>
-      </div>
-      <div>
-        <input type="radio" name="porcentagem_adiantamento" id="porc_adiantamento80" value="0.8" />
-        <label for="porc_adiantamento80">80%</label>
+    <div class="input-group">
+      <label for="porc_adiantamento70">Porcentagem de adiantamento:</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" name="porcentagem_adiantamento" id="porc_adiantamento70" value="0.7" />
+          <label for="porc_adiantamento70">70%</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" name="porcentagem_adiantamento" id="porc_adiantamento80" value="0.8" />
+          <label for="porc_adiantamento80">80%</label>
+        </div>
       </div>
     </div>
 
-
-
     <div class="botoes">
-      <label for="botao"></label>
       <input type="button" value="Calcular" class="bot1" id="botao" />
-
-      <label for="clean"></label>
       <input type="button" value="Limpar" class="bot2" id="clean" />
     </div>
 
-    <label for="freteUnitario">
-      <p class="ref">Valor do frete Unitário</p>
-    </label>
-    <input type="number" class="item" id="freteUnitario" readonly placeholder="R$" />
+    <div class="input-group">
+      <label for="freteUnitario">
+        <p class="ref">Valor do frete Unitário</p>
+      </label>
+      <input type="number" class="item" id="freteUnitario" readonly placeholder="R$" />
+    </div>
 
-    <label for="adiantamento">
-      <p class="ref">Adiantamento</p>
-    </label>
-    <input type="number" class="item" id="adiantamento" readonly placeholder="R$" />
+    <div class="input-group">
+      <label for="adiantamento">
+        <p class="ref">Adiantamento</p>
+      </label>
+      <input type="number" class="item" id="adiantamento" readonly placeholder="R$" />
+    </div>
+
+    <div class="input-group">
+      <label for="valorTotalFrete">
+        <p class="ref">Valor Total do Frete</p>
+      </label>
+      <input type="number" class="item" id="valorTotalFrete" readonly placeholder="R$" />
+    </div>
   </div>
 
   <div class="buttonback">

@@ -38,10 +38,112 @@ function parseFormattedNumber(str) {
   return parseFloat(str.replace(/\./g, "").replace(",", "."));
 }
 
+// Verificar se o cliente é Ourofertil
+async function verificarClienteOurofertil() {
+  try {
+    loadingManager.show();
+    const freteDoc = await getDoc(doc(db, "fretes", freteId));
+    if (freteDoc.exists()) {
+      const freteData = freteDoc.data();
+      const arquivoContainer = document.getElementById("arquivoContainer");
+      
+      if (freteData.cliente && freteData.cliente.toLowerCase().includes("ourofertil")) {
+        console.log("Cliente Ourofertil detectado, mostrando campos adicionais");
+        arquivoContainer.style.display = "block";
+      } else {
+        console.log("Cliente não é Ourofertil, ocultando campos adicionais");
+        arquivoContainer.style.display = "none";
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao verificar cliente:", error);
+  } finally {
+    loadingManager.hide();
+  }
+}
+
+// Função para processar documento Word
+async function processarDocumentoWord(file) {
+  try {
+    loadingManager.show();
+    
+    // Obter os dados do formulário
+    const arquivoContainerVisible = document.getElementById('arquivoContainer').style.display !== 'none';
+    
+    const formData = {
+      nome: document.getElementById('motorista').value,
+      cpf: document.getElementById('cpf').value || '', // Garante string vazia se não existir
+      'tipo-veiculo': document.getElementById('tipo-veiculo').value,
+      placa: document.getElementById('placa').value,
+      placa2: arquivoContainerVisible ? document.getElementById('placa2').value || '' : '',
+      placa3: arquivoContainerVisible ? document.getElementById('placa3').value || '' : '',
+      placa4: arquivoContainerVisible ? document.getElementById('placa4').value || '' : '',
+      'peso-carregado': document.getElementById('peso-carregado').value
+    };
+
+    console.log('Dados sendo enviados para o template:', formData); // Para depuração
+
+    // Ler o arquivo como ArrayBuffer
+    const arrayBuffer = await file.arrayBuffer();
+    
+    // Criar um novo PizZip com o conteúdo do arquivo
+    const zip = new window.PizZip(arrayBuffer);
+    
+    // Criar um novo Docxtemplater
+    const doc = new window.docxtemplater();
+    doc.loadZip(zip);
+    
+    // Definir os dados no template
+    doc.setData(formData);
+    
+    // Renderizar o documento
+    doc.render();
+    
+    // Obter o documento renderizado
+    const out = doc.getZip().generate({
+      type: "blob",
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    });
+    
+    // Configurar botão de download
+    const downloadContainer = document.getElementById('downloadContainer');
+    const btnDownload = document.getElementById('btnDownload');
+    
+    btnDownload.onclick = () => {
+      const placaFormatada = formData.placa.replace(/-/g, '').toUpperCase();
+      const dataAtual = new Date().toISOString().split('T')[0];
+      const nomeArquivo = `Carregamento_${placaFormatada}_${dataAtual}.docx`;
+      window.saveAs(out, nomeArquivo);
+    };
+    
+    downloadContainer.style.display = 'block';
+    
+    loadingManager.hide();
+    return true;
+  } catch (error) {
+    console.error('Erro ao processar documento:', error);
+    loadingManager.hide();
+    alert('Erro ao processar o documento Word: ' + error.message);
+    return false;
+  }
+}
+
+// Event listener para o input de arquivo
+document.getElementById('fileInput')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  if (!file.name.endsWith('.docx')) {
+    alert('Por favor, selecione um arquivo Word (.docx)');
+    return;
+  }
+  
+  await processarDocumentoWord(file);
+});
+
 // Configurar campo de peso
 const pesoInput = document.getElementById("peso-carregado");
 if (pesoInput) {
-  // Adiciona máscara apenas quando o campo perde o foco
   pesoInput.addEventListener("blur", function (e) {
     let value = e.target.value.replace(/[^\d,]/g, "");
     if (value) {
@@ -54,7 +156,6 @@ if (pesoInput) {
     }
   });
   
-  // Permite digitação livre enquanto edita
   pesoInput.addEventListener("focus", function(e) {
     let value = e.target.value;
     if (value) {
@@ -84,19 +185,23 @@ async function loadCarregamentoForEdit() {
       document.getElementById("motorista").value = data.motorista || "";
       document.getElementById("tipo-veiculo").value = data["tipo-veiculo"] || "";
       
-      // Formata o peso corretamente ao carregar
       const peso = parseFloat(data["peso-carregado"] || 0);
       pesoInput.value = formatNumber(peso);
       
       document.getElementById("fretemotorista").value = data.fretemotorista || "";
       document.getElementById("emissor").value = data.emissor || "";
-      document.getElementById("data-manifesto").value =
-        data["data-manifesto"] || "";
+      document.getElementById("data-manifesto").value = data["data-manifesto"] || "";
       document.getElementById("cte").value = data.cte || "";
       document.getElementById("data-entrega").value = data["data-entrega"] || "";
       document.getElementById("nfe").value = data.nfe || "";
       document.getElementById("observacao").value = data.observacao || "";
       document.getElementById("telefone").value = data.telefone || "";
+      
+      // Carregar campos específicos do Ourofertil
+      document.getElementById("placa2").value = data.placa2 || "";
+      document.getElementById("placa3").value = data.placa3 || "";
+      document.getElementById("placa4").value = data.placa4 || "";
+      document.getElementById("cpf").value = data.cpf || "";
     }
   } catch (error) {
     console.error("Erro ao carregar:", error.message, error.stack);
@@ -106,7 +211,7 @@ async function loadCarregamentoForEdit() {
   }
 }
 
-// Validação de peso (modificada para não interferir na edição)
+// Validação de peso
 if (pesoInput) {
   pesoInput.addEventListener("change", async () => {
     const peso = parseFormattedNumber(pesoInput.value) || 0;
@@ -132,7 +237,7 @@ if (pesoInput) {
   });
 }
 
-// Submit do formulário (ajustado para melhor tratamento de erros)
+// Submit do formulário
 document
   .getElementById("formCarregamento")
   ?.addEventListener("submit", async (e) => {
@@ -156,7 +261,6 @@ document
         return;
       }
 
-      // Cálculo do saldo disponível
       let saldoDisponivel = parseFloat(freteData.saldo) || 0;
       let pesoOriginal = 0;
 
@@ -197,9 +301,9 @@ document
       // Determinar se está manifestado
       const isManifestado = cte || nfe || dataManifesto;
 
-      // Salvar carregamento com timestamp ordenável
+      // Salvar carregamento
       const carregamentoData = {
-        "peso-carregado": Number(pesoCarregado.toFixed(3)),
+        "peso-carregado": Number(pesoCarregado.toFixed(1)),
         placa: document.getElementById("placa").value,
         motorista: document.getElementById("motorista").value,
         "tipo-veiculo": document.getElementById("tipo-veiculo").value,
@@ -213,7 +317,13 @@ document
         observacao: document.getElementById("observacao").value,
         telefone: document.getElementById("telefone").value,
         timestamp: new Date(),
-        isManifestado: isManifestado // Novo campo para identificar manifestados
+        isManifestado: isManifestado,
+        
+        // Campos específicos do Ourofertil
+        placa2: document.getElementById("placa2").value,
+        placa3: document.getElementById("placa3").value,
+        placa4: document.getElementById("placa4").value,
+        cpf: document.getElementById("cpf").value
       };
 
       if (isEditMode) {
@@ -242,6 +352,8 @@ document
 if (isEditMode) {
   loadCarregamentoForEdit();
 } else {
-  // Inicializa campo de peso vazio para novo carregamento
   if (pesoInput) pesoInput.value = "";
 }
+
+// Verificar cliente Ourofertil ao carregar a página
+verificarClienteOurofertil();
