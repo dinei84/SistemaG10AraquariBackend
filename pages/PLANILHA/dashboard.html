@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Projeções - Transportes</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Menu -->
+    <div class="menu-container">
+        <div class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="sidebar">
+            <ul>
+                <li><a href="../PLANILHA/index.html">Cadastro de Fretes</a></li>
+                <li><a href="../PLANILHA/lista_fretes.html">Lista de Fretes</a></li>
+                <li><a href="../PLANILHA/dashboard.html">Dashboard</a></li>
+                <li><a href="../MOSTRADOR/index1.html">Mostrador</a></li>
+                <li><a href="../chat.html">Chat</a></li>
+                <li><a href="../indextracking.html">Tracking</a></li>
+                <li><a href="../calculadoras.html">Calculadoras</a></li>
+                <li><a href="../oc.html">Ordem de Carregamento</a></li>
+                <li><a href="../contato.html">Contato</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Dashboard de Projeções - Transportes</h1>
+            <div class="filtros">
+                <select id="periodo">
+                    <option value="atual">Mês Atual</option>
+                    <option value="anterior">Mês Anterior</option>
+                    <option value="ultimos3">Últimos 3 Meses</option>
+                    <option value="ultimos6">Últimos 6 Meses</option>
+                </select>
+                <select id="estado">
+                    <option value="todos">Todos os Estados</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="PR">Paraná</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                </select>
+            </div>
+        </header>
+
+        <main>
+            <section class="metricas">
+                <div class="card projecao">
+                    <h2>Projeção do Mês</h2>
+                    <div class="valor">0 ton</div>
+                    <canvas id="graficoProjecao"></canvas>
+                </div>
+
+                <div class="card estados">
+                    <h2>Valor Médio por Estado</h2>
+                    <div class="tabela-estados">
+                        <table id="tabelaEstados">
+                            <thead>
+                                <tr>
+                                    <th>Estado</th>
+                                    <th>Valor Médio (R$/ton)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <canvas id="graficoEstados"></canvas>
+                </div>
+
+                <div class="card produtos">
+                    <h2>Top 5 Produtos</h2>
+                    <div class="lista-produtos">
+                        <ul id="listaProdutos"></ul>
+                    </div>
+                    <canvas id="graficoProdutos"></canvas>
+                </div>
+
+                <div class="card clientes">
+                    <h2>Top 5 Clientes</h2>
+                    <div class="lista-clientes">
+                        <ul id="listaClientes"></ul>
+                    </div>
+                    <canvas id="graficoClientes"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="../../js/menu.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html> 

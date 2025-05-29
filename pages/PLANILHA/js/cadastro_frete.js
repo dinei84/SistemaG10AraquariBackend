@@ -79,6 +79,7 @@ async function loadFreteForEdit(freteId) {
         document.getElementById("telefone").value = freteData.telefone || "";
         document.getElementById("expedidor").value = freteData.expedidor || "";
         document.getElementById("destino").value = freteData.destino || "";
+        document.getElementById("estado").value = freteData.estado || "";
         document.getElementById("destinatario").value =
           freteData.destinatario || "";
         document.getElementById("recebedor").value = freteData.recebedor || "";
@@ -126,6 +127,7 @@ formFrete.addEventListener("submit", async (e) => {
     telefone: document.getElementById("telefone").value,
     expedidor: document.getElementById("expedidor").value,
     destino: document.getElementById("destino").value,
+    estado: document.getElementById("estado").value,
     destinatario: document.getElementById("destinatario").value,
     recebedor: document.getElementById("recebedor").value,
     destinotroca: document.getElementById("destinotroca").value,
