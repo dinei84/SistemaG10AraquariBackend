@@ -346,6 +346,7 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
 
       // 4. Mapear os dados
       const templateData = {
+          dataoc: "{dataoc}",
           nome: freteData.nomeMotorista || "{nome}",
           cpf: freteData.cpf || "{cpf}",
           telefone: freteData.telefone || null,

@@ -33,6 +33,25 @@ function formatNumber(number) {
   });
 }
 
+function formatarData(data) {
+  if (!data) return '';
+  
+  // Verifica se a data está no formato yyyy-mm-dd
+  if (data.includes('-')) {
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+  
+  const dataObj = new Date(data);
+  if (isNaN(dataObj.getTime())) return '';
+  
+  return dataObj.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
+
 function parseFormattedNumber(str) {
   if (!str) return 0;
   return parseFloat(str.replace(/\./g, "").replace(",", "."));
@@ -78,7 +97,8 @@ async function processarDocumentoWord(file) {
       placa2: arquivoContainerVisible ? document.getElementById('placa2').value || '' : '',
       placa3: arquivoContainerVisible ? document.getElementById('placa3').value || '' : '',
       placa4: arquivoContainerVisible ? document.getElementById('placa4').value || '' : '',
-      'peso-carregado': document.getElementById('peso-carregado').value
+      'peso-carregado': document.getElementById('peso-carregado').value,
+      dataoc: document.getElementById('dataoc').value || ''
     };
 
     console.log('Dados sendo enviados para o template:', formData); // Para depuração
@@ -308,7 +328,7 @@ document
         motorista: document.getElementById("motorista").value,
         "tipo-veiculo": document.getElementById("tipo-veiculo").value,
         fretemotorista: document.getElementById("fretemotorista").value,
-        dataoc: document.getElementById("dataoc").value,
+        dataoc: formatarData(document.getElementById("dataoc").value),
         emissor: document.getElementById("emissor").value,
         "data-manifesto": dataManifesto,
         cte: cte,
