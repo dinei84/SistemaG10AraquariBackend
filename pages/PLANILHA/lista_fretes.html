@@ -127,8 +127,19 @@
 
     <div class="container">
       <h1 style="color: white; font-size: 35px;">Lista de Fretes</h1>
+      <div class="filtros-container">
+        <div class="filtro-centro-custo">
+          <select id="filtroCentroCusto">
+            <option value="">Todos os Centros de Custo</option>
+            <option value="ferro">Ferro</option>
+            <option value="fertilizante">Fertilizante</option>
+            <option value="imbituba">Imbituba</option>
+            <option value="paranagua">Paranaguá</option>
+          </select>
+        </div>
+      </div>
       <a href="index.html" class="btn-novo-frete">Novo Frete</a>
-      <input type="text" id="searchInput" placeholder="Buscar frete...">
+      <input type="text" id="searchInput" placeholder="Buscar...">
       <span class="total-saldo" id="totalSaldo">Saldo Total: 0.00 Ton</span>
       <table id="tabelaFretes">
         <thead>

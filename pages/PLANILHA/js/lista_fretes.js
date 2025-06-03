@@ -103,7 +103,7 @@ async function carregarFretes() {
             : `style="background-color:${corFundo};"`;
 
       const linha = `
-        <tr class="linha-clicavel" data-frete-id="${doc.id}" ${estiloLinha}>
+        <tr class="linha-clicavel" data-frete-id="${doc.id}" data-centro-custo="${frete.centrodecusto || 'fertilizante'}" ${estiloLinha}>
           <td>${formatarData(frete.data)}</td>
           <td>${frete.cliente}</td>
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
@@ -149,6 +149,7 @@ function atualizarTotalSaldo(total) {
 
 function buscarFretes() {
   const termo = document.getElementById("searchInput").value.toLowerCase();
+  const centroCusto = document.getElementById("filtroCentroCusto").value.toLowerCase();
   const linhas = document.querySelectorAll("#tabelaFretes tbody tr");
   let totalSaldo = 0;
 
@@ -157,8 +158,13 @@ function buscarFretes() {
     const textoLinha = Array.from(colunas)
       .map((td) => td.textContent.toLowerCase())
       .join(" ");
+    
+    const freteCentroCusto = linha.getAttribute('data-centro-custo')?.toLowerCase() || '';
 
-    if (textoLinha.includes(termo)) {
+    const matchTermo = textoLinha.includes(termo);
+    const matchCentroCusto = !centroCusto || freteCentroCusto === centroCusto;
+
+    if (matchTermo && matchCentroCusto) {
       linha.style.display = "";
       totalSaldo += parseFloat(colunas[7].textContent);
     } else {
@@ -168,6 +174,9 @@ function buscarFretes() {
 
   atualizarTotalSaldo(totalSaldo);
 }
+
+// Adicionar evento de mudança para o filtro de centro de custo
+document.getElementById("filtroCentroCusto").addEventListener("change", buscarFretes);
 
 document.getElementById("searchInput").addEventListener("input", buscarFretes);
 

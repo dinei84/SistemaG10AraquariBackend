@@ -424,3 +424,35 @@ tr:hover {
     max-height: 80vh;
     overflow-y: auto;
 }
+
+.filtros-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.filtro-centro-custo {
+    width: 300px;
+}
+
+.filtro-centro-custo select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #560e24;
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.filtro-centro-custo select:hover {
+    border-color: #560e24;
+}
+
+.filtro-centro-custo select:focus {
+    outline: none;
+    border-color: #560e24;
+    box-shadow: 0 0 5px rgba(86, 14, 36, 0.2);
+}
