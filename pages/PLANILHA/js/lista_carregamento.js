@@ -94,7 +94,7 @@ async function carregarCarregamentos() {
                     <td>${freteData.pedido || "N/A"}</td>
                     <td>${freteData.operacao || "N/A"}</td>
                     <td>${freteData.lote || "N/A"}</td>
-                    <td>${freteData.observacoes || "N/A"}</td>
+                    <td>${freteData.observacao || "N/A"}</td>
                 </tr>
             `;
       corpoFretes.innerHTML = linhaFrete;
