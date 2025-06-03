@@ -75,7 +75,7 @@ async function carregarDados() {
         querySnapshot.forEach((doc) => {
             const frete = doc.data();
             fretes.push({
-                estado: frete.destino.split('-')[1]?.trim() || 'N/A',
+                estado: frete.estado || 'N/A', 
                 produto: frete.produto || 'N/A',
                 quantidade: parseFloat(frete.liberado) || 0,
                 valor: parseFloat(frete.frempresa) || 0,
@@ -123,11 +123,21 @@ function calcularValorMedioPorEstado(fretes) {
     const estados = {};
     
     fretes.forEach(frete => {
-        if (!estados[frete.estado]) {
-            estados[frete.estado] = { total: 0, quantidade: 0 };
+        // Garantir que o estado não seja nulo ou indefinido
+        const estado = frete.estado || 'N/A';
+        
+        if (!estados[estado]) {
+            estados[estado] = { total: 0, quantidade: 0 };
         }
-        estados[frete.estado].total += frete.valor * frete.quantidade;
-        estados[frete.estado].quantidade += frete.quantidade;
+        
+        // Verificar se valor e quantidade são números válidos
+        const valor = parseFloat(frete.valor) || 0;
+        const quantidade = parseFloat(frete.quantidade) || 0;
+        
+        if (quantidade > 0) {
+            estados[estado].total += valor * quantidade;
+            estados[estado].quantidade += quantidade;
+        }
     });
     
     return Object.entries(estados)

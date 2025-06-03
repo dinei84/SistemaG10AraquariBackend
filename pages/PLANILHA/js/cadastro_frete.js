@@ -72,6 +72,7 @@ async function loadFreteForEdit(freteId) {
 
         // Preencher campos simples
         document.getElementById("data").value = freteData.data || "";
+        document.getElementById("centrodecusto").value = freteData.centrodecusto || "";
         document.getElementById("cliente").value = freteData.cliente || "";
         document.getElementById("representante").value = freteData.representante || "";
         document.getElementById("cnpj").value = freteData.cnpj || "";
@@ -120,6 +121,7 @@ formFrete.addEventListener("submit", async (e) => {
 
   const freteData = {
     data: document.getElementById("data").value,
+    centrodecusto: document.getElementById("centrodecusto").value,
     cliente: document.getElementById("cliente").value,
     representante: document.getElementById("representante").value,
     cnpj: document.getElementById("cnpj").value,
@@ -178,3 +180,11 @@ btnVoltar.addEventListener("click", () => {
 if (isEditMode) {
   loadFreteForEdit(freteId);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Definir o valor padrão do centro de custo como "fertilizante"
+    const centroCustoSelect = document.getElementById('centrodecusto');
+    if (centroCustoSelect && !centroCustoSelect.value) {
+        centroCustoSelect.value = 'fertilizante';
+    }
+});

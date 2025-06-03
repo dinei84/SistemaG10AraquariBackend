@@ -58,6 +58,20 @@ function verificarFreteAntigo(dataString) {
   }
 }
 
+function getCorFundoCentroCusto(centroCusto) {
+    switch(centroCusto?.toLowerCase()) {
+        case 'ferro':
+            return '#e0e0e0'; // cinza claro
+        case 'imbituba':
+            return '#009ee7'; // azul
+        case 'paranagua':
+            return '#068246'; // verde
+        case 'fertilizante':
+        default:
+            return '#ffffff'; // branco
+    }
+}
+
 async function carregarFretes() {
   try {
     loadingManager.show();
@@ -83,7 +97,10 @@ async function carregarFretes() {
         }
         
         const isFreteAntigo = verificarFreteAntigo(frete.data);
-        const estiloLinha = isFreteAntigo ? 'style="background-color:rgb(249, 192, 200);"' : '';
+        const corFundo = getCorFundoCentroCusto(frete.centrodecusto);
+        const estiloLinha = isFreteAntigo 
+            ? 'style="background-color:rgb(249, 192, 200);"' 
+            : `style="background-color:${corFundo};"`;
 
       const linha = `
         <tr class="linha-clicavel" data-frete-id="${doc.id}" ${estiloLinha}>
@@ -195,6 +212,7 @@ window.visualizarFrete = async (freteId, event) => {
 
       const popupContent = `
                 <p><strong>Data:</strong> ${frete.data}</p>
+                <p><strong>Centro de Custo:</strong> ${frete.centrodecusto}</p>
                 <p><strong>Cliente:</strong> ${frete.cliente}</p>
                 <p><strong>Representante:</strong> ${frete.representante}</p>
                 <p><strong>CNPJ:</strong> ${frete.cnpj}</p>
@@ -202,6 +220,7 @@ window.visualizarFrete = async (freteId, event) => {
                 <p><strong>Telefone:</strong> ${frete.telefone}</p>
                 <p><strong>Destinatário:</strong> ${frete.destinatario}</p>
                 <p><strong>Destino:</strong> ${frete.destino}</p>
+                <p><strong>Estado:</strong> ${frete.estado}</p>
                 <P><strong>Troca de NFe: </strong>${frete.destinotroca || "Sem Troca de NFe"}</p>
                 <p><strong>Pedido:</strong> ${frete.pedido}</p>                
                 <p><strong>Liberado:</strong> ${parseFloat(

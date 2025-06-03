@@ -30,13 +30,30 @@ label {
 input[type="text"],
 input[type="date"],
 input[type="number"],
-textarea {
+textarea,
+select {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+select {
+    background-color: white;
+    cursor: pointer;
+    color: #560e24;
+}
+
+select:hover {
+    border-color: #560e24;
+}
+
+select:focus {
+    outline: none;
+    border-color: #560e24;
+    box-shadow: 0 0 5px rgba(86, 14, 36, 0.2);
 }
 
 button {

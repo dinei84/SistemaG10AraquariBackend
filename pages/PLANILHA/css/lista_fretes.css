@@ -231,12 +231,12 @@ tr:hover {
 
 /* Estilo para o novo botão */
 .btn-visualizar {
-  background-color: #2196F3;
+  background-color: #4e6f54;
   margin: 2px;
 }
 
 .btn-visualizar:hover {
-  background-color: #1976D2;
+  background-color: #4e6f54;
 }
 
 /* Media Queries para responsividade */
