@@ -61,7 +61,7 @@ function verificarFreteAntigo(dataString) {
 function getCorFundoCentroCusto(centroCusto) {
     switch(centroCusto?.toLowerCase()) {
         case 'ferro':
-            return '#e0e0e0'; // cinza claro
+            return '#6e6565'; // cinza claro
         case 'imbituba':
             return '#009ee7'; // azul
         case 'paranagua':
@@ -162,7 +162,7 @@ function buscarFretes() {
     const freteCentroCusto = linha.getAttribute('data-centro-custo')?.toLowerCase() || '';
 
     const matchTermo = textoLinha.includes(termo);
-    const matchCentroCusto = !centroCusto || freteCentroCusto === centroCusto;
+    const matchCentroCusto = centroCusto === '' || freteCentroCusto === centroCusto;
 
     if (matchTermo && matchCentroCusto) {
       linha.style.display = "";
