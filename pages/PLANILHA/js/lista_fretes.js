@@ -386,12 +386,12 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
           pesoCarregado: freteData.pesoCarregado || "{peso-carregado}",
           produto: freteData.produto || null,
           embalagem: freteData.embalagem || null,
-          representante: freteData.representante || null,
-          destinatario: freteData.destinatario || null,
-          cnpj: freteData.cnpj || null,
-          ie: freteData.ie || null,
-          destino: freteData.destino || null,
-          pedido: freteData.pedido || null
+          representante: freteData.representante || "",
+          destinatario: freteData.destinatario || "",
+          cnpj: freteData.cnpj || "",
+          ie: freteData.ie || "",
+          destino: freteData.destino || "",
+          pedido: freteData.pedido || ""
       };
 
       console.log('Dados para o template:', templateData);
