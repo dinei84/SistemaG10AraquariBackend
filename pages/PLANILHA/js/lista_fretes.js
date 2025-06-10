@@ -391,7 +391,8 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
           cnpj: freteData.cnpj || "",
           ie: freteData.ie || "",
           destino: freteData.destino || "",
-          pedido: freteData.pedido || ""
+          pedido: freteData.pedido || "",
+          localizacao: freteData.localizacao || ""
       };
 
       console.log('Dados para o template:', templateData);
