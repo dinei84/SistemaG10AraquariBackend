@@ -1,17 +1,20 @@
 import { db } from "../../../js/firebase-config.js";
 import {
-  getFirestore,
   doc,
   getDoc,
   updateDoc,
   addDoc,
   collection,
-  increment,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 import { auth } from "../../../js/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import loadingManager from "../../../js/loading.js";
+import { 
+  formatWeight, 
+  parseFormattedNumber,
+  setupWeightInput
+} from "../../../js/number-formatter.js";
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
@@ -28,37 +31,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const freteId = urlParams.get("freteId");
 let isEditMode = !!freteId;
 
-// Funções de formatação
-function formatNumber(number) {
-  return number.toLocaleString("pt-BR", {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
-  });
-}
-
-function parseFormattedNumber(str) {
-  // Remove pontos de milhar e substitui vírgula por ponto
-  return parseFloat(str.replace(/\./g, "").replace(",", "."));
-}
-
-// Configurar formatação automática para campos numéricos
-function setupNumberInput(inputId) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-
-  input.addEventListener("input", function (e) {
-    let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for dígito
-    value = (parseInt(value || 0) / 100).toFixed(2); // Divide por 100 para obter decimais
-    e.target.value = formatNumber(parseFloat(value)); // Formata com vírgula
-  });
-
-  // Permitir entrada de valores com ponto como separador de milhar
-  input.pattern = "[0-9]{1,3}(\\.[0-9]{3})*,[0-9]{2}";
-  input.inputMode = "decimal";
-}
-
-// Aplicar a todos os campos monetários
-["liberado", "carregado", "saldo"].forEach(setupNumberInput);
+// Configurar formatação automática para campos de peso usando o utilitário centralizado
+["liberado", "carregado", "saldo"].forEach(setupWeightInput);
 
 async function loadFreteForEdit(freteId) {
   if (freteId) {
@@ -103,9 +77,9 @@ async function loadFreteForEdit(freteId) {
         const carregado = parseFloat(freteData.carregado) || 0;
         const saldo = (liberado - carregado).toFixed(3);
 
-        document.getElementById("liberado").value = formatNumber(liberado);
-        document.getElementById("carregado").value = formatNumber(carregado);
-        document.getElementById("saldo").value = formatNumber(saldo);
+        document.getElementById("liberado").value = formatWeight(liberado);
+        document.getElementById("carregado").value = formatWeight(carregado);
+        document.getElementById("saldo").value = formatWeight(saldo);
       }
     } catch (error) {
       console.error("Erro ao carregar frete:", error);
@@ -169,7 +143,7 @@ formFrete.addEventListener("change", (e) => {
     const carregado =
       parseFormattedNumber(document.getElementById("carregado").value) || 0;
     const saldo = (liberado - carregado).toFixed(3);
-    document.getElementById("saldo").value = formatNumber(saldo);
+    document.getElementById("saldo").value = formatWeight(saldo);
   }
 });
 

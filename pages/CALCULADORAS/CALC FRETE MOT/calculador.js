@@ -1,27 +1,16 @@
+import { 
+  formatCurrency, 
+  parseFormattedNumber, 
+  setupCurrencyInput, 
+  setupWeightInput 
+} from "../../../js/number-formatter.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   
-  function formatNumber(number) {
-    return number.toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }
-
-  function parseFormattedNumber(str) {
-    return parseFloat(str.replace(/\./g, "").replace(",", "."));
-  }
-
-  $("#valordoFrete, #pedagio").on("input", function (e) {
-    var value = e.target.value.replace(/\D/g, "");
-    value = (parseInt(value) / 100).toFixed(2);
-    e.target.value = formatNumber(parseFloat(value));
-  });
-
-  $("#peso").on("input", function (e) {
-    var value = e.target.value.replace(/\D/g, "");
-    value = (parseInt(value) / 1000).toFixed(3);
-    e.target.value = value.replace(".", ",");
-  });
+  // Configurar inputs com formatação automática
+  setupCurrencyInput("valordoFrete");
+  setupCurrencyInput("pedagio");
+  setupWeightInput("peso");
 
   const valordoFrete = document.getElementById("valordoFrete");
   const pedagio = document.getElementById("pedagio");
@@ -73,9 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const [resultado, adiantamentoValue, valorTotalFreteValue] = calculodosValores();
-    freteUnitario.value = resultado.toFixed(2);
-    adiantamento.value = adiantamentoValue;
-    valorTotalFrete.value = valorTotalFreteValue.toFixed(2);
+    freteUnitario.value = formatCurrency(resultado);
+    adiantamento.value = formatCurrency(adiantamentoValue);
+    valorTotalFrete.value = formatCurrency(valorTotalFreteValue);
   });
 
   clean.addEventListener("click", function () {

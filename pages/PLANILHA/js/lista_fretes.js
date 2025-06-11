@@ -10,7 +10,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 import { auth } from "../../../js/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import loadingManager from "../../../js/loading.js"
+import loadingManager from "../../../js/loading.js";
+import { 
+  formatWeight, 
+  parseFormattedNumber,
+  formatDate,
+  setupWeightInput
+} from "../../../js/number-formatter.js";
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
@@ -23,23 +29,10 @@ onAuthStateChanged(auth, (user) => {
 const corpoTabela = document.getElementById("corpoTabela");
 const totalSaldoSpan = document.getElementById("totalSaldo");
 
-function formatNumber(number) {
-  return number.toLocaleString("pt-BR", {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
-  });
-}
-
-function parseFormattedNumber(str) {
-  return parseFloat(str.replace(/\./g, "").replace(",", "."));
-}
-
-// Adicionar eventos de formatação para os campos monetários
-document.querySelectorAll("#valordoFrete, #pedagio").forEach((input) => {
-  input.addEventListener("input", function (e) {
-    let value = e.target.value.replace(/\D/g, "");
-    value = (parseInt(value || 0) / 100).toFixed(2);
-    e.target.value = formatNumber(parseFloat(value));
+// Aplicar formatação automática aos campos de peso
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll("#valordoFrete, #pedagio").forEach((input) => {
+    setupWeightInput(input.id);
   });
 });
 
@@ -104,14 +97,14 @@ async function carregarFretes() {
 
       const linha = `
         <tr class="linha-clicavel" data-frete-id="${doc.id}" data-centro-custo="${frete.centrodecusto || 'fertilizante'}" ${estiloLinha}>
-          <td>${formatarData(frete.data)}</td>
+          <td>${formatDate(frete.data)}</td>
           <td>${frete.cliente}</td>
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
           <td>${frete.pedido}</td>
           <td>${frete.frempresa || 'N/A'}</td>
-          <td>${formatNumber(liberado)} Ton</td>
-          <td>${formatNumber(carregado)} Ton</td>
-          <td>${formatNumber(saldo)} Ton</td>
+          <td>${formatWeight(liberado)} Ton</td>
+          <td>${formatWeight(carregado)} Ton</td>
+          <td>${formatWeight(saldo)} Ton</td>
           <td class="acoes">
             <button class="btn-visualizar" onclick="visualizarFrete('${doc.id}', event)">Visualizar</button>
             <button class="btn-editar" onclick="editarFrete('${doc.id}', event)">Editar</button>
@@ -144,7 +137,7 @@ async function carregarFretes() {
 }
 
 function atualizarTotalSaldo(total) {
-  totalSaldoSpan.textContent = `Saldo Total: ${formatNumber(total)} Ton`;
+  totalSaldoSpan.textContent = `Saldo Total: ${formatWeight(total)} Ton`;
 }
 
 function buscarFretes() {
@@ -312,33 +305,7 @@ document.getElementById("fretePopup").addEventListener("click", (e) => {
   }
 });
 
-// Função para formatar a data
-function formatarData(dataString) {
-  if (!dataString || dataString === "N/A") return "N/A";
-  
-  try {
-    // Verifica se a data já está no formato brasileiro
-    if (/^\d{2}\/\d{2}\/\d{2,4}$/.test(dataString)) {
-      return dataString;
-    }
-    
-    // Converte a string para um objeto Date
-    const data = new Date(dataString);
-    
-    // Verifica se a data é válida
-    if (isNaN(data.getTime())) return dataString;
-    
-    // Formata para dd/MM/yy
-    const dia = data.getDate().toString().padStart(2, '0');
-    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
-    const ano = data.getFullYear().toString().slice(-2);
-    
-    return `${dia}/${mes}/${ano}`;
-  } catch (error) {
-    console.error("Erro ao formatar data:", error);
-    return dataString;
-  }
-}
+// Função formatarData removida - usando formatDate do utilitário
 
 window.gerarOrdemCarregamento = async (freteId, event) => {
   event.stopPropagation();

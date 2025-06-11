@@ -193,7 +193,9 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
+    <script type="module">
+        import { formatCurrency } from '../../js/number-formatter.js';
+        
         const fretesOriginal = JSON.parse(localStorage.getItem('fretes')) || [];
         let animationTimeout;
 
@@ -207,7 +209,7 @@
                 row.innerHTML = `
                     <td>${frete.uf}</td>
                     <td>${frete.destino}</td>
-                    <td>${valor !== undefined ? valor.toFixed(2).replace('.', ',') : ''}</td>
+                    <td>${valor !== undefined ? formatCurrency(valor) : ''}</td>
                     <td>${frete.tipo}</td>
                     <td>${frete.observacoes || ''}</td>
                     <td class="acoes-column">

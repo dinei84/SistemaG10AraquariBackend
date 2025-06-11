@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Formatação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste das Funções de Formatação</h1>
+    
+    <div class="test-section">
+        <h2>Formatação de Moeda</h2>
+        <input type="number" id="currencyInput" placeholder="Digite um valor" step="0.01">
+        <button onclick="testCurrency()">Formatar como Moeda</button>
+        <div id="currencyResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Formatação de Peso</h2>
+        <input type="number" id="weightInput" placeholder="Digite um peso" step="0.001">
+        <button onclick="testWeight()">Formatar como Peso</button>
+        <div id="weightResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Formatação de Peso Condicional</h2>
+        <input type="number" id="weightCondInput" placeholder="Digite um peso" step="0.001">
+        <button onclick="testWeightConditional()">Formatar Peso Condicional</button>
+        <div id="weightCondResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Parse de Número Formatado</h2>
+        <input type="text" id="parseInput" placeholder="Digite um número formatado (ex: 1.234,56)">
+        <button onclick="testParse()">Converter para Número</button>
+        <div id="parseResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Formatação de Data</h2>
+        <input type="date" id="dateInput">
+        <button onclick="testDate()">Formatar Data</button>
+        <div id="dateResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Input com Formatação Automática - Moeda</h2>
+        <input type="text" id="autoFormatCurrency" placeholder="Digite valores monetários">
+        <div class="result">Digite valores e veja a formatação automática</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Input com Formatação Automática - Peso</h2>
+        <input type="text" id="autoFormatWeight" placeholder="Digite valores de peso">
+        <div class="result">Digite valores e veja a formatação automática</div>
+    </div>
+
+    <script type="module">
+        import { 
+            formatCurrency, 
+            formatWeight, 
+            formatWeightConditional,
+            parseFormattedNumber,
+            formatDate,
+            setupCurrencyInput,
+            setupWeightInput
+        } from './js/number-formatter.js';
+
+        // Configurar inputs com formatação automática
+        setupCurrencyInput('autoFormatCurrency');
+        setupWeightInput('autoFormatWeight');
+
+        // Tornar as funções globais para os botões
+        window.testCurrency = function() {
+            const value = document.getElementById('currencyInput').value;
+            const result = formatCurrency(parseFloat(value));
+            document.getElementById('currencyResult').innerHTML = `
+                <strong>Valor original:</strong> ${value}<br>
+                <strong>Formatado:</strong> ${result}
+            `;
+        };
+
+        window.testWeight = function() {
+            const value = document.getElementById('weightInput').value;
+            const result = formatWeight(parseFloat(value));
+            document.getElementById('weightResult').innerHTML = `
+                <strong>Valor original:</strong> ${value}<br>
+                <strong>Formatado:</strong> ${result}
+            `;
+        };
+
+        window.testWeightConditional = function() {
+            const value = document.getElementById('weightCondInput').value;
+            const result = formatWeightConditional(parseFloat(value));
+            document.getElementById('weightCondResult').innerHTML = `
+                <strong>Valor original:</strong> ${value}<br>
+                <strong>Formatado:</strong> ${result}
+            `;
+        };
+
+        window.testParse = function() {
+            const value = document.getElementById('parseInput').value;
+            const result = parseFormattedNumber(value);
+            document.getElementById('parseResult').innerHTML = `
+                <strong>Valor formatado:</strong> ${value}<br>
+                <strong>Número:</strong> ${result}
+            `;
+        };
+
+        window.testDate = function() {
+            const value = document.getElementById('dateInput').value;
+            const result = formatDate(value);
+            document.getElementById('dateResult').innerHTML = `
+                <strong>Data original:</strong> ${value}<br>
+                <strong>Formatada:</strong> ${result}
+            `;
+        };
+
+        // Exemplos automáticos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Teste automático de alguns valores
+            document.getElementById('currencyInput').value = '1234.56';
+            document.getElementById('weightInput').value = '25.750';
+            document.getElementById('weightCondInput').value = '30.000';
+            document.getElementById('parseInput').value = '1.234,56';
+            document.getElementById('dateInput').value = '2024-01-15';
+        });
+    </script>
+</body>
+</html>

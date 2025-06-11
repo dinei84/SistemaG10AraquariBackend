@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Input de Peso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Formatação de Peso</h1>
+    
+    <div class="form-group">
+        <label for="peso1">Peso 1 (teste com 35,215):</label>
+        <input type="text" id="peso1" placeholder="Digite 35,215">
+        <div class="result" id="result1">Valor formatado aparecerá aqui</div>
+    </div>
+    
+    <div class="form-group">
+        <label for="peso2">Peso 2 (teste com 1234,567):</label>
+        <input type="text" id="peso2" placeholder="Digite 1234,567">
+        <div class="result" id="result2">Valor formatado aparecerá aqui</div>
+    </div>
+    
+    <div class="form-group">
+        <label for="peso3">Peso 3 (teste com 40,000):</label>
+        <input type="text" id="peso3" placeholder="Digite 40,000">
+        <div class="result" id="result3">Valor formatado aparecerá aqui</div>
+    </div>
+
+    <script type="module">
+        import { setupWeightInput, parseFormattedNumber } from './js/number-formatter.js';
+        
+        // Configurar os inputs
+        setupWeightInput('peso1');
+        setupWeightInput('peso2');
+        setupWeightInput('peso3');
+        
+        // Mostrar valores parseados
+        document.getElementById('peso1').addEventListener('blur', function() {
+            const parsed = parseFormattedNumber(this.value);
+            document.getElementById('result1').textContent = `Valor parseado: ${parsed}`;
+        });
+        
+        document.getElementById('peso2').addEventListener('blur', function() {
+            const parsed = parseFormattedNumber(this.value);
+            document.getElementById('result2').textContent = `Valor parseado: ${parsed}`;
+        });
+        
+        document.getElementById('peso3').addEventListener('blur', function() {
+            const parsed = parseFormattedNumber(this.value);
+            document.getElementById('result3').textContent = `Valor parseado: ${parsed}`;
+        });
+    </script>
+</body>
+</html>

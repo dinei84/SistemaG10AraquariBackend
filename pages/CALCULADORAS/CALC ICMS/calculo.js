@@ -1,20 +1,11 @@
 
+import { 
+  formatCurrency, 
+  parseFormattedNumber, 
+  roundUp 
+} from "../../../js/number-formatter.js";
+
 document.addEventListener("DOMContentLoaded", function () {
-
-  function formatNumber(number) {
-    return number.toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }
-
-  function parseFormattedNumber(str) {
-    return parseFloat(str.replace(/\./g, "").replace(",", "."));
-  }
-
-  function arredondar(valor) {
-    return Math.ceil(valor * 100) / 100;
-  }
 
   $("#valordoFrete").mask("#.##0,00", { reverse: true });
   $("#valorPrimeiraPerna").mask("#.##0,00", { reverse: true });
@@ -84,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function calcularFrete(valorFrete, margem, taxaICMS, adicional = 0) {
     const totalPorcentagem = margem + taxaICMS + adicional;
-    return arredondar(valorFrete - (valorFrete * totalPorcentagem) / 100);
+    return roundUp(valorFrete - (valorFrete * totalPorcentagem) / 100);
   }
 
   document.getElementById("calcular").addEventListener("click", function () {
@@ -105,8 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const primeiraPerna = valorFreteTotal * percentageTroca;
         const segundaPerna = valorFreteTotal - primeiraPerna; // Atualizar campos
 
-        elementos.valorPrimeiraPerna.value = formatNumber(primeiraPerna);
-        elementos.valorSegundaPerna.value = formatNumber(segundaPerna); // Calcular taxas
+        elementos.valorPrimeiraPerna.value = formatCurrency(primeiraPerna);
+        elementos.valorSegundaPerna.value = formatCurrency(segundaPerna); // Calcular taxas
 
         const taxaICMSPrimeiraPerna = obterTaxaICMS(estadoOrigem, estadoTroca);
         const taxaICMSSegundaPerna = obterTaxaICMS(
@@ -137,18 +128,18 @@ document.addEventListener("DOMContentLoaded", function () {
           3.25
         ); // Exibir resultados
 
-        elementos.freteParaPJ2.value = formatNumber(fretePJSegundaPerna);
-        elementos.freteParaPF2.value = formatNumber(fretePFSegundaPerna);
+        elementos.freteParaPJ2.value = formatCurrency(fretePJSegundaPerna);
+        elementos.freteParaPF2.value = formatCurrency(fretePFSegundaPerna);
         elementos.taxaICMSField.value = `${taxaICMSPrimeiraPerna}% (1° Perna) / ${taxaICMSSegundaPerna}% (2° Perna)`; // CAMPOS ADICIONADOS - EXIBIR RESULTADOS DA PRIMEIRA PERNA
-        elementos.freteParaPJ1Perna.value = formatNumber(fretePJPrimeiraPerna);
-        elementos.freteParaPF1Perna.value = formatNumber(fretePFPrimeiraPerna); // FIM CAMPOS ADICIONADOS
+        elementos.freteParaPJ1Perna.value = formatCurrency(fretePJPrimeiraPerna);
+        elementos.freteParaPF1Perna.value = formatCurrency(fretePFPrimeiraPerna); // FIM CAMPOS ADICIONADOS
       } else {
         const taxaICMS = obterTaxaICMS(estadoOrigem, estadoDestinoFinal);
         elementos.taxaICMSField.value = `${taxaICMS}%`;
-        elementos.freteParaPJ.value = formatNumber(
+        elementos.freteParaPJ.value = formatCurrency(
           calcularFrete(valorFreteTotal, margem, taxaICMS)
         );
-        elementos.freteParaPF.value = formatNumber(
+        elementos.freteParaPF.value = formatCurrency(
           calcularFrete(valorFreteTotal, margem, taxaICMS, 3.25)
         );
       }

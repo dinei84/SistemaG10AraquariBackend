@@ -279,7 +279,9 @@
 
     <script src="../../js/menu.js"></script>
 
-    <script>
+    <script type="module">
+        import { formatCurrency, parseFormattedNumber } from '../../js/number-formatter.js';
+        
         let fretes = JSON.parse(localStorage.getItem('fretes')) || [];
         let editId = null;
 
@@ -291,7 +293,7 @@
                 origem: document.getElementById('origem').value,
                 uf: document.getElementById('uf').value,
                 destino: document.getElementById('destino').value,
-                valor: parseFloat(document.getElementById('valor').value),
+                valor: parseFormattedNumber(document.getElementById('valor').value),
                 tipo: document.getElementById('tipo').value,
                 observacoes: document.getElementById('observacoes').value
             };
