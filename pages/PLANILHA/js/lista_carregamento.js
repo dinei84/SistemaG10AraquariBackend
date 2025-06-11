@@ -32,8 +32,8 @@ if (!freteId) {
 
 function formatNumber(number) {
   return number.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
   });
 }
 
@@ -147,7 +147,7 @@ async function carregarCarregamentos() {
             <td>${carregamento.motorista || "N/A"}</td>
             <td>${carregamento["tipo-veiculo"] || "N/A"}</td>
             <td>${formatNumber(
-              carregamento["peso-carregado"] || "N/A"
+              parseFloat(carregamento["peso-carregado"]) || 0
             )}</td>
             <td>${carregamento.fretemotorista || "N/A"}</td>
             <td>${carregamento.emissor || "N/A"}</td>

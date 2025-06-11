@@ -25,8 +25,8 @@ const totalSaldoSpan = document.getElementById("totalSaldo");
 
 function formatNumber(number) {
   return number.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
   });
 }
 
@@ -109,9 +109,9 @@ async function carregarFretes() {
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
           <td>${frete.pedido}</td>
           <td>${frete.frempresa || 'N/A'}</td>
-          <td>${liberado.toFixed(2)} Ton</td>
-          <td>${carregado.toFixed(2)} Ton</td>
-          <td>${saldo.toFixed(2)} Ton</td>
+          <td>${formatNumber(liberado)} Ton</td>
+          <td>${formatNumber(carregado)} Ton</td>
+          <td>${formatNumber(saldo)} Ton</td>
           <td class="acoes">
             <button class="btn-visualizar" onclick="visualizarFrete('${doc.id}', event)">Visualizar</button>
             <button class="btn-editar" onclick="editarFrete('${doc.id}', event)">Editar</button>
@@ -144,7 +144,7 @@ async function carregarFretes() {
 }
 
 function atualizarTotalSaldo(total) {
-  totalSaldoSpan.textContent = `Saldo Total: ${total.toFixed(2)} Ton`;
+  totalSaldoSpan.textContent = `Saldo Total: ${formatNumber(total)} Ton`;
 }
 
 function buscarFretes() {
@@ -166,7 +166,9 @@ function buscarFretes() {
 
     if (matchTermo && matchCentroCusto) {
       linha.style.display = "";
-      totalSaldo += parseFloat(colunas[7].textContent);
+      // Extrair o valor numérico do saldo (coluna 7) removendo "Ton" e formatação
+      const saldoTexto = colunas[7].textContent.replace(' Ton', '');
+      totalSaldo += parseFormattedNumber(saldoTexto);
     } else {
       linha.style.display = "none";
     }
@@ -232,13 +234,13 @@ window.visualizarFrete = async (freteId, event) => {
                 <p><strong>Estado:</strong> ${frete.estado}</p>
                 <P><strong>Troca de NFe: </strong>${frete.destinotroca || "Sem Troca de NFe"}</p>
                 <p><strong>Pedido:</strong> ${frete.pedido}</p>                
-                <p><strong>Liberado:</strong> ${parseFloat(
-                  frete.liberado
-                ).toFixed(2)} Ton</p>
-                <p><strong>Carregado:</strong> ${parseFloat(
-                  frete.carregado
-                ).toFixed(2)} Ton</p>
-                <p><strong>Saldo:</strong> ${saldo.toFixed(2)} Ton</p>
+                <p><strong>Liberado:</strong> ${formatNumber(
+                  parseFloat(frete.liberado)
+                )} Ton</p>
+                <p><strong>Carregado:</strong> ${formatNumber(
+                  parseFloat(frete.carregado)
+                )} Ton</p>
+                <p><strong>Saldo:</strong> ${formatNumber(saldo)} Ton</p>
                 <p><strong>Valor do Frete:</strong> ${
                   frete.frempresa || "00,00"
                 }</p>
@@ -278,9 +280,9 @@ window.compartilharFrete = async (freteId) => {
         `📍 Destino: ${frete.destino}\n` +
         `📝 Troca de NFe: ${frete.destinotroca || "Sem Troca de NFe"}\n` +
         `🔢 Pedido: ${frete.pedido}\n` +
-        `⚖️ Liberado: ${parseFloat(frete.liberado).toFixed(2)} Ton\n` +
-        `🚛 Carregado: ${parseFloat(frete.carregado).toFixed(2)} Ton\n` +
-        `📊 Saldo: ${saldo.toFixed(2)} Ton\n` +
+        `⚖️ Liberado: ${formatNumber(parseFloat(frete.liberado))} Ton\n` +
+        `🚛 Carregado: ${formatNumber(parseFloat(frete.carregado))} Ton\n` +
+        `📊 Saldo: ${formatNumber(saldo)} Ton\n` +
         `💰 Valor do Frete: ${frete.frempresa || "00,00"}\n` +
         `📍 Localização: ${frete.localizacao || "Nenhuma"}\n` +
         `📌 Observações: ${frete.observacao || "Nenhuma"}`;
@@ -392,7 +394,7 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
           ie: freteData.ie || "",
           destino: freteData.destino || "",
           pedido: freteData.pedido || "",
-          localizacao: freteData.localizacao || ""
+          localizacao: freteData.localizacao || "",
       };
 
       console.log('Dados para o template:', templateData);

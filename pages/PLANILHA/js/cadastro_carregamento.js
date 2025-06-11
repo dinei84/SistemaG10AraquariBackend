@@ -33,6 +33,29 @@ function formatNumber(number) {
   });
 }
 
+// Função para formatar números mostrando decimais apenas se diferentes de zero
+function formatNumberConditional(number) {
+  const num = parseFloat(number);
+  if (isNaN(num)) return "0";
+  
+  // Verifica se a parte decimal é diferente de zero
+  const hasDecimals = num % 1 !== 0;
+  
+  if (hasDecimals) {
+    // Se tem decimais, mostra com 3 casas decimais
+    return num.toLocaleString("pt-BR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    });
+  } else {
+    // Se não tem decimais, mostra apenas a parte inteira
+    return num.toLocaleString("pt-BR", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  }
+}
+
 function formatarData(data) {
   if (!data) return '';
   
@@ -323,7 +346,7 @@ document
 
       // Salvar carregamento
       const carregamentoData = {
-        "peso-carregado": Number(pesoCarregado.toFixed(1)),
+        "peso-carregado": Number(pesoCarregado.toFixed(3)),
         placa: document.getElementById("placa").value,
         motorista: document.getElementById("motorista").value,
         "tipo-veiculo": document.getElementById("tipo-veiculo").value,

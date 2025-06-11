@@ -31,8 +31,8 @@ let isEditMode = !!freteId;
 // Funções de formatação
 function formatNumber(number) {
   return number.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
   });
 }
 
@@ -101,7 +101,7 @@ async function loadFreteForEdit(freteId) {
         // Formatando valores numéricos
         const liberado = parseFloat(freteData.liberado) || 0;
         const carregado = parseFloat(freteData.carregado) || 0;
-        const saldo = (liberado - carregado).toFixed(2);
+        const saldo = (liberado - carregado).toFixed(3);
 
         document.getElementById("liberado").value = formatNumber(liberado);
         document.getElementById("carregado").value = formatNumber(carregado);
@@ -168,7 +168,7 @@ formFrete.addEventListener("change", (e) => {
       parseFormattedNumber(document.getElementById("liberado").value) || 0;
     const carregado =
       parseFormattedNumber(document.getElementById("carregado").value) || 0;
-    const saldo = (liberado - carregado).toFixed(2);
+    const saldo = (liberado - carregado).toFixed(3);
     document.getElementById("saldo").value = formatNumber(saldo);
   }
 });
