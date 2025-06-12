@@ -1,12 +1,10 @@
 import { db } from "../../../js/firebase-config.js";
 import {
-  getFirestore,
   doc,
   getDoc,
   updateDoc,
   addDoc,
   collection,
-  increment,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 import { auth } from "../../../js/firebase-config.js";
@@ -56,37 +54,56 @@ function setupTonelageInput(inputId) {
 
   input.addEventListener("input", function (e) {
     let value = e.target.value;
-    
-    // Remove tudo exceto números, vírgula e ponto
+
+    // Permite apenas números, vírgula e ponto
     value = value.replace(/[^\d,\.]/g, "");
-    
-    // Se tem vírgula, divide em parte inteira e decimal
+
+    // Limita a apenas uma vírgula
+    let parts = value.split(',');
+    if (parts.length > 2) {
+      value = parts[0] + ',' + parts.slice(1).join('');
+    }
+
+    // Se tem vírgula, limita casas decimais
     if (value.includes(',')) {
-      let parts = value.split(',');
-      let integerPart = parts[0].replace(/\./g, ""); // Remove pontos da parte inteira
-      let decimalPart = parts[1] ? parts[1].substring(0, 3) : ""; // Máximo 3 casas decimais
-      
-      // Formatar parte inteira com pontos de milhar
-      if (integerPart) {
-        integerPart = parseInt(integerPart).toLocaleString("pt-BR");
-      }
-      
-      // Reconstruir o valor
-      value = integerPart + (decimalPart ? "," + decimalPart : "");
-    } else {
-      // Se não tem vírgula, trata como número inteiro
-      if (value) {
-        value = parseInt(value.replace(/\./g, "")).toLocaleString("pt-BR");
+      parts = value.split(',');
+      if (parts[1] && parts[1].length > 3) {
+        parts[1] = parts[1].substring(0, 3);
+        value = parts[0] + ',' + parts[1];
       }
     }
-    
+
     e.target.value = value;
   });
 
-  // Configurar padrão para toneladas
-  input.pattern = "[0-9]{1,3}(\\.[0-9]{3})*,[0-9]{1,3}";
+  // Configuração simples sem pattern restritivo
+  input.removeAttribute('pattern');
+  input.type = "text";
   input.inputMode = "decimal";
-  input.placeholder = "Ex: 101,100";
+  input.placeholder = "Ex: 37,000";
+
+  // Formatação final quando sair do campo
+  input.addEventListener("blur", function(e) {
+    let value = e.target.value.trim();
+    if (value === '') return;
+
+    // Se é só números, adiciona ,000
+    if (/^\d+$/.test(value)) {
+      e.target.value = value + ",000";
+    }
+    // Se tem vírgula mas sem decimais, adiciona zeros
+    else if (value.endsWith(',')) {
+      e.target.value = value + "000";
+    }
+    // Se tem vírgula com 1 decimal, adiciona zeros
+    else if (/,\d$/.test(value)) {
+      e.target.value = value + "00";
+    }
+    // Se tem vírgula com 2 decimais, adiciona um zero
+    else if (/,\d{2}$/.test(value)) {
+      e.target.value = value + "0";
+    }
+  });
 }
 
 // Configurar formatação automática para campos monetários
