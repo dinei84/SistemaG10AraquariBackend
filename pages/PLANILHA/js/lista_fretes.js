@@ -108,6 +108,7 @@ async function carregarFretes() {
           <td>${frete.cliente}</td>
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
           <td>${frete.pedido}</td>
+          <td>${frete.produto}</td>
           <td>${frete.frempresa || 'N/A'}</td>
           <td>${formatNumber(liberado)} Ton</td>
           <td>${formatNumber(carregado)} Ton</td>
