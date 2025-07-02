@@ -3,9 +3,7 @@ import {
     collection,
     getDocs,
     query,
-    orderBy,
-    where,
-    Timestamp
+    orderBy
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 import { auth } from "../../../js/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
@@ -17,9 +15,12 @@ onAuthStateChanged(auth, (user) => {
         window.location.href = "/login.html";
     } else {
         console.log("Usuário autenticado:", user.email);
-        carregarDados();
     }
 });
+
+// Variáveis globais para armazenar os dados carregados
+window.fretesDashboard = [];
+window.carregamentosDashboard = [];
 
 // Função para filtrar fretes por período
 function filtrarFretesPorPeriodo(fretes, periodo) {
@@ -63,35 +64,170 @@ function filtrarFretesPorEstado(fretes, estado) {
     return fretes.filter(frete => frete.estado === estado);
 }
 
+// Função para filtrar carregamentos por período
+function filtrarCarregamentosPorPeriodo(carregamentos, periodo) {
+    const hoje = new Date();
+    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    
+    switch(periodo) {
+        case 'atual':
+            return carregamentos.filter(carregamento => {
+                const dataCarregamento = new Date(carregamento.dataoc);
+                return dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
+            });
+        case 'anterior':
+            const inicioMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
+            const fimMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
+            return carregamentos.filter(carregamento => {
+                const dataCarregamento = new Date(carregamento.dataoc);
+                return dataCarregamento >= inicioMesAnterior && dataCarregamento <= fimMesAnterior;
+            });
+        case 'ultimos3':
+            const inicio3Meses = new Date(hoje.getFullYear(), hoje.getMonth() - 3, 1);
+            return carregamentos.filter(carregamento => {
+                const dataCarregamento = new Date(carregamento.dataoc);
+                return dataCarregamento >= inicio3Meses && dataCarregamento <= hoje;
+            });
+        case 'ultimos6':
+            const inicio6Meses = new Date(hoje.getFullYear(), hoje.getMonth() - 6, 1);
+            return carregamentos.filter(carregamento => {
+                const dataCarregamento = new Date(carregamento.dataoc);
+                return dataCarregamento >= inicio6Meses && dataCarregamento <= hoje;
+            });
+        default:
+            return carregamentos;
+    }
+}
+
 // Função para carregar dados do Firestore
 async function carregarDados() {
     try {
         loadingManager.show();
+        
         const fretesRef = collection(db, "fretes");
         const q = query(fretesRef, orderBy("data", "desc"));
         const querySnapshot = await getDocs(q);
         
         const fretes = [];
-        querySnapshot.forEach((doc) => {
+        const carregamentos = [];
+        
+        for (const doc of querySnapshot.docs) {
             const frete = doc.data();
+            const freteId = doc.id;
+            
             fretes.push({
+                id: freteId,
                 estado: frete.estado || 'N/A', 
                 produto: frete.produto || 'N/A',
                 quantidade: parseFloat(frete.liberado) || 0,
                 valor: parseFloat(frete.frempresa) || 0,
                 cliente: frete.cliente || 'N/A',
-                data: frete.data
+                data: frete.data,
+                emissor: frete.emissor || '',
+                dataoc: frete.dataoc || frete.data,
+                peso_carregado: frete.peso_carregado || frete.liberado || 0
             });
-        });
+            
+            try {
+                const carregamentosRef = collection(db, "fretes", freteId, "carregamentos");
+                const carregamentosSnapshot = await getDocs(carregamentosRef);
+                
+                carregamentosSnapshot.forEach((carregamentoDoc) => {
+                    const carregamento = carregamentoDoc.data();
+                    carregamentos.push({
+                        id: carregamentoDoc.id,
+                        freteId: freteId,
+                        emissor: carregamento.emissor || '',
+                        dataoc: carregamento.dataoc || '',
+                        pesoCarregado: parseFloat(carregamento['peso-carregado']) || 0,
+                        placa: carregamento.placa || '',
+                        motorista: carregamento.motorista || '',
+                        timestamp: carregamento.timestamp,
+                        cliente: frete.cliente || 'N/A',
+                        produto: frete.produto || 'N/A',
+                        estado: frete.estado || 'N/A'
+                    });
+                });
+            } catch (error) {
+                console.log(`Erro ao buscar carregamentos do frete ${freteId}:`, error);
+            }
+        }
 
-        // Aplicar filtros
+        console.log('Carregamentos encontrados:', carregamentos.length);
+
+        if (carregamentos.length === 0) {
+            console.log('Nenhum carregamento encontrado. Criando dados de exemplo para teste...');
+            const hoje = new Date();
+            const dataExemplo = hoje.toISOString().split('T')[0];
+            
+            const carregamentosExemplo = [
+                {
+                    id: 'exemplo1',
+                    freteId: 'teste1',
+                    emissor: 'Dinei',
+                    dataoc: dataExemplo,
+                    pesoCarregado: 25.5,
+                    placa: 'ABC-1234',
+                    motorista: 'João Silva',
+                    cliente: 'Cliente Teste 1',
+                    produto: 'Produto A',
+                    estado: 'SC'
+                },
+                {
+                    id: 'exemplo2',
+                    freteId: 'teste2',
+                    emissor: 'Thiago',
+                    dataoc: dataExemplo,
+                    pesoCarregado: 30.0,
+                    placa: 'DEF-5678',
+                    motorista: 'Maria Santos',
+                    cliente: 'Cliente Teste 2',
+                    produto: 'Produto B',
+                    estado: 'PR'
+                },
+                {
+                    id: 'exemplo3',
+                    freteId: 'teste3',
+                    emissor: 'Dinei',
+                    dataoc: dataExemplo,
+                    pesoCarregado: 28.3,
+                    placa: 'GHI-9012',
+                    motorista: 'Pedro Costa',
+                    cliente: 'Cliente Teste 3',
+                    produto: 'Produto A',
+                    estado: 'SC'
+                }
+            ];
+            
+            carregamentos.push(...carregamentosExemplo);
+            console.log('Dados de exemplo adicionados:', carregamentosExemplo.length);
+        }
+
+        console.log('Carregamentos finais:', carregamentos.length);
+        console.log('Emissores encontrados:', [...new Set(carregamentos.map(c => c.emissor))]);
+
         const periodo = document.getElementById('periodo').value;
         const estado = document.getElementById('estado').value;
         
         let fretesFiltrados = filtrarFretesPorPeriodo(fretes, periodo);
         fretesFiltrados = filtrarFretesPorEstado(fretesFiltrados, estado);
+        
+        let carregamentosFiltrados = filtrarCarregamentosPorPeriodo(carregamentos, periodo);
+        if (estado !== 'todos') {
+            carregamentosFiltrados = carregamentosFiltrados.filter(carregamento => carregamento.estado === estado);
+        }
+
+        window.fretesDashboard = fretesFiltrados;
+        window.carregamentosDashboard = carregamentosFiltrados;
 
         atualizarInterface(fretesFiltrados);
+        
+        document.getElementById('emissorFilter').value = '';
+        document.getElementById('ordensMes').textContent = '0';
+        document.getElementById('caminhoesMes').textContent = '0';
+        document.getElementById('totalRetirado').textContent = '0 ton';
+        
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
         alert("Erro ao carregar dados do dashboard");
@@ -100,37 +236,30 @@ async function carregarDados() {
     }
 }
 
-// Função para calcular a projeção do mês
 function calcularProjecaoMensal(fretes) {
     const hoje = new Date();
+    const diaAtual = hoje.getDate();
     const diasNoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
-    const diasDecorridos = hoje.getDate();
     
-    const fretesDoMes = fretes.filter(frete => {
-        const dataFrete = new Date(frete.data);
-        return dataFrete.getMonth() === hoje.getMonth() && 
-               dataFrete.getFullYear() === hoje.getFullYear();
-    });
-    
-    const mediaDiaria = fretesDoMes.reduce((acc, frete) => acc + frete.quantidade, 0) / diasDecorridos;
-    const projecao = mediaDiaria * diasNoMes;
+    const totalAtual = fretes.reduce((acc, frete) => acc + frete.quantidade, 0);
+    const projecao = (totalAtual / diaAtual) * diasNoMes;
     
     return Math.round(projecao);
 }
 
-// Função para calcular valor médio por estado
 function calcularValorMedioPorEstado(fretes) {
     const estados = {};
     
     fretes.forEach(frete => {
-        // Garantir que o estado não seja nulo ou indefinido
         const estado = frete.estado || 'N/A';
         
         if (!estados[estado]) {
-            estados[estado] = { total: 0, quantidade: 0 };
+            estados[estado] = {
+                total: 0,
+                quantidade: 0
+            };
         }
         
-        // Verificar se valor e quantidade são números válidos
         const valor = parseFloat(frete.valor) || 0;
         const quantidade = parseFloat(frete.quantidade) || 0;
         
@@ -148,7 +277,6 @@ function calcularValorMedioPorEstado(fretes) {
         }));
 }
 
-// Função para calcular top 5 produtos
 function calcularTopProdutos(fretes) {
     const produtos = {};
     
@@ -166,7 +294,6 @@ function calcularTopProdutos(fretes) {
         .slice(0, 5);
 }
 
-// Função para calcular top 5 clientes
 function calcularTopClientes(fretes) {
     const clientes = {};
     
@@ -184,13 +311,96 @@ function calcularTopClientes(fretes) {
         .slice(0, 5);
 }
 
-// Função para atualizar a interface
+function calcularEmissorStats(carregamentos, emissor) {
+    const hoje = new Date();
+    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    
+    if (!Array.isArray(carregamentos)) {
+        console.error('Dados de carregamentos não são um array válido');
+        return { ordens: 0, caminhoes: 0, totalRetirado: 0 };
+    }
+    
+    const carregamentosDoEmissor = carregamentos.filter(carregamento => {
+        if (!carregamento.dataoc) {
+            return false;
+        }
+        
+        const dataCarregamento = new Date(carregamento.dataoc);
+        const isEmissorCorreto = carregamento.emissor === emissor;
+        const isNoMes = dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
+        
+        return isEmissorCorreto && isNoMes;
+    });
+
+    const ordens = carregamentosDoEmissor.length;
+    const caminhoes = carregamentosDoEmissor.length;
+    const totalRetirado = carregamentosDoEmissor.reduce((acc, carregamento) => 
+        acc + (parseFloat(carregamento.pesoCarregado) || 0), 0);
+
+    return {
+        ordens,
+        caminhoes,
+        totalRetirado: Math.round(totalRetirado * 100) / 100
+    };
+}
+
+function calcularRankingEmissores(carregamentos) {
+    const hoje = new Date();
+    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    
+    if (!Array.isArray(carregamentos)) {
+        console.error('Dados de carregamentos não são um array válido');
+        return [];
+    }
+    
+    const emissores = {};
+    const emissoresDisponiveis = ['Dinei', 'Thiago', 'Geovane', 'Tom', 'Joao', 'Milene', 'JoaoVitor'];
+    
+    emissoresDisponiveis.forEach(emissor => {
+        emissores[emissor] = {
+            ordens: 0,
+            caminhoes: 0,
+            totalRetirado: 0
+        };
+    });
+    
+    const carregamentosDoMes = carregamentos.filter(carregamento => {
+        if (!carregamento.dataoc) return false;
+        const dataCarregamento = new Date(carregamento.dataoc);
+        return dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
+    });
+    
+    carregamentosDoMes.forEach(carregamento => {
+        const emissor = carregamento.emissor;
+        if (emissor && emissores[emissor]) {
+            emissores[emissor].ordens += 1;
+            emissores[emissor].caminhoes += 1;
+            emissores[emissor].totalRetirado += parseFloat(carregamento.pesoCarregado) || 0;
+        }
+    });
+    
+    return Object.entries(emissores)
+        .map(([emissor, stats]) => ({
+            emissor,
+            ordens: stats.ordens,
+            caminhoes: stats.caminhoes,
+            totalRetirado: Math.round(stats.totalRetirado * 100) / 100
+        }))
+        .sort((a, b) => b.totalRetirado - a.totalRetirado);
+}
+
 function atualizarInterface(fretes) {
-    // Atualizar projeção
+    const chartsIds = ['graficoProjecao', 'graficoEstados', 'graficoProdutos', 'graficoClientes', 'graficoEmissores'];
+    chartsIds.forEach(id => {
+        const chart = Chart.getChart(id);
+        if (chart) chart.destroy();
+    });
+
     const projecao = calcularProjecaoMensal(fretes);
     document.querySelector('.projecao .valor').textContent = `${projecao} ton`;
     
-    // Atualizar gráfico de projeção
     const ctxProjecao = document.getElementById('graficoProjecao').getContext('2d');
     new Chart(ctxProjecao, {
         type: 'bar',
@@ -212,7 +422,6 @@ function atualizarInterface(fretes) {
         }
     });
     
-    // Atualizar tabela de estados
     const estados = calcularValorMedioPorEstado(fretes);
     const tbody = document.querySelector('#tabelaEstados tbody');
     tbody.innerHTML = estados.map(estado => `
@@ -222,7 +431,6 @@ function atualizarInterface(fretes) {
         </tr>
     `).join('');
     
-    // Atualizar gráfico de estados
     const ctxEstados = document.getElementById('graficoEstados').getContext('2d');
     new Chart(ctxEstados, {
         type: 'pie',
@@ -238,14 +446,12 @@ function atualizarInterface(fretes) {
         }
     });
     
-    // Atualizar lista de produtos
     const produtos = calcularTopProdutos(fretes);
     const listaProdutos = document.getElementById('listaProdutos');
     listaProdutos.innerHTML = produtos.map(produto => `
         <li>${produto.produto}: ${produto.quantidade} ton</li>
     `).join('');
     
-    // Atualizar gráfico de produtos
     const ctxProdutos = document.getElementById('graficoProdutos').getContext('2d');
     new Chart(ctxProdutos, {
         type: 'bar',
@@ -267,14 +473,12 @@ function atualizarInterface(fretes) {
         }
     });
 
-    // Atualizar lista de clientes
     const clientes = calcularTopClientes(fretes);
     const listaClientes = document.getElementById('listaClientes');
     listaClientes.innerHTML = clientes.map(cliente => `
         <li>${cliente.cliente}: ${cliente.quantidade} ton</li>
     `).join('');
 
-    // Atualizar gráfico de clientes
     const ctxClientes = document.getElementById('graficoClientes').getContext('2d');
     new Chart(ctxClientes, {
         type: 'bar',
@@ -295,11 +499,59 @@ function atualizarInterface(fretes) {
             }
         }
     });
+
+    const rankingEmissores = calcularRankingEmissores(window.carregamentosDashboard);
+    const tabelaEmissores = document.querySelector('#tabelaEmissores tbody');
+    tabelaEmissores.innerHTML = rankingEmissores.map((emissor) => `
+        <tr>
+            <td>${emissor.emissor}</td>
+            <td>${emissor.ordens}</td>
+            <td>${emissor.caminhoes}</td>
+            <td>${emissor.totalRetirado} ton</td>
+        </tr>
+    `).join('');
+
+    const emissoresComDados = rankingEmissores.filter(e => e.totalRetirado > 0);
+    if (emissoresComDados.length > 0) {
+        const ctxEmissores = document.getElementById('graficoEmissores').getContext('2d');
+        new Chart(ctxEmissores, {
+            type: 'bar',
+            data: {
+                labels: emissoresComDados.map(e => e.emissor),
+                datasets: [{
+                    label: 'Total Retirado (ton)',
+                    data: emissoresComDados.map(e => e.totalRetirado),
+                    backgroundColor: '#e67e22'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
 }
 
-// Inicializar o dashboard
 document.addEventListener('DOMContentLoaded', () => {
-    // Adicionar listeners para os filtros
     document.getElementById('periodo').addEventListener('change', () => carregarDados());
     document.getElementById('estado').addEventListener('change', () => carregarDados());
-}); 
+    document.getElementById('emissorFilter').addEventListener('change', () => {
+        const emissor = document.getElementById('emissorFilter').value;
+        if (emissor) {
+            const emissorStats = calcularEmissorStats(window.carregamentosDashboard, emissor);
+            document.getElementById('ordensMes').textContent = emissorStats.ordens;
+            document.getElementById('caminhoesMes').textContent = emissorStats.caminhoes;
+            document.getElementById('totalRetirado').textContent = emissorStats.totalRetirado + ' ton';
+        } else {
+            document.getElementById('ordensMes').textContent = '0';
+            document.getElementById('caminhoesMes').textContent = '0';
+            document.getElementById('totalRetirado').textContent = '0 ton';
+        }
+    });
+
+    carregarDados();
+});

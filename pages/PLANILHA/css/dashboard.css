@@ -173,23 +173,9 @@ canvas {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.hamburger-menu {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 20px;
-    cursor: pointer;
-    padding: 15px;
-    z-index: 1001;
-}
-
-.hamburger-menu span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: #2c3e50;
-    transition: all 0.3s ease;
+/* Ocultar apenas os traços visuais do hambúrguer, mantendo a funcionalidade */
+.hamburger span {
+    display: none !important;
 }
 
 .sidebar {
@@ -233,4 +219,113 @@ canvas {
 /* Ajuste do conteúdo principal para o menu fixo */
 .container {
     margin-top: 60px;
+}
+
+/* Estilos para a seção de emissor */
+.emissor-stats {
+    margin-top: 15px;
+}
+
+.emissor-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.emissor-select {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.emissor-select label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.emissor-select select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+.emissor-select select:hover {
+    border-color: #3498db;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.stat-item .label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.stat-item .value {
+    font-weight: bold;
+    color: #3498db;
+}
+
+/* Estilos para tabelas */
+.tabela-estados, .lista-emissores {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+table th {
+    background-color: #3498db;
+    color: white;
+    padding: 6px;
+    text-align: left;
+    font-weight: 500;
+}
+
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+table tr:hover {
+    background-color: #f8f9fa;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Responsividade para tabelas */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
 } 
