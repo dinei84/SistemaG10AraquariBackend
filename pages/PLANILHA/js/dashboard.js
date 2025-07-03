@@ -22,6 +22,32 @@ onAuthStateChanged(auth, (user) => {
 window.fretesDashboard = [];
 window.carregamentosDashboard = [];
 
+// Função para normalizar nomes de emissores
+function normalizarEmissor(emissor) {
+    if (!emissor) return '';
+    
+    // Converter para minúsculas e remover espaços extras
+    const normalizado = emissor.trim().toLowerCase();
+    
+    // Mapear variações para os nomes padrão
+    const mapeamento = {
+        'ton': 'Ton',
+        'thiago': 'Thiago',
+        'andrielly': 'Andrielly',
+        'geovane': 'Geovane',
+        'geovani': 'Geovane',
+        'geo': 'Geovane',
+        'tom': 'Ton',
+        'joao': 'Joao',
+        'joao vitor': 'JoaoVitor',
+        'joaovitor': 'JoaoVitor',
+        'milene': 'Milene',
+        'frota': 'Frota'
+    };
+    
+    return mapeamento[normalizado] || normalizado.charAt(0).toUpperCase() + normalizado.slice(1);
+}
+
 // Função para filtrar fretes por período
 function filtrarFretesPorPeriodo(fretes, periodo) {
     const hoje = new Date();
@@ -73,30 +99,49 @@ function filtrarCarregamentosPorPeriodo(carregamentos, periodo) {
     switch(periodo) {
         case 'atual':
             return carregamentos.filter(carregamento => {
-                const dataCarregamento = new Date(carregamento.dataoc);
+                const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
                 return dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
             });
         case 'anterior':
             const inicioMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
             const fimMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
             return carregamentos.filter(carregamento => {
-                const dataCarregamento = new Date(carregamento.dataoc);
+                const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
                 return dataCarregamento >= inicioMesAnterior && dataCarregamento <= fimMesAnterior;
             });
         case 'ultimos3':
             const inicio3Meses = new Date(hoje.getFullYear(), hoje.getMonth() - 3, 1);
             return carregamentos.filter(carregamento => {
-                const dataCarregamento = new Date(carregamento.dataoc);
+                const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
                 return dataCarregamento >= inicio3Meses && dataCarregamento <= hoje;
             });
         case 'ultimos6':
             const inicio6Meses = new Date(hoje.getFullYear(), hoje.getMonth() - 6, 1);
             return carregamentos.filter(carregamento => {
-                const dataCarregamento = new Date(carregamento.dataoc);
+                const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
                 return dataCarregamento >= inicio6Meses && dataCarregamento <= hoje;
             });
         default:
             return carregamentos;
+    }
+}
+
+// Função auxiliar para parsear datas de carregamento
+function parseDataCarregamento(dataString) {
+    if (!dataString) return new Date(0); // Retorna data inválida se não houver data
+    
+    try {
+        if (dataString.includes('/')) {
+            const [dia, mes, ano] = dataString.split('/');
+            return new Date(`${mes}/${dia}/${ano}`);
+        } else if (dataString.includes('-')) {
+            return new Date(dataString);
+        } else {
+            return new Date(dataString);
+        }
+    } catch (e) {
+        console.error('Erro ao parsear data:', dataString);
+        return new Date(0); // Retorna data inválida se houver erro
     }
 }
 
@@ -138,7 +183,7 @@ async function carregarDados() {
                     carregamentos.push({
                         id: carregamentoDoc.id,
                         freteId: freteId,
-                        emissor: carregamento.emissor || '',
+                        emissor: normalizarEmissor(carregamento.emissor || ''),
                         dataoc: carregamento.dataoc || '',
                         pesoCarregado: parseFloat(carregamento['peso-carregado']) || 0,
                         placa: carregamento.placa || '',
@@ -154,57 +199,7 @@ async function carregarDados() {
             }
         }
 
-        console.log('Carregamentos encontrados:', carregamentos.length);
-
-        if (carregamentos.length === 0) {
-            console.log('Nenhum carregamento encontrado. Criando dados de exemplo para teste...');
-            const hoje = new Date();
-            const dataExemplo = hoje.toISOString().split('T')[0];
-            
-            const carregamentosExemplo = [
-                {
-                    id: 'exemplo1',
-                    freteId: 'teste1',
-                    emissor: 'Dinei',
-                    dataoc: dataExemplo,
-                    pesoCarregado: 25.5,
-                    placa: 'ABC-1234',
-                    motorista: 'João Silva',
-                    cliente: 'Cliente Teste 1',
-                    produto: 'Produto A',
-                    estado: 'SC'
-                },
-                {
-                    id: 'exemplo2',
-                    freteId: 'teste2',
-                    emissor: 'Thiago',
-                    dataoc: dataExemplo,
-                    pesoCarregado: 30.0,
-                    placa: 'DEF-5678',
-                    motorista: 'Maria Santos',
-                    cliente: 'Cliente Teste 2',
-                    produto: 'Produto B',
-                    estado: 'PR'
-                },
-                {
-                    id: 'exemplo3',
-                    freteId: 'teste3',
-                    emissor: 'Dinei',
-                    dataoc: dataExemplo,
-                    pesoCarregado: 28.3,
-                    placa: 'GHI-9012',
-                    motorista: 'Pedro Costa',
-                    cliente: 'Cliente Teste 3',
-                    produto: 'Produto A',
-                    estado: 'SC'
-                }
-            ];
-            
-            carregamentos.push(...carregamentosExemplo);
-            console.log('Dados de exemplo adicionados:', carregamentosExemplo.length);
-        }
-
-        console.log('Carregamentos finais:', carregamentos.length);
+        console.log('Total de carregamentos encontrados:', carregamentos.length);
         console.log('Emissores encontrados:', [...new Set(carregamentos.map(c => c.emissor))]);
 
         const periodo = document.getElementById('periodo').value;
@@ -321,16 +316,14 @@ function calcularEmissorStats(carregamentos, emissor) {
         return { ordens: 0, caminhoes: 0, totalRetirado: 0 };
     }
     
+    const emissorNormalizado = normalizarEmissor(emissor);
     const carregamentosDoEmissor = carregamentos.filter(carregamento => {
-        if (!carregamento.dataoc) {
-            return false;
-        }
+        const carregamentoEmissorNormalizado = normalizarEmissor(carregamento.emissor);
+        const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
         
-        const dataCarregamento = new Date(carregamento.dataoc);
-        const isEmissorCorreto = carregamento.emissor === emissor;
-        const isNoMes = dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
-        
-        return isEmissorCorreto && isNoMes;
+        return carregamentoEmissorNormalizado === emissorNormalizado && 
+               dataCarregamento >= inicioMes && 
+               dataCarregamento <= fimMes;
     });
 
     const ordens = carregamentosDoEmissor.length;
@@ -356,31 +349,31 @@ function calcularRankingEmissores(carregamentos) {
     }
     
     const emissores = {};
-    const emissoresDisponiveis = ['Andrielly', 'Dinei', 'Thiago', 'Geovane', 'Ton', 'Joao', 'Milene', 'JoaoVitor'];
     
-    emissoresDisponiveis.forEach(emissor => {
-        emissores[emissor] = {
-            ordens: 0,
-            caminhoes: 0,
-            totalRetirado: 0
-        };
-    });
-    
+    // Processar todos os carregamentos do mês
     const carregamentosDoMes = carregamentos.filter(carregamento => {
-        if (!carregamento.dataoc) return false;
-        const dataCarregamento = new Date(carregamento.dataoc);
+        const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
         return dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
     });
     
+    // Agrupar por emissor normalizado
     carregamentosDoMes.forEach(carregamento => {
-        const emissor = carregamento.emissor;
-        if (emissor && emissores[emissor]) {
-            emissores[emissor].ordens += 1;
-            emissores[emissor].caminhoes += 1;
-            emissores[emissor].totalRetirado += parseFloat(carregamento.pesoCarregado) || 0;
+        const emissorNormalizado = normalizarEmissor(carregamento.emissor);
+        
+        if (!emissores[emissorNormalizado]) {
+            emissores[emissorNormalizado] = {
+                ordens: 0,
+                caminhoes: 0,
+                totalRetirado: 0
+            };
         }
+        
+        emissores[emissorNormalizado].ordens += 1;
+        emissores[emissorNormalizado].caminhoes += 1;
+        emissores[emissorNormalizado].totalRetirado += parseFloat(carregamento.pesoCarregado) || 0;
     });
     
+    // Converter para array e ordenar
     return Object.entries(emissores)
         .map(([emissor, stats]) => ({
             emissor,
