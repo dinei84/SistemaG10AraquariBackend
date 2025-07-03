@@ -356,7 +356,7 @@ function calcularRankingEmissores(carregamentos) {
     }
     
     const emissores = {};
-    const emissoresDisponiveis = ['Dinei', 'Thiago', 'Geovane', 'Tom', 'Joao', 'Milene', 'JoaoVitor'];
+    const emissoresDisponiveis = ['Andrielly', 'Dinei', 'Thiago', 'Geovane', 'Ton', 'Joao', 'Milene', 'JoaoVitor'];
     
     emissoresDisponiveis.forEach(emissor => {
         emissores[emissor] = {
