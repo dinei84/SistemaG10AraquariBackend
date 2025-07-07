@@ -59,19 +59,62 @@ async function carregarCarregamentos() {
       tabelaFretes.innerHTML = "";
       tabelaFretes.appendChild(cabecalhoFretes);
 
-      // Calcular o valor de 'marcado' (liberado - saldo)
-      let marcado = "N/A";
-      if (freteData.liberado && freteData.saldo) {
-        // Converter valores formatados para números
-        const liberado = typeof freteData.liberado === "string"
-          ? parseFormattedNumber(freteData.liberado)
-          : freteData.liberado;
-        const saldo = typeof freteData.saldo === "string"
-          ? parseFormattedNumber(freteData.saldo)
-          : freteData.saldo;
-        const marcadoCalculado = liberado - saldo;
-        marcado = formatNumber(marcadoCalculado); // Formatar para exibição
+      // Carrega os carregamentos relacionados
+      const querySnapshot = await getDocs(
+        collection(db, "fretes", freteId, "carregamentos")
+      );
+      const corpoTabelaCarregamentos = document.getElementById(
+        "corpoTabelaCarregamentos"
+      );
+      corpoTabelaCarregamentos.innerHTML = "";
+
+      // Soma dos pesos dos carregamentos
+      let somaCarregado = 0;
+      const carregamentos = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        let peso = 0;
+        if (typeof data["peso-carregado"] === "string") {
+          peso = parseFormattedNumber(data["peso-carregado"]);
+        } else {
+          peso = data["peso-carregado"] || 0;
+        }
+        somaCarregado += peso;
+        carregamentos.push({
+          id: doc.id,
+          ...data,
+          timestamp: data.timestamp || Date.now(),
+        });
+      });
+
+      // Atualiza o campo 'carregado' e 'saldo' no banco se necessário
+      let liberado = 0;
+      if (typeof freteData.liberado === "string") {
+        liberado = parseFormattedNumber(freteData.liberado);
+      } else {
+        liberado = freteData.liberado || 0;
       }
+      let saldo = liberado - somaCarregado;
+      if (saldo < 0) saldo = 0;
+      // Atualiza no banco se diferente
+      if (
+        freteData.carregado !== somaCarregado ||
+        freteData.saldo !== saldo
+      ) {
+        const freteRef = doc(db, "fretes", freteId);
+        await updateDoc(freteRef, {
+          carregado: somaCarregado,
+          saldo: saldo,
+        });
+      }
+
+      // Calcular o valor de 'marcado' (liberado - saldo)
+      let marcado = liberado - saldo;
+      // Formatar para exibição
+      const liberadoFormatado = formatNumber(liberado);
+      const saldoFormatado = formatNumber(saldo);
+      const marcadoFormatado = formatNumber(marcado);
+      const carregadoFormatado = formatNumber(somaCarregado);
 
       // Cria corpo da tabela e adiciona os dados do frete
       const corpoFretes = document.createElement("tbody");
@@ -86,9 +129,9 @@ async function carregarCarregamentos() {
                     <td>${freteData.destino || "N/A"}</td>
                     <td>${freteData.produto || "N/A"}</td>
                     <td>${freteData.embalagem || "N/A"}</td>
-                    <td>${freteData.liberado || "N/A"}</td>
-                    <td>${marcado}</td> <!-- Usar o valor calculado -->
-                    <td>${freteData.saldo || "00.000"}</td>
+                    <td>${liberadoFormatado}</td>
+                    <td>${marcadoFormatado}</td>
+                    <td>${saldoFormatado}</td>
                     <td>${freteData.frempresa || "N/A"}</td>
                     <td>${freteData.motorista || "N/A"}</td>
                     <td>${freteData.pedido || "N/A"}</td>
@@ -99,76 +142,43 @@ async function carregarCarregamentos() {
             `;
       corpoFretes.innerHTML = linhaFrete;
       tabelaFretes.appendChild(corpoFretes);
+
+      if (querySnapshot.empty) {
+        corpoTabelaCarregamentos.innerHTML =
+          "Ainda nenhum Carregamento cadastrado para este Frete.";
+      } else {
+        // Ordenar por timestamp decrescente (mais recente primeiro)
+        carregamentos.sort((a, b) => b.timestamp - a.timestamp);
+        carregamentos.forEach((carregamento) => {
+          const isManifestado =
+            carregamento.nfe && carregamento.cte && carregamento["data-manifesto"];
+          const linha = `
+            <tr class="${isManifestado ? 'manifestado' : ''}">
+              <td>${formatarData(carregamento.dataoc) || "N/A"}</td>
+              <td>${carregamento.placa || "N/A"}</td>
+              <td>${carregamento.motorista || "N/A"}</td>
+              <td>${carregamento["tipo-veiculo"] || "N/A"}</td>
+              <td>${formatNumber(parseFloat(carregamento["peso-carregado"]) || 0)}</td>
+              <td>${carregamento.fretemotorista || "N/A"}</td>
+              <td>${carregamento.emissor || "N/A"}</td>
+              <td>${formatarData(carregamento["data-manifesto"]) || "N/A"}</td>
+              <td>${carregamento.cte || "N/A"}</td>
+              <td>${formatarData(carregamento["data-entrega"]) || "N/A"}</td>
+              <td>${carregamento.nfe || "N/A"}</td>
+              <td>${carregamento.observacao || "N/A"}</td>
+              <td>${formatarTelefoneWhatsApp(carregamento.telefone)}</td>
+              <td class="acoes">
+                <button class="btn-editar" onclick="editarCarregamento('${carregamento.id}')">Editar</button>
+                <button class="btn-excluir" onclick="excluirCarregamento('${carregamento.id}')">Excluir</button>
+              </td>
+            </tr>
+          `;
+          corpoTabelaCarregamentos.innerHTML += linha;
+        });
+      }
     } else {
       console.error("Frete não encontrado!");
       alert("Frete não encontrado!");
-    }
-
-    // Carrega os carregamentos relacionados
-    const querySnapshot = await getDocs(
-      collection(db, "fretes", freteId, "carregamentos")
-    );
-    const corpoTabelaCarregamentos = document.getElementById(
-      "corpoTabelaCarregamentos"
-    );
-    corpoTabelaCarregamentos.innerHTML = "";
-
-    if (querySnapshot.empty) {
-      console.log("Nenhum carregamento encontrado para este frete.");
-      corpoTabelaCarregamentos.innerHTML =
-        "Ainda nenhum Carregamento cadastrado para este Frete.";
-    } else {
-      // Converter para array para poder ordenar
-      const carregamentos = [];
-      querySnapshot.forEach((doc) => {
-        carregamentos.push({
-          id: doc.id,
-          ...doc.data(),
-          // Adicionar timestamp para ordenação (se não existir, usar Date.now())
-          timestamp: doc.data().timestamp || Date.now()
-        });
-      });
-
-      // Ordenar por timestamp decrescente (mais recente primeiro)
-      carregamentos.sort((a, b) => b.timestamp - a.timestamp);
-
-      // Renderizar os carregamentos ordenados
-      carregamentos.forEach((carregamento) => {
-        // Verificar se tem NFe, CTe e data do manifesto preenchidos
-        const isManifestado = 
-          carregamento.nfe && 
-          carregamento.cte && 
-          carregamento["data-manifesto"];
-        
-        const linha = `
-          <tr class="${isManifestado ? 'manifestado' : ''}">
-            <td>${formatarData(carregamento.dataoc) || "N/A"}</td>
-            <td>${carregamento.placa || "N/A"}</td>
-            <td>${carregamento.motorista || "N/A"}</td>
-            <td>${carregamento["tipo-veiculo"] || "N/A"}</td>
-            <td>${formatNumber(
-              parseFloat(carregamento["peso-carregado"]) || 0
-            )}</td>
-            <td>${carregamento.fretemotorista || "N/A"}</td>
-            <td>${carregamento.emissor || "N/A"}</td>
-            <td>${formatarData(carregamento["data-manifesto"]) || "N/A"}</td>
-            <td>${carregamento.cte || "N/A"}</td>
-            <td>${formatarData(carregamento["data-entrega"]) || "N/A"}</td>
-            <td>${carregamento.nfe || "N/A"}</td>
-            <td>${carregamento.observacao || "N/A"}</td>
-            <td>${formatarTelefoneWhatsApp(carregamento.telefone)}</td>
-            <td class="acoes">
-              <button class="btn-editar" onclick="editarCarregamento('${
-                carregamento.id
-              }')">Editar</button>
-              <button class="btn-excluir" onclick="excluirCarregamento('${
-                carregamento.id
-              }')">Excluir</button>
-            </td>
-          </tr>
-        `;
-        corpoTabelaCarregamentos.innerHTML += linha;
-      });
     }
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
