@@ -223,7 +223,18 @@ async function loadCarregamentoForEdit() {
     );
     if (carregamentoDoc.exists()) {
       const data = carregamentoDoc.data();
-      document.getElementById("dataoc").value = data.dataoc || "";
+      // Corrigir dataoc para formato yyyy-MM-dd
+      let dataoc = data.dataoc || "";
+      if (dataoc && dataoc.includes("/")) {
+        // Se vier no formato dd/MM/yy ou dd/MM/yyyy
+        const partes = dataoc.split("/");
+        if (partes.length === 3) {
+          let [dia, mes, ano] = partes;
+          if (ano.length === 2) ano = "20" + ano; // Ajusta para yyyy
+          dataoc = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+        }
+      }
+      document.getElementById("dataoc").value = dataoc;
       document.getElementById("placa").value = data.placa || "";
       document.getElementById("motorista").value = data.motorista || "";
       document.getElementById("tipo-veiculo").value = data["tipo-veiculo"] || "";
@@ -304,6 +315,13 @@ document
         return;
       }
 
+      // Validação do campo dataoc
+      const dataoc = document.getElementById("dataoc").value;
+      if (!dataoc) {
+        alert("A data do carregamento é obrigatória!");
+        return;
+      }
+
       let saldoDisponivel = parseFloat(freteData.saldo) || 0;
       let pesoOriginal = 0;
 
@@ -351,7 +369,7 @@ document
         motorista: document.getElementById("motorista").value,
         "tipo-veiculo": document.getElementById("tipo-veiculo").value,
         fretemotorista: document.getElementById("fretemotorista").value,
-        dataoc: formatarData(document.getElementById("dataoc").value),
+        dataoc: formatarData(dataoc),
         emissor: document.getElementById("emissor").value,
         "data-manifesto": dataManifesto,
         cte: cte,
