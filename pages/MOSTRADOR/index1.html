@@ -250,8 +250,8 @@
                 <div class="form-group">
                     <input type="text" id="origem" placeholder="Origem" value="São Francisco do Sul" readonly>
                     <select id="uf" required>
-                        <option value="">Selecione a UF</option>
                         <option value="SC - SFCO">Santa Catarina - SFCO</option>
+                        <option value="">Selecione a UF</option>                        
                         <option value="SC - IMBITUBA">Santa Catarina - Imbituba</option>
                         <option value="MT">Mato Grosso</option>
                         <option value="GO">Goiás</option>
@@ -268,9 +268,11 @@
                     <input type="number" id="valor" step="0.01" placeholder="Valor (R$)" required>
                     <select id="tipo" required>
                         <option value="">Tipo de Carga</option>
-                        <option value="GRANEL">Granel</option>
-                        <option value="BAG">BAG</option>
                         <option value="BIG BAG">BIG BAG</option>
+                        <option value="GRANEL">Granel</option>
+                        <option value="OUTROS">OUTROS</option>
+                        <option value="BOBINA">BOBINA</option>
+
                     </select>
                     <input type="text" id="observacoes" placeholder="Observações (ex: 50T)">
                 </div>
