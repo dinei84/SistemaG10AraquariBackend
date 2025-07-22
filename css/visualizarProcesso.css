@@ -1,0 +1,257 @@
+/* visualizarProcesso.css - Estilos para visualização de processos */
+
+/* Reset e estilos globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('../assets/g10ok.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Camada escura sobre a imagem de fundo */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: -1;
+}
+
+/* Container principal */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.active + main {
+  margin-left: 300px;
+}
+
+/* Título da página */
+h1 {
+  color: white;
+  text-align: center;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Container de informações do processo */
+#processoInfo {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  margin-bottom: 2rem;
+}
+
+#processoInfo h2 {
+  color: #721738;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+#processoInfo p {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+#processoInfo strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Container do diagrama Mermaid */
+#mermaidContainer {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  overflow-x: auto;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mermaidContainer .mermaid {
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+}
+
+/* Estilos para o diagrama Mermaid */
+.mermaid {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+  fill: #721738 !important;
+  stroke: #560e24 !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .node text {
+  fill: white !important;
+  font-weight: 600 !important;
+}
+
+.mermaid .edgePath .path {
+  stroke: #721738 !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .arrowheadPath {
+  fill: #721738 !important;
+}
+
+.mermaid .label {
+  color: #333 !important;
+  font-weight: 500 !important;
+}
+
+/* Botões */
+button {
+  background: #721738;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  box-shadow: 0 4px 16px rgba(114, 23, 56, 0.3);
+}
+
+button:hover {
+  background: #560e24;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(114, 23, 56, 0.4);
+}
+
+button:active {
+  transform: translateY(-1px);
+}
+
+/* Botão voltar específico */
+button[onclick*="dashboardProcessos"] {
+  background: #6c757d;
+  margin-top: 1rem;
+}
+
+button[onclick*="dashboardProcessos"]:hover {
+  background: #5a6268;
+}
+
+/* Estados de carregamento */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #721738;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Mensagens de erro */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  main {
+    padding: 1rem;
+    margin-left: 0 !important;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  #processoInfo {
+    padding: 1.5rem;
+  }
+  
+  #processoInfo h2 {
+    font-size: 1.5rem;
+  }
+  
+  #mermaidContainer {
+    padding: 1.5rem;
+    min-height: 300px;
+  }
+  
+  button {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  #processoInfo {
+    padding: 1rem;
+  }
+  
+  #processoInfo h2 {
+    font-size: 1.3rem;
+  }
+  
+  #processoInfo p {
+    font-size: 0.9rem;
+  }
+  
+  #mermaidContainer {
+    padding: 1rem;
+    min-height: 250px;
+  }
+  
+  button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+} 
