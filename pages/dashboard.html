@@ -12,7 +12,18 @@
     <title>Início</title>
 </head>
 
-<body>
+<body style="background: url('../assets/Frota-G10.jpg') center center/cover no-repeat; min-height: 100vh;">
+
+    <div class="logout-container">
+        <button id="logoutBtn" class="logout-button">
+            <i class="fas fa-sign-out-alt">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#FFFFFF">
+                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
+                </svg>
+            </i>
+            Sair
+        </button>
+    </div>
     
     <nav class="sidebar">
         <div class="hamburger-menu">
@@ -123,26 +134,37 @@
     </nav>
 
     <header class="hello">
-        <h3 style="font-size: 55px; color: white;">Ola Time Araquari!</h3>
-
-        <aside class="team">
-            <img src="assets/team350.jpeg" alt="">
-        </aside>
-
-    <button id="logoutBtn" class="logout-button">
-        <i class="fas fa-sign-out-alt">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#FFFFFF">
-                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
-            </svg>
-        </i>
-        Sair
-    </button>
+        
+        <h3>Ola Time Araquari!</h3>
 
     <style>
-        .logout-button {
+        .hello {
+            min-height: 350px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .hello h3 {
+            font-size: 55px;
+            color: white;
+            text-shadow: 2px 2px 8px #000;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logout-container {
             position: absolute;
             top: 20px;
             right: 20px;
+            z-index: 10;
+        }
+
+        .logout-button {
             background: #721738;
             color: white;
             border: none;
@@ -157,6 +179,23 @@
 
         .logout-button:hover {
             background: #560e24;
+        }
+        .hello {
+            min-height: 350px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+        .hello h3 {
+            font-size: 55px;
+            color: white;
+            text-shadow: 2px 2px 8px #000;
+            position: relative;
+            z-index: 2;
         }
     </style>
 
