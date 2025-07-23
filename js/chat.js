@@ -4,11 +4,10 @@ import { auth } from "./firebase-config.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import config from "./config.js";
 
-// Configurau00e7u00f5es
 const WEBSOCKET_URL = config.WEBSOCKET_URL;
 const CHAT_HISTORY_KEY = 'chat_history';
 const MAX_STORED_MESSAGES = 100;
-const RECONNECT_INTERVAL = 3000; // Tentar reconectar a cada 3 segundos
+const RECONNECT_INTERVAL = 3000; 
 
 // Elementos do DOM
 const messageInput = document.getElementById('messageInput');
@@ -19,7 +18,6 @@ const userNameElement = document.getElementById('userName');
 const userAvatarElement = document.getElementById('userAvatar');
 const logoutBtn = document.getElementById('logoutBtn');
 
-// Variu00e1veis globais
 let socket;
 let currentUser = null;
 let onlineUsers = [];
@@ -27,12 +25,9 @@ let reconnectInterval = null;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 
-// Inicializau00e7u00e3o
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificar se o usuu00e1rio estu00e1 autenticado
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // Configura o usuu00e1rio atual
             currentUser = {
                 uid: user.uid,
                 email: user.email,
@@ -40,39 +35,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 photoURL: user.photoURL
             };
             
-            // Inicializau00e7u00e3o em sequu00eancia
             initializeChat();
         } else {
-            // Redireciona para a pu00e1gina de login se nu00e3o estiver autenticado
             window.location.href = '../../login.html';
         }
     });
 });
 
-// Funu00e7u00e3o para inicializar o chat de forma organizada
 function initializeChat() {
-    // 1. Atualiza a interface com os dados do usuu00e1rio
     updateUserInfo();
     
-    // 2. Carrega o histu00f3rico de mensagens do localStorage
     loadChatHistory();
     
-    // 3. Configura os event listeners
     setupEventListeners();
     
-    // 4. Conecta ao WebSocket
     connectWebSocket();
 }
 
-// Atualiza as informau00e7u00f5es do usuu00e1rio na interface
 function updateUserInfo() {
     userNameElement.textContent = currentUser.displayName;
     
-    // Configura o avatar do usuu00e1rio
     if (currentUser.photoURL) {
         userAvatarElement.innerHTML = `<img src="${currentUser.photoURL}" alt="${currentUser.displayName}" />`;
     } else {
-        // Usa as iniciais do nome como avatar
         const initials = currentUser.displayName.split(' ')
             .map(name => name.charAt(0))
             .join('')
@@ -90,13 +75,11 @@ function connectWebSocket() {
             console.log('Conexão WebSocket estabelecida');
             reconnectAttempts = 0;
             
-            // Limpa o intervalo de reconexão se existir
             if (reconnectInterval) {
                 clearInterval(reconnectInterval);
                 reconnectInterval = null;
             }
             
-            // Envia informações do usuário para o servidor
             sendUserInfo();
         };
         
@@ -122,7 +105,7 @@ function connectWebSocket() {
 
 // Tenta reconectar ao WebSocket
 function attemptReconnect() {
-    if (reconnectInterval) return; // Já está tentando reconectar
+    if (reconnectInterval) return; 
     
     reconnectInterval = setInterval(() => {
         reconnectAttempts++;
@@ -165,7 +148,6 @@ async function sendUserInfo() {
         } catch (error) {
             console.error('Erro ao obter token de autenticação:', error);
             
-            // Envia sem o token em caso de erro
             socket.send(JSON.stringify({
                 type: 'user_info',
                 user: currentUser
@@ -174,7 +156,6 @@ async function sendUserInfo() {
     }
 }
 
-// Configura os event listeners
 function setupEventListeners() {
     // Enviar mensagem ao clicar no botu00e3o
     sendButton.addEventListener('click', sendMessage);
@@ -197,12 +178,10 @@ function setupEventListeners() {
                 }));
             }
             
-            // Fecha a conexu00e3o WebSocket
             if (socket) {
                 socket.close();
             }
             
-            // Faz logout no Firebase
             await signOut(auth);
             window.location.href = '../../index.html';
         } catch (error) {
@@ -290,13 +269,11 @@ function displaySystemMessage(text) {
     scrollToBottom();
 }
 
-// Atualiza a lista de usuu00e1rios online
 function updateOnlineUsers(users) {
     onlineUsers = users;
     renderOnlineUsers();
 }
 
-// Adiciona um usuu00e1rio u00e0 lista de online
 function addOnlineUser(user) {
     if (!onlineUsers.some(u => u.uid === user.uid)) {
         onlineUsers.push(user);
@@ -304,20 +281,17 @@ function addOnlineUser(user) {
     }
 }
 
-// Remove um usuu00e1rio da lista de online
 function removeOnlineUser(user) {
     onlineUsers = onlineUsers.filter(u => u.uid !== user.uid);
     renderOnlineUsers();
 }
 
-// Renderiza a lista de usuu00e1rios online
 function renderOnlineUsers() {
     onlineUsersList.innerHTML = '';
     
     onlineUsers.forEach(user => {
         const listItem = document.createElement('li');
         
-        // Destaca o usuu00e1rio atual
         if (user.uid === currentUser.uid) {
             listItem.classList.add('current-user');
         }
@@ -331,19 +305,15 @@ function renderOnlineUsers() {
     });
 }
 
-// Rola o chat para o final
 function scrollToBottom() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Salva uma mensagem no histu00f3rico local
 function saveMessageToHistory(message) {
     let chatHistory = JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY) || '[]');
     
-    // Adiciona a nova mensagem
     chatHistory.push(message);
     
-    // Limita o nu00famero de mensagens armazenadas
     if (chatHistory.length > MAX_STORED_MESSAGES) {
         chatHistory = chatHistory.slice(chatHistory.length - MAX_STORED_MESSAGES);
     }
@@ -351,16 +321,13 @@ function saveMessageToHistory(message) {
     localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chatHistory));
 }
 
-// Carrega o histu00f3rico de mensagens do localStorage
 function loadChatHistory() {
     const chatHistory = JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY) || '[]');
     
-    // Exibe as mensagens do histu00f3rico
     chatHistory.forEach(message => {
         displayMessage(message);
     });
     
-    // Se houver mensagens, exibe uma divisu00f3ria
     if (chatHistory.length > 0) {
         displaySystemMessage('Mensagens anteriores carregadas do histu00f3rico local');
     }

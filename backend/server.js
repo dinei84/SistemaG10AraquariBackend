@@ -6,11 +6,9 @@ const http = require('http');
 // Carrega as variáveis de ambiente
 dotenv.config();
 
-// Inicializa o Express
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Cria o servidor HTTP usando o app Express
 const server = http.createServer(app);
 
 // Middleware
@@ -22,7 +20,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware para logging de requisiu00e7u00f5es
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
@@ -32,12 +29,10 @@ app.use((req, res, next) => {
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/data', require('./routes/dataRoutes'));
 
-// Rota de teste/sau00fade
 app.get('/', (req, res) => {
   res.json({ message: 'API funcionando corretamente' });
 });
 
-// Middleware para tratamento de erros
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -46,10 +41,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Configuração do WebSocket
 const setupWebSocket = require('./websocket/setup-websocket');
 
-// Configura o WebSocket no mesmo servidor HTTP
 setupWebSocket(server);
 
 // Inicia o servidor HTTP

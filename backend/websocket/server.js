@@ -7,14 +7,11 @@ const admin = require('firebase-admin');
 const fs = require('fs');
 const path = require('path');
 
-// Carrega as variu00e1veis de ambiente
 dotenv.config();
 
-// Configurau00e7u00f5es
 const PORT = process.env.WEBSOCKET_PORT || 8080;
 const ENABLE_AUTH = process.env.ENABLE_AUTH === 'true';
 
-// Inicializau00e7u00e3o do Firebase Admin (se necessu00e1rio)
 function initializeFirebase() {
     if (!ENABLE_AUTH) {
         console.log('Autenticau00e7u00e3o desativada. O servidor nu00e3o verificaru00e1 tokens.');
@@ -56,11 +53,9 @@ const wss = new WebSocket.Server({ server });
 // Armazena os clientes conectados
 const clients = new Map();
 
-// Evento de conexu00e3o
 wss.on('connection', (ws) => {
     console.log('Nova conexu00e3o WebSocket estabelecida');
     
-    // Gera um ID temporu00e1rio para o cliente atu00e9 que ele se identifique
     const clientId = generateClientId();
     clients.set(ws, { id: clientId });
     
@@ -78,7 +73,6 @@ wss.on('connection', (ws) => {
     ws.on('close', () => {
         const client = clients.get(ws);
         if (client && client.user) {
-            // Notifica os outros usuu00e1rios que este usuu00e1rio saiu
             broadcastMessage({
                 type: 'user_left',
                 user: client.user
@@ -104,9 +98,7 @@ async function handleMessage(ws, data) {
     
     switch (data.type) {
         case 'user_info':
-            // Atualiza as informau00e7u00f5es do usuu00e1rio
             if (data.user) {
-                // Verifica o token do usuu00e1rio se o Firebase Admin estiver configurado
                 if (firebaseInitialized && data.token) {
                     try {
                         const decodedToken = await admin.auth().verifyIdToken(data.token);
@@ -123,16 +115,13 @@ async function handleMessage(ws, data) {
                     }
                 }
                 
-                // Atualiza as informau00e7u00f5es do cliente
                 clients.set(ws, { ...client, user: data.user });
                 
-                // Notifica os outros usuu00e1rios que este usuu00e1rio entrou
                 broadcastMessage({
                     type: 'user_joined',
                     user: data.user
                 }, ws);
                 
-                // Envia a lista de usuu00e1rios online para o novo usuu00e1rio
                 ws.send(JSON.stringify({
                     type: 'user_list',
                     users: getOnlineUsers()
@@ -143,16 +132,13 @@ async function handleMessage(ws, data) {
             break;
             
         case 'chat_message':
-            // Verifica se o usuu00e1rio estu00e1 identificado
             if (client && client.user) {
-                // Transmite a mensagem para todos os clientes
                 broadcastMessage(data);
                 console.log(`Mensagem de ${client.user.displayName}: ${data.content}`);
             }
             break;
             
         case 'user_logout':
-            // Usuu00e1rio fez logout explicitamente
             if (client && client.user) {
                 broadcastMessage({
                     type: 'user_left',
@@ -179,7 +165,6 @@ function broadcastMessage(message, excludeWs = null) {
     });
 }
 
-// Transmite a lista atualizada de usuu00e1rios online para todos os clientes
 function broadcastUserList() {
     const users = getOnlineUsers();
     
@@ -189,7 +174,6 @@ function broadcastUserList() {
     });
 }
 
-// Obtu00e9m a lista de usuu00e1rios online
 function getOnlineUsers() {
     const users = [];
     
@@ -202,17 +186,14 @@ function getOnlineUsers() {
     return users;
 }
 
-// Gera um ID u00fanico para o cliente
 function generateClientId() {
     return Math.random().toString(36).substring(2, 15);
 }
 
 // Inicia o servidor
 if (process.env.VERCEL) {
-    // Na Vercel, exportamos o servidor como um mu00f3dulo
     module.exports = server;
 } else {
-    // Em ambiente local, iniciamos o servidor normalmente
     server.listen(PORT, () => {
         console.log(`Servidor WebSocket rodando na porta ${PORT}`);
         console.log(`Autenticau00e7u00e3o: ${firebaseInitialized ? 'Ativada' : 'Desativada'}`);

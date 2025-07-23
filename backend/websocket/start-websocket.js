@@ -18,11 +18,9 @@ const wss = new WebSocket.Server({ server });
 // Armazena os clientes conectados
 const clients = new Map();
 
-// Evento de conexu00e3o
 wss.on('connection', (ws) => {
     console.log('Nova conexu00e3o WebSocket estabelecida');
     
-    // Gera um ID temporu00e1rio para o cliente atu00e9 que ele se identifique
     const clientId = Math.random().toString(36).substring(2, 15);
     clients.set(ws, { id: clientId });
     
@@ -36,11 +34,9 @@ wss.on('connection', (ws) => {
         }
     });
     
-    // Evento de desconexu00e3o
     ws.on('close', () => {
         const client = clients.get(ws);
         if (client && client.user) {
-            // Notifica os outros usuu00e1rios que este usuu00e1rio saiu
             broadcastMessage({
                 type: 'user_left',
                 user: client.user
@@ -66,18 +62,14 @@ function handleMessage(ws, data) {
     
     switch (data.type) {
         case 'user_info':
-            // Atualiza as informau00e7u00f5es do usuu00e1rio
             if (data.user) {
-                // Atualiza as informau00e7u00f5es do cliente
                 clients.set(ws, { ...client, user: data.user });
                 
-                // Notifica os outros usuu00e1rios que este usuu00e1rio entrou
                 broadcastMessage({
                     type: 'user_joined',
                     user: data.user
                 }, ws);
                 
-                // Envia a lista de usuu00e1rios online para o novo usuu00e1rio
                 ws.send(JSON.stringify({
                     type: 'user_list',
                     users: getOnlineUsers()
@@ -88,16 +80,13 @@ function handleMessage(ws, data) {
             break;
             
         case 'chat_message':
-            // Verifica se o usuu00e1rio estu00e1 identificado
             if (client && client.user) {
-                // Transmite a mensagem para todos os clientes
                 broadcastMessage(data);
                 console.log(`Mensagem de ${client.user.displayName}: ${data.content}`);
             }
             break;
             
         case 'user_logout':
-            // Usuu00e1rio fez logout explicitamente
             if (client && client.user) {
                 broadcastMessage({
                     type: 'user_left',
@@ -134,7 +123,6 @@ function broadcastUserList() {
     });
 }
 
-// Obtu00e9m a lista de usuu00e1rios online
 function getOnlineUsers() {
     const users = [];
     

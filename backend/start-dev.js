@@ -1,7 +1,3 @@
-/**
- * Script para iniciar o servidor em modo de desenvolvimento
- * Este script configura o ambiente para desenvolvimento sem necessidade de credenciais reais
- */
 
 const fs = require('fs');
 const path = require('path');
@@ -9,17 +5,14 @@ const { spawn } = require('child_process');
 
 console.log('Iniciando o servidor em modo de desenvolvimento seguro...');
 
-// Configura variu00e1veis de ambiente para desenvolvimento
 process.env.NODE_ENV = 'development';
 
-// Verifica se o arquivo de credenciais existe
 const serviceAccountPath = path.join(__dirname, 'firebase-service-account.json');
 const examplePath = path.join(__dirname, 'firebase-service-account.example.json');
 
 if (!fs.existsSync(serviceAccountPath) && fs.existsSync(examplePath)) {
   console.log('Arquivo de credenciais nu00e3o encontrado. Usando arquivo de exemplo para desenvolvimento.');
   try {
-    // Copia o arquivo de exemplo para o arquivo real
     fs.copyFileSync(examplePath, serviceAccountPath);
     console.log('Arquivo de exemplo copiado com sucesso.');
   } catch (error) {
@@ -28,7 +21,6 @@ if (!fs.existsSync(serviceAccountPath) && fs.existsSync(examplePath)) {
   }
 }
 
-// Inicia o servidor usando nodemon
 console.log('Iniciando o servidor...');
 
 try {

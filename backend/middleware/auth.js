@@ -24,7 +24,7 @@ const authMiddleware = async (req, res, next) => {
     
     try {
       const decodedToken = await admin.auth().verifyIdToken(token);
-      req.user = decodedToken; // Adiciona os dados do usuário ao objeto de requisição
+      req.user = decodedToken; 
       next();
     } catch (error) {
       console.error('Erro ao verificar token:', error);

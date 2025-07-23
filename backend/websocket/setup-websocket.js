@@ -19,7 +19,6 @@ function initializeFirebase() {
         const serviceAccountPath = path.join(__dirname, '../firebase-service-account.json');
         if (fs.existsSync(serviceAccountPath)) {
             const serviceAccount = require(serviceAccountPath);
-            // Verifica se o Firebase Admin já foi inicializado
             if (!admin.apps.length) {
                 admin.initializeApp({
                     credential: admin.credential.cert(serviceAccount),
@@ -96,9 +95,7 @@ module.exports = function setupWebSocket(server) {
         
         switch (data.type) {
             case 'user_info':
-                // Atualiza as informações do usuário
                 if (data.user) {
-                    // Verifica o token do usuário se o Firebase Admin estiver configurado
                     if (firebaseInitialized && data.token) {
                         try {
                             const decodedToken = await admin.auth().verifyIdToken(data.token);
@@ -115,16 +112,13 @@ module.exports = function setupWebSocket(server) {
                         }
                     }
                     
-                    // Atualiza as informações do cliente
                     clients.set(ws, { ...client, user: data.user });
                     
-                    // Notifica os outros usuários que este usuário entrou
                     broadcastMessage({
                         type: 'user_joined',
                         user: data.user
                     }, ws);
                     
-                    // Envia a lista de usuários online para o novo usuário
                     ws.send(JSON.stringify({
                         type: 'user_list',
                         users: getOnlineUsers()
@@ -135,16 +129,13 @@ module.exports = function setupWebSocket(server) {
                 break;
                 
             case 'chat_message':
-                // Verifica se o usuário está identificado
                 if (client && client.user) {
-                    // Transmite a mensagem para todos os clientes
                     broadcastMessage(data);
                     console.log(`Mensagem de ${client.user.displayName}: ${data.content}`);
                 }
                 break;
                 
             case 'user_logout':
-                // Usuário fez logout explicitamente
                 if (client && client.user) {
                     broadcastMessage({
                         type: 'user_left',

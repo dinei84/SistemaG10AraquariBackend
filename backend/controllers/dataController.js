@@ -1,11 +1,9 @@
 const admin = require('../config/firebase-admin');
 
-// Armazenamento em memória para desenvolvimento quando o Firestore não está disponível
 const inMemoryDb = {
   collections: {}
 };
 
-// Função auxiliar para gerar IDs únicos
 function generateId() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
@@ -187,7 +185,6 @@ const updateDocument = async (req, res) => {
     // Verifica se o Firestore está disponível
     const db = getDb();
     if (db) {
-      // Verifica se o documento existe no Firestore
       const docRef = db.collection(collection).doc(id);
       const doc = await docRef.get();
       
@@ -195,7 +192,6 @@ const updateDocument = async (req, res) => {
         return res.status(404).json({ message: 'Documento não encontrado' });
       }
       
-      // Atualiza o documento no Firestore
       await docRef.update(enhancedData);
       
       return res.status(200).json({
@@ -203,7 +199,6 @@ const updateDocument = async (req, res) => {
         ...enhancedData
       });
     } else {
-      // Usa o armazenamento em memória
       if (!inMemoryDb.collections[collection] || !inMemoryDb.collections[collection][id]) {
         return res.status(404).json({ message: 'Documento não encontrado' });
       }
@@ -237,10 +232,8 @@ const deleteDocument = async (req, res) => {
       return res.status(400).json({ message: 'Parâmetros inválidos' });
     }
     
-    // Verifica se o Firestore está disponível
     const db = getDb();
     if (db) {
-      // Verifica se o documento existe no Firestore
       const docRef = db.collection(collection).doc(id);
       const doc = await docRef.get();
       
@@ -248,15 +241,12 @@ const deleteDocument = async (req, res) => {
         return res.status(404).json({ message: 'Documento não encontrado' });
       }
       
-      // Exclui o documento do Firestore
       await docRef.delete();
     } else {
-      // Usa o armazenamento em memória
       if (!inMemoryDb.collections[collection] || !inMemoryDb.collections[collection][id]) {
         return res.status(404).json({ message: 'Documento não encontrado' });
       }
       
-      // Exclui o documento da memória
       delete inMemoryDb.collections[collection][id];
     }
     

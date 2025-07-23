@@ -66,25 +66,19 @@ export function setupCurrencyInput(inputId) {
   if (!input) return;
 
   input.addEventListener("input", function (e) {
-    // Remove tudo que não for dígito, vírgula ou ponto
     let value = e.target.value.replace(/[^\d,\.]/g, "");
     
-    // Se o valor estiver vazio, não faz nada
     if (!value) return;
     
-    // Substitui vírgula por ponto para processamento
     value = value.replace(",", ".");
     
-    // Converte para número
     const numValue = parseFloat(value);
     
-    // Se não for um número válido, limpa o campo
     if (isNaN(numValue)) {
       e.target.value = "";
       return;
     }
     
-    // Formata o valor
     e.target.value = formatCurrency(numValue);
   });
 
@@ -111,7 +105,6 @@ export function setupCurrencyInput(inputId) {
     }
   });
 
-  // Permitir entrada de valores com ponto como separador de milhar
   input.pattern = "[0-9]{1,3}(\\.[0-9]{3})*,[0-9]{2}";
   input.inputMode = "decimal";
 }
@@ -126,10 +119,8 @@ export function setupWeightInput(inputId) {
   input.addEventListener("input", function (e) {
     let value = e.target.value;
     
-    // Remove caracteres não numéricos exceto vírgula
     value = value.replace(/[^\d,]/g, "");
     
-    // Garante que só existe uma vírgula
     const commaCount = (value.match(/,/g) || []).length;
     if (commaCount > 1) {
       value = value.replace(/,/g, (match, index) => {
@@ -137,7 +128,6 @@ export function setupWeightInput(inputId) {
       });
     }
     
-    // Limita a 3 casas decimais
     if (value.includes(",")) {
       const parts = value.split(",");
       if (parts[1] && parts[1].length > 3) {
@@ -146,7 +136,6 @@ export function setupWeightInput(inputId) {
       }
     }
     
-    // Atualiza o valor do input
     e.target.value = value;
     lastValue = value;
   });
@@ -154,10 +143,8 @@ export function setupWeightInput(inputId) {
   input.addEventListener("blur", function (e) {
     let value = e.target.value;
     
-    // Se o valor estiver vazio, não faz nada
     if (!value) return;
     
-    // Converte para número e formata
     const numValue = parseFormattedNumber(value);
     if (!isNaN(numValue)) {
       e.target.value = formatWeight(numValue);
@@ -169,7 +156,6 @@ export function setupWeightInput(inputId) {
   input.addEventListener("focus", function(e) {
     let value = e.target.value;
     if (value) {
-      // Remove formatação para edição mais fácil
       const numValue = parseFormattedNumber(value);
       if (!isNaN(numValue)) {
         e.target.value = numValue.toString().replace(".", ",");
@@ -182,7 +168,7 @@ export function setupWeightInput(inputId) {
 export function formatDate(date) {
   if (!date) return '';
   
-  // Verifica se a data está no formato yyyy-mm-dd
+  
   if (date.includes('-')) {
     const [ano, mes, dia] = date.split('-');
     return `${dia}/${mes}/${ano}`;
