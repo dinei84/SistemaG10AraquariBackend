@@ -40,6 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = '../../login.html';
         }
     });
+
+    if ("Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
 });
 
 function initializeChat() {
@@ -213,6 +217,15 @@ function handleWebSocketMessage(data) {
         case 'chat_message':
             displayMessage(data);
             saveMessageToHistory(data);
+
+            // Notificação: só se não for sua mensagem e a aba não estiver em foco
+            if (data.sender && data.sender.uid !== currentUser.uid && document.visibilityState !== 'visible') {
+                let nomeRemetente = data.sender.email ? data.sender.email.split('@')[0] : (data.sender.displayName || 'Usuário');
+                mostrarNotificacao(
+                    `Nova mensagem de ${nomeRemetente}`,
+                    data.content.length > 60 ? data.content.substring(0, 60) + '...' : data.content
+                );
+            }
             break;
             
         case 'user_list':
@@ -340,5 +353,15 @@ function loadChatHistory() {
     
     if (chatHistory.length > 0) {
         displaySystemMessage('Mensagens anteriores carregadas do histórico local');
+    }
+}
+
+// Função utilitária para mostrar notificação do navegador
+function mostrarNotificacao(titulo, corpo) {
+    if (Notification.permission === "granted") {
+        new Notification(titulo, {
+            body: corpo,
+            icon: "../../assets/favcom.png"
+        });
     }
 }
