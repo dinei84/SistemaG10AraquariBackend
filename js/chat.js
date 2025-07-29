@@ -194,20 +194,144 @@ function setupEventListeners() {
     });
 }
 
-// Envia uma mensagem
-function sendMessage() {
-    const messageText = messageInput.value.trim();
-    
-    if (messageText && socket && socket.readyState === WebSocket.OPEN) {
+// 1. Adicione o painel de figurinhas e o botão de upload no DOM após o campo de mensagem
+// (adicione após o campo de input e botão de enviar)
+
+// Função para criar painel de figurinhas
+function criarPainelFigurinhas() {
+    const stickers = [
+        // Stickers já existentes
+        '../../assets/icons/icon chat.png',
+        '../../assets/icons/icon calculator.png',
+        '../../assets/icons/icon manual order.png',
+        '../../assets/icons/icon phone.png',
+        '../../assets/icons/icon search.png',
+        '../../assets/icons/icon spreedsheet.png',
+        '../../assets/g10.png',
+        '../../assets/team.jpeg',
+        // Twemoji (CDN oficial)
+        '😀', // 😍
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f602.png', // 😂
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f62d.png', // 😭
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f609.png', // 😉
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f60e.png', // 😎
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f973.png', // 🥳
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f621.png', // 😡
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f622.png', // 😢
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f44d.png', // 👍
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f44e.png', // 👎
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f525.png', // 🔥
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f47b.png', // 👻
+        'https://twemoji.maxcdn.com/v/latest/72x72/1f480.png', // 💀
+        // OpenMoji (CDN oficial)
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f92a.png', // 🤪
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f60f.png', // 😏
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f618.png', // 😘
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f4af.png', // 💯
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f389.png', // 🎉
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f643.png', // 🙃
+        'https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@14.0.0/color/72x72/1f60a.png', // 😊
+    ];
+    const painel = document.createElement('div');
+    painel.id = 'painelFigurinhas';
+    painel.style.display = 'none';
+    painel.style.position = 'absolute';
+    painel.style.bottom = '60px';
+    painel.style.left = '20px';
+    painel.style.background = '#fff';
+    painel.style.border = '1px solid #ccc';
+    painel.style.borderRadius = '8px';
+    painel.style.padding = '10px';
+    painel.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+    painel.style.zIndex = '999';
+    painel.style.maxWidth = '300px';
+    painel.style.display = 'flex';
+    painel.style.flexWrap = 'wrap';
+    painel.style.gap = '8px';
+    stickers.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'sticker';
+        img.style.width = '48px';
+        img.style.height = '48px';
+        img.style.cursor = 'pointer';
+        img.onclick = () => {
+            enviarMensagem(`<img src=\"${url}\" class=\"sticker\">`);
+            painel.style.display = 'none';
+        };
+        painel.appendChild(img);
+    });
+    document.body.appendChild(painel);
+    return painel;
+}
+
+// Função para mostrar/ocultar painel de figurinhas
+function togglePainelFigurinhas() {
+    const painel = document.getElementById('painelFigurinhas') || criarPainelFigurinhas();
+    painel.style.display = painel.style.display === 'none' ? 'flex' : 'none';
+}
+
+// Adicione botão de figurinhas e upload ao lado do campo de mensagem
+const chatInputContainer = document.querySelector('.chat-input-container');
+if (chatInputContainer) {
+    // Botão de figurinhas
+    const btnSticker = document.createElement('button');
+    btnSticker.type = 'button';
+    btnSticker.id = 'btnSticker';
+    btnSticker.title = 'Enviar figurinha';
+    btnSticker.innerHTML = '😀';
+    btnSticker.style.marginRight = '8px';
+    btnSticker.onclick = togglePainelFigurinhas;
+    chatInputContainer.insertBefore(btnSticker, chatInputContainer.firstChild);
+
+    // Botão de upload de imagem
+    const btnUpload = document.createElement('button');
+    btnUpload.type = 'button';
+    btnUpload.id = 'btnUpload';
+    btnUpload.title = 'Enviar imagem';
+    btnUpload.innerHTML = '📎';
+    btnUpload.style.marginRight = '8px';
+    chatInputContainer.insertBefore(btnUpload, chatInputContainer.firstChild.nextSibling);
+
+    // Input file escondido
+    const inputFile = document.createElement('input');
+    inputFile.type = 'file';
+    inputFile.accept = 'image/*';
+    inputFile.style.display = 'none';
+    inputFile.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                enviarMensagem(`<img src=\"${evt.target.result}\" class=\"chat-image\">`);
+            };
+            reader.readAsDataURL(file);
+        }
+        inputFile.value = '';
+    };
+    document.body.appendChild(inputFile);
+    btnUpload.onclick = () => inputFile.click();
+}
+
+// Função para enviar mensagem (texto, figurinha ou imagem)
+function enviarMensagem(conteudo) {
+    if (conteudo && socket && socket.readyState === WebSocket.OPEN) {
         const message = {
             type: 'chat_message',
-            content: messageText,
+            content: conteudo,
             sender: currentUser,
             timestamp: new Date().toISOString()
         };
-        
         socket.send(JSON.stringify(message));
         messageInput.value = '';
+    }
+}
+
+// Substitua sendMessage() para usar enviarMensagem()
+function sendMessage() {
+    const messageText = messageInput.value.trim();
+    if (messageText) {
+        enviarMensagem(messageText);
     }
 }
 
@@ -247,12 +371,10 @@ function handleWebSocketMessage(data) {
     }
 }
 
-// Exibe uma mensagem no chat
+// Ajuste displayMessage para exibir imagens/figurinhas corretamente
 function displayMessage(message) {
     const messageElement = document.createElement('div');
     const isSentByCurrentUser = message.sender.uid === currentUser.uid;
-
-    // Sempre pega o nome antes do @ do e-mail, se disponível
     let nomeExibido = 'Usuário';
     if (isSentByCurrentUser) {
         nomeExibido = 'Você';
@@ -261,21 +383,31 @@ function displayMessage(message) {
     } else if (message.sender && message.sender.displayName) {
         nomeExibido = message.sender.displayName;
     }
-
     messageElement.className = `message ${isSentByCurrentUser ? 'sent' : 'received'}`;
-
-    // Formata a data/hora
     const timestamp = new Date(message.timestamp);
     const timeString = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+    // Detecta se é uma imagem/figurinha
+    let conteudo = message.content;
+    if (/^<img\s/i.test(conteudo)) {
+        // Segurança: só permite src de data:image ou das pastas de assets
+        conteudo = conteudo.replace(/src=\"([^\"]+)\"/g, (match, src) => {
+            if (src.startsWith('data:image') || src.startsWith('../../assets/')) {
+                return `src=\"${src}\"`;
+            } else {
+                return 'src=\"#\"';
+            }
+        });
+    } else {
+        // Escapa HTML para texto normal
+        conteudo = conteudo.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
     messageElement.innerHTML = `
         <div class="message-info">
             <span class="message-sender">${nomeExibido}</span>
             <span class="message-time">${timeString}</span>
         </div>
-        <div class="message-content">${message.content}</div>
+        <div class="message-content">${conteudo}</div>
     `;
-
     chatMessages.appendChild(messageElement);
     scrollToBottom();
 }
