@@ -135,7 +135,7 @@
 
     <header class="hello">
         
-        <h3>Ola Time Araquari!</h3>
+        <h3></h3>
 
     <style>
         .hello {
@@ -211,6 +211,19 @@
                 console.error("Erro ao fazer logout:", error);
             }
         });
+
+        const now = new Date();
+        const hours = now.getHours();
+
+        if (hours >= 6 && hours < 12) {
+            document.querySelector('.hello h3').textContent = 'Bom dia, Time Araquari!';
+        } else if (hours >= 12 && hours < 18) {
+            document.querySelector('.hello h3').textContent = 'Boa tarde, Time Araquari!';
+        } else {
+            document.querySelector('.hello h3').textContent = 'Boa noite, Time Araquari!';
+        }
+
+
     </script>
     </header>
 
