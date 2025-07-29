@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUser = {
                 uid: user.uid,
                 email: user.email,
-                displayName: user.displayName || user.email.split('@')[0],
+                displayName: user.email.split('@')[0], // Sempre pega antes do @
                 photoURL: user.photoURL
             };
             
@@ -238,21 +238,31 @@ function handleWebSocketMessage(data) {
 function displayMessage(message) {
     const messageElement = document.createElement('div');
     const isSentByCurrentUser = message.sender.uid === currentUser.uid;
-    
+
+    // Sempre pega o nome antes do @ do e-mail, se disponível
+    let nomeExibido = 'Usuário';
+    if (isSentByCurrentUser) {
+        nomeExibido = 'Você';
+    } else if (message.sender && message.sender.email) {
+        nomeExibido = message.sender.email.split('@')[0];
+    } else if (message.sender && message.sender.displayName) {
+        nomeExibido = message.sender.displayName;
+    }
+
     messageElement.className = `message ${isSentByCurrentUser ? 'sent' : 'received'}`;
-    
+
     // Formata a data/hora
     const timestamp = new Date(message.timestamp);
     const timeString = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
+
     messageElement.innerHTML = `
         <div class="message-info">
-            <span class="message-sender">${isSentByCurrentUser ? 'Vocu00ea' : message.sender.displayName}</span>
+            <span class="message-sender">${nomeExibido}</span>
             <span class="message-time">${timeString}</span>
         </div>
         <div class="message-content">${message.content}</div>
     `;
-    
+
     chatMessages.appendChild(messageElement);
     scrollToBottom();
 }
@@ -329,6 +339,6 @@ function loadChatHistory() {
     });
     
     if (chatHistory.length > 0) {
-        displaySystemMessage('Mensagens anteriores carregadas do histu00f3rico local');
+        displaySystemMessage('Mensagens anteriores carregadas do histórico local');
     }
 }
