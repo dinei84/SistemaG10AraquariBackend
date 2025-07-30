@@ -127,13 +127,21 @@ input {
 }
 
 .bot3 {
-    background-color: rgb(255, 255, 255);
+    background-color: green;
     border-radius: 30px;
-    padding: 10px 20px;
+    width: 120px;
+    height: 40px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
-    font-weight: bolder;
-    color: red;
-    border: 2px solid red;
+    border: none;
+    margin: 0 auto;
+    display: block;
+}
+
+.bot3:hover {
+    background-color: lightgreen;
+    color: green;
 }
 
 @media screen and (max-width: 800px) {
@@ -154,6 +162,11 @@ input {
     }
 
     #botao, #clean {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .bot3 {
         width: 100%;
         max-width: 200px;
     }

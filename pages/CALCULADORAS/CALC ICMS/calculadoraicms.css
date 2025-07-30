@@ -105,8 +105,8 @@ main {
 }
 
 .botoes button {
-    width: 45%; /* Botões ocupam quase metade da largura, com espaço entre eles */
-    height: auto; /* Altura automática baseada no conteúdo e padding */
+    width: 45%; 
+    height: auto; 
     padding: 0.7em 1em;
     border-radius: 26px;
     font-size: 1em;
@@ -125,6 +125,42 @@ main {
 
 .botoes #limpar:hover {
     background-color: green !important;
+}
+
+.bot3 {
+    width: 45%;
+    height: auto;
+    padding: 0.7em 1em;
+    border-radius: 26px;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.642);
+    background-color: var(--quaternary-color);
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border: 2px solid var(--secondary-color);
+    margin: 0 auto;
+    display: block;
+}
+
+.bot3:hover {
+    background-color: var(--tertiary-color);
+    color: var(--quaternary-color);
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.buttonback {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 #taxaICMSField {
@@ -181,6 +217,10 @@ main {
     }
 
     .botoes button {
+        width: 150px; /* Largura fixa para botões em telas maiores */
+    }
+
+    .bot3 {
         width: 150px; /* Largura fixa para botões em telas maiores */
     }
 }
