@@ -338,10 +338,19 @@ function calcularEmissorStats(carregamentos, emissor) {
     };
 }
 
-function calcularRankingEmissores(carregamentos) {
+function calcularRankingEmissores(carregamentos, mesAnterior = false) {
     const hoje = new Date();
-    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    let inicioMes, fimMes;
+    
+    if (mesAnterior) {
+        // Se for para o mês anterior
+        inicioMes = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
+        fimMes = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
+    } else {
+        // Mês atual (comportamento original)
+        inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+        fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    }
     
     if (!Array.isArray(carregamentos)) {
         console.error('Dados de carregamentos não são um array válido');
@@ -350,14 +359,14 @@ function calcularRankingEmissores(carregamentos) {
     
     const emissores = {};
     
-    // Processar todos os carregamentos do mês
-    const carregamentosDoMes = carregamentos.filter(carregamento => {
+    // Processar todos os carregamentos do período
+    const carregamentosDoPeriodo = carregamentos.filter(carregamento => {
         const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
         return dataCarregamento >= inicioMes && dataCarregamento <= fimMes;
     });
     
     // Agrupar por emissor normalizado
-    carregamentosDoMes.forEach(carregamento => {
+    carregamentosDoPeriodo.forEach(carregamento => {
         const emissorNormalizado = normalizarEmissor(carregamento.emissor);
         
         if (!emissores[emissorNormalizado]) {
@@ -374,7 +383,7 @@ function calcularRankingEmissores(carregamentos) {
     });
     
     // Converter para array e ordenar
-    return Object.entries(emissores)
+    const resultado = Object.entries(emissores)
         .map(([emissor, stats]) => ({
             emissor,
             ordens: stats.ordens,
@@ -382,6 +391,14 @@ function calcularRankingEmissores(carregamentos) {
             totalRetirado: Math.round(stats.totalRetirado * 100) / 100
         }))
         .sort((a, b) => b.totalRetirado - a.totalRetirado);
+    
+    // Se estamos calculando o mês anterior, podemos salvar os dados
+    if (mesAnterior) {
+        // Aqui você pode adicionar lógica para salvar no banco de dados se necessário
+        console.log('Ranking do mês anterior calculado:', resultado);
+    }
+    
+    return resultado;
 }
 
 function atualizarInterface(fretes) {
@@ -504,16 +521,21 @@ function atualizarInterface(fretes) {
         </tr>
     `).join('');
 
-    const emissoresComDados = rankingEmissores.filter(e => e.totalRetirado > 0);
-    if (emissoresComDados.length > 0) {
+    const rankingEmissoresAtual = calcularRankingEmissores(window.carregamentosDashboard, false);
+    const emissoresComDadosAtual = rankingEmissoresAtual.filter(e => e.totalRetirado > 0).slice(0, 5);
+    
+    const rankingEmissoresAnterior = calcularRankingEmissores(window.carregamentosDashboard, true);
+    const emissoresComDadosAnterior = rankingEmissoresAnterior.filter(e => e.totalRetirado > 0).slice(0, 5);
+    
+    if (document.getElementById('graficoEmissores')) {
         const ctxEmissores = document.getElementById('graficoEmissores').getContext('2d');
         new Chart(ctxEmissores, {
             type: 'bar',
             data: {
-                labels: emissoresComDados.map(e => e.emissor),
+                labels: emissoresComDadosAtual.map(e => e.emissor),
                 datasets: [{
-                    label: 'Total Retirado (ton)',
-                    data: emissoresComDados.map(e => e.totalRetirado),
+                    label: 'Total Retirado (ton) - Mês Atual',
+                    data: emissoresComDadosAtual.map(e => e.totalRetirado),
                     backgroundColor: '#e67e22'
                 }]
             },
@@ -522,6 +544,41 @@ function atualizarInterface(fretes) {
                 scales: {
                     y: {
                         beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Ranking de Emissores - Mês Atual'
+                    }
+                }
+            }
+        });
+    }
+    
+    if (document.getElementById('graficoEmissoresAnterior')) {
+        const ctxEmissoresAnterior = document.getElementById('graficoEmissoresAnterior').getContext('2d');
+        new Chart(ctxEmissoresAnterior, {
+            type: 'bar',
+            data: {
+                labels: emissoresComDadosAnterior.map(e => e.emissor),
+                datasets: [{
+                    label: 'Total Retirado (ton) - Mês Anterior',
+                    data: emissoresComDadosAnterior.map(e => e.totalRetirado),
+                    backgroundColor: '#3498db'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Ranking de Emissores - Mês Anterior'
                     }
                 }
             }
