@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="menu.css">
-    <link rel="stylesheet" href="login.css">
     <link rel="shortcut icon" href="assets/favcom.png" type="image/x-icon">
-    <title>Login</title>
+    <title>ERP01 - Login</title>
 </head>
 <body>
     <div class="login-container">
         <div class="login-card">
-            <h2>Login</h2>
+            <h2>Login CargoTecno</h2>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="email">E-mail</label>
@@ -28,12 +26,27 @@
     </div>
 
     <style>
+        @import url(css/_colors.css);
+        /* Zerando estilos globais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family: sans-serif;
+        }
+
         .login-container {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(rgba(114, 23, 56, 0.9), rgba(86, 14, 36, 0.9));
+            background-image: url('../assets/img.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         .login-card {
@@ -46,7 +59,7 @@
         }
 
         .login-card h2 {
-            color: #721738;
+            color: var(--cor-primaria);
             text-align: center;
             margin-bottom: 2rem;
         }
@@ -72,17 +85,17 @@
         button {
             width: 100%;
             padding: 1rem;
-            background: #721738;
-            color: white;
+            background: white;
+            color: black;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 2rem;
             transition: background 0.3s;
         }
 
         button:hover {
-            background: #560e24;
+            background: var(--primary-color);
         }
 
         .error-message {

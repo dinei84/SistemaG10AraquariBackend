@@ -3,8 +3,10 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar/Editar Carregamento</title>
     <link rel="stylesheet" href="css/adicionar_carregamento.css" />
+    <link rel="stylesheet" href="css/shared-styles.css" />
     <link rel="stylesheet" href="../../css/menu.css">
     <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
     <link rel="stylesheet" href="../../css/loading.css">
@@ -17,89 +19,226 @@
         </svg>
     </div>
 
-    <div class="container">
-        <h2>Adicionar/Editar Carregamento</h2>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger"></div>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="lista_fretes.html">
+                    <i class="fas fa-table"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M620-163 450-333l56-56 114 114 226-226 56 56-282 282Zm220-397h-80v-200h-80v120H280v-120h-80v560h240v80H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v200ZM480-760q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z"/></svg></i>
+                    <span>Planilha</span>
+                </a>
+            </li>
+            <li>
+                <a href="../CALCULADORAS/calculadoras.html">
+                    <i class="fas fa-calculator"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg></i>
+                    <span>Calculadoras</span>
+                </a>
+            </li>
+            <li>
+                <a href="../OC/oc.html">
+                    <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="white"><path d="M280-280h84l240-238-86-86-238 238v86Zm352-266 42-44q6-6 6-14t-6-14l-56-56q-6-6-14-6t-14 6l-44 42 86 86ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg></i>
+                    <span>Ordens Manuais</span>
+                </a>
+            </li>
+            <li>
+                <a href="../CONTATOS/contato.html">
+                    <i class="fas fa-address-book"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM360-400q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm400 160 80-80-60-80h-66q-6-18-10-38.5t-4-41.5q0-21 4-40.5t10-39.5h66l60-80-80-80q-54 42-87 106.5T640-480q0 69 33 133.5T760-240Zm-578 40h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm178-280q-17 0-28.5-11.5T320-520q0-17 11.5-28.5T360-560q17 0 28.5 11.5T400-520q0 17-11.5 28.5T360-480Zm120 0Z"/></svg></i>
+                    <span>Lista de Contatos</span>
+                </a>
+            </li>
+            <li>
+                <a href="../MOSTRADOR/index1.html">
+                    <i class="fas fa-tv"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h720q33 0 56.5 23.5T920-680v480q0 33-23.5 56.5T840-120H120Zm0-80h720v-480H120v480Zm160 160v-80h400v80H280Z"/></svg></i>
+                    <span>Televisão</span>
+                </a>
+            </li>
+            <li>
+                <a href="../TRACKING/indextracking.html">
+                    <i class="fas fa-truck"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q146 0 255.5 91.5T872-559h-82q-19-73-68.5-130.5T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h80v120h-40L168-552q-3 18-5.5 36t-2.5 36q0 131 92 225t228 95v80Zm364-20L716-228q-21 12-45 20t-51 8q-75 0-127.5-52.5T440-380q0-75 52.5-127.5T620-560q75 0 127.5 52.5T800-380q0 27-8 51t-20 45l128 128-56 56ZM620-280q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Z"/></svg></i>
+                    <span>Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="dashboard.html">
+                    <i class="fas fa-chart-line"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M120-120v-60h720v60H120Zm120-180v-60h480v60H240Zm120-180v-60h360v60H360Z"/></svg></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="../dashboard.html">
+                    <i class="fas fa-home"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></i>
+                    <span>Início</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
-        <form id="formCarregamento">
-            <label for="dataoc">Data da OC</label required>
-            <input type="date" id="dataoc" required />
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="content-wrapper">
+                <div class="form-card">
+                    <header class="form-header">
+                        <h1>Adicionar/Editar Carregamento</h1>
+                        <p class="form-subtitle">Preencha os dados do carregamento para cadastrar no sistema</p>
+                    </header>
+                    
+                    <form id="formCarregamento" class="carregamento-form">
+                        <div class="form-section">
+                            <h3>Informações Básicas</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dataoc">Data da OC</label>
+                                    <input type="date" id="dataoc" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="placa">Placa</label>
+                                    <input type="text" id="placa" required />
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="motorista">Motorista</label>
+                                    <input type="text" id="motorista" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo-veiculo">Tipo Veículo</label>
+                                    <input type="text" id="tipo-veiculo" required />
+                                </div>
+                            </div>
+                        </div>
 
-            <label for="placa">Placa</label>
-            <input type="text" id="placa" required />
+                        <div class="form-section">
+                            <h3>Dados do Carregamento</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="peso-carregado">Peso Carregado</label>
+                                    <input type="text" id="peso-carregado" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fretemotorista">Frete Motorista</label>
+                                    <input type="number" id="fretemotorista" required step="0.01" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="emissor">Emissor</label>
+                                <select id="emissor" required>
+                                    <option value="">Selecione o emissor</option>
+                                    <option value="Usuario 01">Usuario 01</option>
+                                    <option value="Usuario 02">Usuario 02</option>
+                                    <option value="Usuario 03">Usuario 03</option>
+                                    <option value="Usuario 04">Usuario 04</option>
+                                    <option value="Usuario 05">Usuario 05</option>
+                                    <option value="Usuario 06">Usuario 06</option>
+                                    <option value="Usuario 07">Usuario 07</option>
+                                    <option value="Usuario 08">Usuario 08</option>
+                                    <option value="Usuario 09">Usuario 09</option> 
+                                </select>
+                            </div>
+                        </div>
 
-            <label for="motorista">Motorista</label>
-            <input type="text" id="motorista" required />
+                        <div class="form-section">
+                            <h3>Documentação</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="data-manifesto">Data Manifesto</label>
+                                    <input type="date" id="data-manifesto" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cte">CTe</label>
+                                    <input type="text" id="cte" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="data-entrega">Data Entrega</label>
+                                    <input type="date" id="data-entrega" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="nfe">NFe</label>
+                                    <input type="text" id="nfe" />
+                                </div>
+                            </div>
+                        </div>
 
-            <label for="tipo-veiculo">Tipo Veiculo</label>
-            <input type="text" id="tipo-veiculo" required />
+                        <div class="form-section">
+                            <h3>Informações Adicionais</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="telefone">Telefone</label>
+                                    <input type="text" id="telefone" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="observacao">Observação</label>
+                                    <input type="text" id="observacao" />
+                                </div>
+                            </div>
+                        </div>
 
-            <label for="peso-carregado">Peso Carregado</label>
-            <input type="text" id="peso-carregado" required>
-
-            <label for="fretemotorista">Frete Motorista</label>
-            <input type="number" id="fretemotorista" required step="0.01" />
-
-            <label for="emissor">Emissor</label>
-            <select id="emissor" required>
-                <option value="">Selecione o emissor</option>
-                <option value="Andrielly">Andrielly</option>
-                <option value="Dinei">Dinei</option>
-                <option value="Thiago">Thiago</option>
-                <option value="Geovane">Geovane</option>
-                <option value="Ton">Ton</option>
-                <option value="Joao">João</option>
-                <option value="Milene">Milene</option>
-                <option value="JoaoVitor">João Vitor</option>
-                <option value="frota">Frota</option> 
-            </select>
-
-            <label for="data-manifesto">Data Manifesto</label>
-            <input type="date" id="data-manifesto" />
-
-            <label for="cte">CTe</label>
-            <input type="text" id="cte" />
-
-            <label for="data-entrega">Data Entrega</label>
-            <input type="date" id="data-entrega" />
-
-            <label for="nfe">NFe</label>
-            <input type="text" id="nfe" />
-
-            <label for="telefone">Telefone</label required>
-            <input type="text" id="telefone" />
-
-            <label for="observacao">Observação</label>
-            <input type="text" id="observacao" />            
-
-            <div id="arquivoContainer" style="display: none;">
-                <label for="placa2">Placa 2</label>
-                <input type="text" id="placa2" />
-
-                <label for="placa3">Placa 3</label>
-                <input type="text" id="placa3" />
-
-                <label for="placa4">Placa 4</label>
-                <input type="text" id="placa4" />
-
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" />
-
-                <label for="fileInput">Arquivo Template (.docx)</label>
-                <input type="file" id="fileInput" accept=".docx" />
-                
-                <div id="downloadContainer" style="display: none; margin-top: 15px;">
-                    <button type="button" id="btnDownload" class="btn-download">Baixar Documento Preenchido</button>
-                    <button type="button" id="btnImprimir" class="btn-download" style="display: none; margin-left: 10px;">Imprimir Documento</button>
+                        <div id="arquivoContainer" class="form-section" style="display: none;">
+                            <h3>Documento Template</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="placa2">Placa 2</label>
+                                    <input type="text" id="placa2" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="placa3">Placa 3</label>
+                                    <input type="text" id="placa3" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="placa4">Placa 4</label>
+                                    <input type="text" id="placa4" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cpf">CPF</label>
+                                    <input type="text" id="cpf" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fileInput">Arquivo Template (.docx)</label>
+                                <input type="file" id="fileInput" accept=".docx" />
+                            </div>
+                            
+                            <div id="downloadContainer" style="display: none; margin-top: 15px;">
+                                <div class="form-actions">
+                                    <button type="button" id="btnDownload" class="btn btn-primary">
+                                        <span class="btn-icon">📥</span>
+                                        Baixar Documento Preenchido
+                                    </button>
+                                    <button type="button" id="btnImprimir" class="btn btn-secondary" style="display: none;">
+                                        <span class="btn-icon">🖨️</span>
+                                        Imprimir Documento
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="btn-icon">💾</span>
+                                Salvar Carregamento
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnVoltar">
+                                <span class="btn-icon">←</span>
+                                Voltar para Lista de Carregamentos
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <button type="submit">Salvar Carregamento</button>
-
-            <button type="button" class="btn-voltar" id="btnVoltar">
-                Voltar para Lista de Carregamentos
-            </button>
-        </form>
-    </div>
+        </div>
+    </main>
 
     <!-- Carregar bibliotecas necessárias -->
     <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
@@ -109,6 +248,7 @@
     
     <!-- Carregar script principal -->
     <script type="module" src="js/cadastro_carregamento.js"></script>
+    <script src="../../js/menu.js"></script>
 </body>
 
 </html>

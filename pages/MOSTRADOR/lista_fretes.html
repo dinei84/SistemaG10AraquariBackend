@@ -5,193 +5,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
-    <title>Lista de Fretes</title>
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('../../assets/g10ok.jpeg');
-            background-size: cover;
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 95%;
-            max-width: 1500px;
-            margin: 20px auto;
-            background-color: #fff !important;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        /* Definição da animação com pausa */
-        @keyframes rowRotate {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            5% {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            10% {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            15% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th,
-        td {
-            padding: 7px 10px;
-            text-align: left;
-            font-weight: bolder;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #560e24;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        tbody tr {
-            background-color: #f9f2f4;
-            color: #495057;
-            transition: all 0.3s ease;
-        }
-
-        tbody tr.animating {
-            animation: rowRotate 1s ease-in-out;
-        }
-
-        tbody tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .btn-primary,
-        .btn-danger,
-        .btn-export {
-            display: inline-block;
-            padding: 3px 6px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
-        }
-
-        .btn-primary {
-            background-color: #560e24;
-            color: white;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-export {
-            background-color: #2c5e1a;
-            color: white;
-            margin-left: 10px;
-        }
-
-        .botoes-acao {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            table thead {
-                display: none;
-            }
-
-            table tbody tr {
-                display: block;
-                margin-bottom: 10px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-            }
-
-            table td {
-                display: block;
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-                border-bottom: none;
-                background-color: transparent;
-                color: #333;
-            }
-
-            table td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                width: 45%;
-                text-align: left;
-                font-weight: bold;
-            }
-
-            .botoes-acao {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="css/shared-styles.css">
+    <title>Lista de Fretes - Mostrador</title>
 </head>
 
 <body>
-    <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th>UF</th>
-                    <th>Destino</th>
-                    <th>Valor (R$)</th>
-                    <th>Tipo</th>
-                    <th>Observações</th>
-                    <th class="acoes-column">Ações</th>
-                </tr>
-            </thead>
-            <tbody id="listaFretes"></tbody>
-        </table>
-        <div class="botoes-acao">
-            <a href="index1.html" class="btn-primary">Voltar</a>
-            <button class="btn-export" onclick="exportarParaImagem()">Exportar para Imagem</button>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger"></div>
         </div>
-    </div>
+        <ul class="nav-list">
+            <li>
+                <a href="../PLANILHA/lista_fretes.html">
+                    <i class="fas fa-table"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M620-163 450-333l56-56 114 114 226-226 56 56-282 282Zm220-397h-80v-200h-80v120H280v-120h-80v560h240v80H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v200ZM480-760q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z"/></svg></i>
+                    <span>Planilha</span>
+                </a>
+            </li>
 
+            <li>
+                <a href="../CHAT/chat.html">
+                    <i class="fas fa-comments"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg></i>
+                    <span>Chat</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="../CALCULADORAS/calculadoras.html">
+                    <i class="fas fa-calculator"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg></i>
+                    <span>Calculadoras</span>
+                </a>
+            </li>
+            <li>
+                <a href="../OC/oc.html">
+                    <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="white"><path d="M280-280h84l240-238-86-86-238 238v86Zm352-266 42-44q6-6 6-14t-6-14l-56-56q-6-6-14-6t-14 6l-44 42 86 86ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg></i>
+                    <span>Ordens Manuais</span>
+                </a>
+            </li>
+            <li>
+                <a href="../CONTATOS/contato.html">
+                    <i class="fas fa-address-book"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM360-400q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm400 160 80-80-60-80h-66q-6-18-10-38.5t-4-41.5q0-21 4-40.5t10-39.5h66l60-80-80-80q-54 42-87 106.5T640-480q0 69 33 133.5T760-240Zm-578 40h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm178-280q-17 0-28.5-11.5T320-520q0-17 11.5-28.5T360-560q17 0 28.5 11.5T400-520q0 17-11.5 28.5T360-480Zm120 0Z"/></svg></i>
+                    <span>Lista de Contatos</span>
+                </a>
+            </li>
+            <li>
+                <a href="../MOSTRADOR/index1.html">
+                    <i class="fas fa-tv"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h720q33 0 56.5 23.5T920-680v480q0 33-23.5 56.5T840-120H120Zm0-80h720v-480H120v480Zm160 160v-80h400v80H280Z"/></svg></i>
+                    <span>Televisão</span>
+                </a>
+            </li>
+            <li>
+                <a href="../TRACKING/indextracking.html">
+                    <i class="fas fa-truck"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q146 0 255.5 91.5T872-559h-82q-19-73-68.5-130.5T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h80v120h-40L168-552q-3 18-5.5 36t-2.5 36q0 131 92 225t228 95v80Zm364-20L716-228q-21 12-45 20t-51 8q-75 0-127.5-52.5T440-380q0-75 52.5-127.5T620-560q75 0 127.5 52.5T800-380q0 27-8 51t-20 45l128 128-56 56ZM620-280q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Z"/></svg></i>
+                    <span>Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="../PLANILHA/dashboard.html">
+                    <i class="fas fa-chart-line"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M120-120v-60h720v60H120Zm120-180v-60h480v60H240Zm120-180v-60h360v60H360Z"/></svg></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="../dashboard.html">
+                    <i class="fas fa-home"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></i>
+                    <span>Início</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="content-wrapper">
+                <div class="table-card">
+                    <header class="table-header">
+                        <h1>Lista de Fretes - Mostrador</h1>
+                        <p class="table-subtitle">Visualização e gerenciamento de fretes para exibição</p>
+                    </header>
+                    
+                    <div class="table-controls">
+                        <div class="table-actions">
+                            <a href="index1.html" class="btn btn-secondary">
+                                <span class="btn-icon">←</span>
+                                Voltar
+                            </a>
+                            <button class="btn btn-outline" onclick="exportarParaImagem()">
+                                <span class="btn-icon">📷</span>
+                                Exportar para Imagem
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>UF</th>
+                                    <th>Destino</th>
+                                    <th>Valor (R$)</th>
+                                    <th>Tipo</th>
+                                    <th>Observações</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaFretes"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/menu.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         const fretesOriginal = JSON.parse(localStorage.getItem('fretes')) || [];
@@ -210,9 +138,15 @@
                     <td>${valor !== undefined ? valor.toFixed(2).replace('.', ',') : ''}</td>
                     <td>${frete.tipo}</td>
                     <td>${frete.observacoes || ''}</td>
-                    <td class="acoes-column">
-                        <button class="btn-primary" onclick="editarFrete(${frete.id})">Editar</button>
-                        <button class="btn-danger" onclick="excluirFrete(${frete.id})">Excluir</button>
+                    <td class="actions">
+                        <button class="btn btn-primary" onclick="editarFrete(${frete.id})">
+                            <span class="btn-icon">✏️</span>
+                            Editar
+                        </button>
+                        <button class="btn btn-danger" onclick="excluirFrete(${frete.id})">
+                            <span class="btn-icon">🗑️</span>
+                            Excluir
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(row);

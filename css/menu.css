@@ -9,7 +9,7 @@
   --primary-color: #721738;
   --secondary-color: #333;
   --tertiary-color: #560e24;
-  --quaternary-color: #ffffff;
+  --quaternary-color: #fff;
   --quintenary-color: #66253d;
 }
 
@@ -190,7 +190,7 @@ html, body {
 /* ESTILOS DA TABELA COMPACTA - AJUSTADO */
 .table-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 0 15px;
 }

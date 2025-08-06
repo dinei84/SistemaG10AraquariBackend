@@ -5,48 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard de Projeções - Transportes</title>
     <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="css/shared-styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="../../css/menu.css">
-    <link rel="stylesheet" href="../css/loading.css">
-    
-    <style>
-        #loadingOverlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/loading.css">
+    <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
 </head>
 <body>
-    <!-- Menu Hamburger -->
-    <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    <!-- Sidebar -->
+    <!-- Sidebar Navigation -->
     <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger"></div>
+        </div>
         <ul class="nav-list">
             <li>
                 <a href="lista_fretes.html">
@@ -56,22 +26,18 @@
                     <span>Planilha</span>
                 </a>
             </li>
-            <li>
-                <a href="#">
-                    <i class="fas fa-truck"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF">
-                        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q146 0 255.5 91.5T872-559h-82q-19-73-68.5-130.5T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h80v120h-40L168-552q-3 18-5.5 36t-2.5 36q0 131 92 225t228 95v80Zm364-20L716-228q-21 12-45 20t-51 8q-75 0-127.5-52.5T440-380q0-75 52.5-127.5T620-560q75 0 127.5 52.5T800-380q0 27-8 51t-20 45l128 128-56 56ZM620-280q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Z"/>
-                    </svg></i>
-                    <span>Consulta de Frete</span>
-                </a>
-            </li>
+
             <li>
                 <a href="../CHAT/chat.html">
-                    <i class="fas fa-comments"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF">
-                        <path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/>
-                    </svg></i>
+                    <i class="fas fa-comments"><svg xmlns="http://www.w3.org/2000/svg" height="30px"
+                            viewBox="0 -960 960 960" width="30px" fill="#FFFFFF">
+                            <path
+                                d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
+                        </svg></i>
                     <span>Chat</span>
                 </a>
             </li>
+
             <li>
                 <a href="../CALCULADORAS/calculadoras.html">
                     <i class="fas fa-calculator"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF">
@@ -113,6 +79,12 @@
                 </a>
             </li>
             <li>
+                <a href="dashboard.html">
+                    <i class="fas fa-chart-line"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M120-120v-60h720v60H120Zm120-180v-60h480v60H240Zm120-180v-60h360v60H360Z"/></svg></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
                 <a href="../dashboard.html">
                     <i class="fas fa-home"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF">
                         <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/>
@@ -124,139 +96,143 @@
     </nav>
 
     <!-- Loading Overlay -->
-    <div id="loadingOverlay">
-        <div class="loading-spinner"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <svg class="loading-svg" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20"/>
+        </svg>
     </div>
 
-    <div class="container">
-        <header>
-            <h1>Dashboard de Projeções - Transportes</h1>
-            <div class="filtros">
-                <select id="periodo">
-                    <option value="atual">Mês Atual</option>
-                    <option value="anterior">Mês Anterior</option>
-                    <option value="ultimos3">Últimos 3 Meses</option>
-                    <option value="ultimos6">Últimos 6 Meses</option>
-                </select>
-                <select id="estado">
-                    <option value="todos">Todos os Estados</option>
-                    <option value="SC">Santa Catarina</option>
-                    <option value="PR">Paraná</option>
-                    <option value="RS">Rio Grande do Sul</option>
-                </select>
-            </div>
-        </header>
-
-        <main>
-            <div class="row">
-                <div class="card">
-                    <h3>Projeção Mensal</h3>
-                    <div class="projecao">
-                        <div class="valor">0 ton</div>
-                        <canvas id="graficoProjecao"></canvas>
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="content-wrapper">
+                <div class="table-card">
+                    <header class="table-header">
+                        <h1>Dashboard de Projeções - Transportes</h1>
+                        <p class="table-subtitle">Análise completa de dados e métricas de transporte</p>
+                    </header>
+                    
+                    <div class="table-controls">
+                        <div class="filters-container">
+                            <select id="periodo" class="filter-select">
+                                <option value="atual">Mês Atual</option>
+                                <option value="anterior">Mês Anterior</option>
+                                <option value="ultimos3">Últimos 3 Meses</option>
+                                <option value="ultimos6">Últimos 6 Meses</option>
+                            </select>
+                            <select id="estado" class="filter-select">
+                                <option value="todos">Todos os Estados</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="PR">Paraná</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="card">
-                    <h3>Emissor do Mês</h3>
-                    <div class="emissor-stats">
-                        <div class="emissor-info">
-                            <div class="emissor-select">
-                                <select id="emissorFilter">
-                                    <option value="">Selecione um emissor</option>
-                                    <option value="Dinei">Dinei</option>
-                                    <option value="Thiago">Thiago</option>
-                                    <option value="Geovane">Geovane</option>
-                                    <option value="Tom">Tom</option>
-                                    <option value="Joao">João</option>
-                                    <option value="Milene">Milene</option>
-                                    <option value="JoaoVitor">João Vitor</option>
-                                </select>
-                            </div>
-                            <div class="stats">
-                                <div class="stat-item">
-                                    <span class="label">Ordens do Mês:</span>
-                                    <span class="value" id="ordensMes">0</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="label">Caminhões do Mês:</span>
-                                    <span class="value" id="caminhoesMes">0</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="label">Total Retirado:</span>
-                                    <span class="value" id="totalRetirado">0 ton</span>
-                                </div>
+                    <div class="dashboard-grid">
+                        <!-- Projeção Mensal -->
+                        <div class="dashboard-card">
+                            <h3>Projeção Mensal</h3>
+                            <div class="projecao">
+                                <div class="valor">0 ton</div>
+                                <canvas id="graficoProjecao"></canvas>
                             </div>
                         </div>
-                        <div class="graficos-container">
-                            <div class="grafico-wrapper">
-                                <h4>Mês Atual</h4>
+
+                        <!-- Emissor do Mês -->
+                        <div class="dashboard-card">
+                            <h3>Emissor do Mês</h3>
+                            <div class="emissor-stats">
+                                <div class="emissor-info">
+                                    <div class="emissor-select">
+                                        <select id="emissorFilter" class="filter-select">
+                                            <option value="">Selecione um emissor</option>
+                                            <option value="Dinei">Dinei</option>
+                                            <option value="Thiago">Thiago</option>
+                                            <option value="Geovane">Geovane</option>
+                                            <option value="Ton">Ton</option>
+                                            <option value="Joao">João</option>
+                                            <option value="Milene">Milene</option>
+                                            <option value="JoaoVitor">JoãoVitor</option>
+                                        </select>
+                                    </div>
+                                    <div class="stats">
+                                        <div class="stat-item">
+                                            <span class="label">Ordens do Mês:</span>
+                                            <span class="value" id="ordensMes">0</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="label">Caminhões do Mês:</span>
+                                            <span class="value" id="caminhoesMes">0</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="label">Total Retirado:</span>
+                                            <span class="value" id="totalRetirado">0 ton</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <canvas id="graficoEmissor"></canvas>
                             </div>
-                            <div class="grafico-wrapper">
-                                <h4>Mês Anterior</h4>
-                                <canvas id="graficoEmissorAnterior"></canvas>
+                        </div>
+
+                        <!-- Valor Médio por Estado -->
+                        <div class="dashboard-card">
+                            <h3>Valor Médio por Estado</h3>
+                            <div class="table-wrapper">
+                                <table id="tabelaEstados">
+                                    <thead>
+                                        <tr>
+                                            <th>Estado</th>
+                                            <th>Valor Médio (R$/ton)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
+                            <canvas id="graficoEstados"></canvas>
+                        </div>
+
+                        <!-- Top 5 Produtos -->
+                        <div class="dashboard-card">
+                            <h3>Top 5 Produtos</h3>
+                            <div class="lista-produtos">
+                                <ul id="listaProdutos"></ul>
+                            </div>
+                            <canvas id="graficoProdutos"></canvas>
+                        </div>
+
+                        <!-- Top 5 Clientes -->
+                        <div class="dashboard-card">
+                            <h3>Top 5 Clientes</h3>
+                            <div class="lista-clientes">
+                                <ul id="listaClientes"></ul>
+                            </div>
+                            <canvas id="graficoClientes"></canvas>
+                        </div>
+
+                        <!-- Ranking de Emissores -->
+                        <div class="dashboard-card">
+                            <h3>Ranking de Emissores do Mês</h3>
+                            <div class="table-wrapper">
+                                <table id="tabelaEmissores">
+                                    <thead>
+                                        <tr>
+                                            <th>Emissor</th>
+                                            <th>Ordens</th>
+                                            <th>Caminhões</th>
+                                            <th>Total (ton)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <canvas id="graficoEmissores"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <section class="metricas">
-                <div class="card estados">
-                    <h2>Valor Médio por Estado</h2>
-                    <div class="tabela-estados">
-                        <table id="tabelaEstados">
-                            <thead>
-                                <tr>
-                                    <th>Estado</th>
-                                    <th>Valor Médio (R$/ton)</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <canvas id="graficoEstados"></canvas>
-                </div>
-
-                <div class="card produtos">
-                    <h2>Top 5 Produtos</h2>
-                    <div class="lista-produtos">
-                        <ul id="listaProdutos"></ul>
-                    </div>
-                    <canvas id="graficoProdutos"></canvas>
-                </div>
-
-                <div class="card clientes">
-                    <h2>Top 5 Clientes</h2>
-                    <div class="lista-clientes">
-                        <ul id="listaClientes"></ul>
-                    </div>
-                    <canvas id="graficoClientes"></canvas>
-                </div>
-
-                <div class="card emissores">
-                    <h2>Ranking de Emissores do Mês</h2>
-                    <div class="lista-emissores">
-                        <table id="tabelaEmissores">
-                            <thead>
-                                <tr>
-                                    <th>Emissor</th>
-                                    <th>Ordens</th>
-                                    <th>Caminhões</th>
-                                    <th>Total (ton)</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <canvas id="graficoEmissores"></canvas>
-                </div>
-            </section>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script src="../../js/menu.js"></script>
     <script type="module" src="js/dashboard.js"></script>
