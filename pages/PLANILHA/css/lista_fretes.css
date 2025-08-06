@@ -62,11 +62,12 @@ h1 {
 #searchInput {
   width: 100%;
   max-width: 200px;
-  height: 2.5rem;
+  margin-left: 262px;
+  height: 3.2rem;
   border-radius: 0.3125rem;
-  border: 1px solid #ddd;
+  border: 5px solid #4a4141;
   padding: 0 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 
 /* Tabela */
