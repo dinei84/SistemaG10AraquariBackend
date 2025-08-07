@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texto para Áudio - Utilitários</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="texto-para-audio.css">
+</head>
+<body>
+    <header>
+        <h1><a href="../index.html" class="header-link">Painel de Utilitários</a></h1>
+        <p>Conversor de Texto para Áudio (Text-to-Speech )</p>
+    </header>
+
+    <main class="tts-container">
+        <div class="tts-box">
+            <h2>Digite o texto para converter</h2>
+            <textarea id="text-to-speak" placeholder="Comece a digitar aqui..."></textarea>
+            
+            <div class="controls-grid">
+                <div class="voice-control">
+                    <label for="voice-select">Escolha uma voz:</label>
+                    <select id="voice-select"></select>
+                </div>
+                
+                <div class="range-control">
+                    <label for="rate">Velocidade: <span id="rate-value">1</span></label>
+                    <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
+                </div>
+
+                <div class="range-control">
+                    <label for="pitch">Tom: <span id="pitch-value">1</span></label>
+                    <input type="range" id="pitch" min="0" max="2" value="1" step="0.1">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="play-btn"><i class="fas fa-play"></i> Ouvir</button>
+                <button id="pause-btn" disabled><i class="fas fa-pause"></i> Pausar</button>
+                <button id="resume-btn" disabled><i class="fas fa-play-circle"></i> Continuar</button>
+                <button id="stop-btn" disabled><i class="fas fa-stop"></i> Parar</button>
+            </div>
+            <div id="status" class="status-message"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Desenvolvido por Manus</p>
+    </footer>
+
+    <script src="texto-para-audio.js"></script>
+</body>
+</html>

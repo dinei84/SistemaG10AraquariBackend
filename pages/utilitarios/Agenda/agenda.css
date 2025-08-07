@@ -1,0 +1,165 @@
+/* Estilos específicos para a página da agenda */
+.agenda-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+.agenda-box {
+    width: 100%;
+    max-width: 700px;
+    background-color: var(--tertiary-color);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.agenda-box h2, .agenda-box h3 {
+    text-align: center;
+    color: var(--quaternary-color);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.reminder-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.reminder-form input[type="text"] {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--quintenary-color);
+    border-radius: 5px;
+    background-color: #fdfdfd;
+    color: var(--secondary-color);
+}
+
+.date-time-inputs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.reminder-form input[type="date"],
+.reminder-form input[type="time"] {
+    padding: 0.75rem;
+    border: 1px solid var(--quintenary-color);
+    border-radius: 5px;
+    background-color: #fdfdfd;
+    color: var(--secondary-color);
+}
+
+.reminder-form button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--quaternary-color);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reminder-form button:hover {
+    background-color: #9c2d55;
+}
+
+/* Seção de Post-its */
+.pinned-section {
+    margin-bottom: 2rem;
+}
+.pinned-section.hidden {
+    display: none;
+}
+.pinned-section .reminder-item {
+    background-color: #ffc107; /* Cor de post-it */
+    color: #333;
+    border: 1px solid #e0a800;
+}
+.pinned-section .reminder-item .date,
+.pinned-section .reminder-item .time {
+    color: #555;
+}
+.pinned-section .pin-btn {
+    color: var(--primary-color) !important; /* Cor do pino quando ativo */
+}
+
+.reminder-list {
+    list-style: none;
+    padding: 0;
+}
+
+.reminder-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--quintenary-color);
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 0.75rem;
+    transition: background-color 0.3s;
+}
+
+.reminder-item.completed .reminder-content {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.reminder-content {
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.reminder-content .text {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.reminder-content .datetime {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.25rem;
+}
+
+.reminder-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.pin-btn, .delete-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.pin-btn {
+    color: var(--quaternary-color);
+}
+.pin-btn:hover {
+    transform: scale(1.2);
+    color: #ffc107;
+}
+
+.delete-btn {
+    color: #ff6b6b;
+}
+.delete-btn:hover {
+    color: #e03131;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .reminder-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
