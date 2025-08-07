@@ -304,21 +304,24 @@ document
       
       if (!freteDoc.exists()) {
         alert("Frete não encontrado!");
+        loadingManager.hide();
         return;
       }
       
       const freteData = freteDoc.data();
 
+      const pesoInput = document.getElementById("peso-carregado");
       const pesoCarregado = parseFormattedNumber(pesoInput.value);
       if (isNaN(pesoCarregado) || pesoCarregado <= 0) {
         alert("Peso carregado inválido!");
+        loadingManager.hide();
         return;
       }
 
-      // Validação do campo dataoc
       const dataoc = document.getElementById("dataoc").value;
       if (!dataoc) {
         alert("A data do carregamento é obrigatória!");
+        loadingManager.hide();
         return;
       }
 
@@ -339,6 +342,7 @@ document
         alert(
           `Saldo insuficiente! Disponível: ${formatNumber(saldoDisponivel)} Ton`
         );
+        loadingManager.hide();
         return;
       }
 
@@ -359,8 +363,8 @@ document
       const nfe = document.getElementById("nfe").value;
       const dataManifesto = document.getElementById("data-manifesto").value;
       
-      // Determinar se está manifestado
-      const isManifestado = cte || nfe || dataManifesto;
+      // Determinar se está manifestado (somente se os 3 campos estiverem preenchidos)
+      const isManifestado = cte && nfe && dataManifesto;
 
       // Salvar carregamento
       const carregamentoData = {
@@ -378,7 +382,9 @@ document
         observacao: document.getElementById("observacao").value,
         telefone: document.getElementById("telefone").value,
         timestamp: new Date(),
-        isManifestado: isManifestado,
+        // Garante que o valor salvo no banco de dados seja um booleano (true/false)
+        // refletindo a regra de negócio (&&).
+        isManifestado: !!isManifestado, 
         
         // Campos específicos do Ourofertil
         placa2: document.getElementById("placa2").value,
@@ -401,20 +407,14 @@ document
 
       alert("Carregamento salvo com sucesso!");
       window.location.href = `lista_carregamento.html?freteId=${freteId}`;
+      
     } catch (error) {
       console.error("Erro ao salvar:", error.message, error.stack);
       alert(`Erro ao salvar carregamento: ${error.message}`);
     } finally {
       loadingManager.hide();
     }
-  });
-
-// Inicialização
-if (isEditMode) {
-  loadCarregamentoForEdit();
-} else {
-  if (pesoInput) pesoInput.value = "";
-}
+});
 
 // Verificar cliente Ourofertil ao carregar a página
 verificarClienteOurofertil();

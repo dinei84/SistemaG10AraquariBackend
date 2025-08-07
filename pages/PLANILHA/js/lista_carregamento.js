@@ -150,8 +150,23 @@ async function carregarCarregamentos() {
         // Ordenar por timestamp decrescente (mais recente primeiro)
         carregamentos.sort((a, b) => b.timestamp - a.timestamp);
         carregamentos.forEach((carregamento) => {
-          const isManifestado =
-            carregamento.nfe && carregamento.cte && carregamento["data-manifesto"];
+          // Check if all required fields exist and are not empty
+          const hasNfe = carregamento.nfe && carregamento.nfe !== "N/A" && carregamento.nfe.trim() !== "";
+          const hasCte = carregamento.cte && carregamento.cte !== "N/A" && carregamento.cte.trim() !== "";
+          const hasDataManifesto = carregamento["data-manifesto"] && carregamento["data-manifesto"] !== "N/A" && carregamento["data-manifesto"].trim() !== "";
+          
+          const isManifestado = hasNfe && hasCte && hasDataManifesto;
+          
+          console.log(`Carregamento ${carregamento.id}:`, { 
+            nfe: carregamento.nfe, 
+            hasNfe: hasNfe,
+            cte: carregamento.cte, 
+            hasCte: hasCte,
+            dataManifesto: carregamento["data-manifesto"],
+            hasDataManifesto: hasDataManifesto,
+            isManifestado: isManifestado,
+            allFields: carregamento
+          });
           const linha = `
             <tr class="${isManifestado ? 'manifestado' : ''}">
               <td>${formatarData(carregamento.dataoc) || "N/A"}</td>

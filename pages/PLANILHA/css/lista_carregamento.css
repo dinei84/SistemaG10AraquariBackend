@@ -97,6 +97,31 @@ tr:hover {
     color: white;
 }
 
+/* Estilo para linhas de carregamentos manifestados */
+tr.manifestado {
+  background-color: #e8f5e9 !important; /* Light green background */
+  font-weight: bold !important;
+  position: relative !important;
+}
+
+tr.manifestado td {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+tr.manifestado::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: #e8f5e9 !important;
+  z-index: 0 !important;
+  opacity: 0.7 !important;
+  pointer-events: none !important;
+}
+
 .hide-for-print {
     display: none !important;
 }
