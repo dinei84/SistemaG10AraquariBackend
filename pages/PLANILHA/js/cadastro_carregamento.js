@@ -25,6 +25,9 @@ const freteId = urlParams.get("freteId");
 const carregamentoId = urlParams.get("carregamentoId");
 let isEditMode = !!carregamentoId;
 
+// Referência ao campo de peso
+const pesoInput = document.getElementById("peso-carregado");
+
 // Funções de formatação e cálculo
 function formatNumber(number) {
   return number.toLocaleString("pt-BR", {
@@ -185,7 +188,6 @@ document.getElementById('fileInput')?.addEventListener('change', async (e) => {
 });
 
 // Configurar campo de peso
-const pesoInput = document.getElementById("peso-carregado");
 if (pesoInput) {
   pesoInput.addEventListener("blur", function (e) {
     let value = e.target.value.replace(/[^\d,]/g, "");
@@ -416,5 +418,8 @@ document
     }
 });
 
-// Verificar cliente Ourofertil ao carregar a página
-verificarClienteOurofertil();
+// Verificar cliente Ourofertil e carregar dados do carregamento quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+  verificarClienteOurofertil();
+  loadCarregamentoForEdit();
+});
