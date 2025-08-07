@@ -98,28 +98,46 @@ tr:hover {
 }
 
 /* Estilo para linhas de carregamentos manifestados */
-tr.manifestado {
-  background-color: #e8f5e9 !important; /* Light green background */
+#tabelaCarregamentos tbody tr.manifestado {
+  background-color: #e8f5e9 !important;
   font-weight: bold !important;
   position: relative !important;
+  border-left: 4px solid #2e7d32 !important;
+  animation: pulse 2s infinite;
 }
 
-tr.manifestado td {
+@keyframes pulse {
+  0% { background-color: #e8f5e9; }
+  50% { background-color: #d0e8d0; }
+  100% { background-color: #e8f5e9; }
+}
+
+#tabelaCarregamentos tbody tr.manifestado td {
   position: relative !important;
   z-index: 1 !important;
+  background-color: transparent !important;
+  color: #1b5e20 !important;
 }
 
-tr.manifestado::after {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
+#tabelaCarregamentos tbody tr.manifestado:hover {
+  background-color: #c8e6c9 !important;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+/* Força a cor de fundo mesmo com outras classes */
+#tabelaCarregamentos tbody tr.manifestado,
+#tabelaCarregamentos tbody tr.manifestado:nth-child(even),
+#tabelaCarregamentos tbody tr.manifestado:nth-child(odd) {
   background-color: #e8f5e9 !important;
-  z-index: 0 !important;
-  opacity: 0.7 !important;
-  pointer-events: none !important;
+}
+
+/* Adiciona um ícone de check ao lado do status */
+#tabelaCarregamentos tbody tr.manifestado td:first-child::before {
+  content: "✓";
+  color: #2e7d32;
+  font-weight: bold;
+  margin-right: 8px;
 }
 
 .hide-for-print {

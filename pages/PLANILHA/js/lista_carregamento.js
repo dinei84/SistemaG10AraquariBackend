@@ -63,10 +63,9 @@ async function carregarCarregamentos() {
       const querySnapshot = await getDocs(
         collection(db, "fretes", freteId, "carregamentos")
       );
-      const corpoTabelaCarregamentos = document.getElementById(
-        "corpoTabelaCarregamentos"
-      );
-      corpoTabelaCarregamentos.innerHTML = "";
+      const tabelaCarregamentos = document.getElementById("tabelaCarregamentos");
+      const tbody = tabelaCarregamentos.querySelector('tbody');
+      tbody.innerHTML = "";
 
       // Soma dos pesos dos carregamentos
       let somaCarregado = 0;
@@ -144,8 +143,13 @@ async function carregarCarregamentos() {
       tabelaFretes.appendChild(corpoFretes);
 
       if (querySnapshot.empty) {
-        corpoTabelaCarregamentos.innerHTML =
-          "Ainda nenhum Carregamento cadastrado para este Frete.";
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td colspan="14" style="text-align: center;">
+            Ainda nenhum Carregamento cadastrado para este Frete.
+          </td>
+        `;
+        tbody.appendChild(row);
       } else {
         // Ordenar por timestamp decrescente (mais recente primeiro)
         carregamentos.sort((a, b) => b.timestamp - a.timestamp);
@@ -188,7 +192,7 @@ async function carregarCarregamentos() {
               </td>
             </tr>
           `;
-          corpoTabelaCarregamentos.innerHTML += linha;
+          tbody.insertAdjacentHTML('beforeend', linha);
         });
       }
     } else {
