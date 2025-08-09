@@ -17,7 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setStatus(message, isError = false) {
     status.textContent = message;
-    status.style.color = isError ? "#ff6b6b" : "#66d9ef"; // Cor de erro e sucesso ajustadas
+    status.className = 'status-message'; // Reset classes
+    if (message) {
+      status.classList.add(isError ? 'error' : 'success');
+    }
   }
 
   function handleFileUpload(event) {

@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fixar (Post-it)
         const pinBtn = li.querySelector('.pin-btn');
         if (reminder.isPinned) {
-            pinBtn.style.color = 'var(--primary-color)';
+            pinBtn.classList.add('active');
         }
         pinBtn.addEventListener('click', (e) => {
             e.stopPropagation();

@@ -7,147 +7,102 @@
   <link rel="stylesheet" href="../../css/menu.css">
   <link rel="stylesheet" href="ordensmanuais.css" />
   <link rel="shortcut icon" href="../../assets/favcom.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=note_alt" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <title>Ordens Manuais</title>
 </head>
 
 <body>
 
   <nav class="sidebar">
-    <div class="hamburger-menu">
-      <div class="hamburger"></div>
+    <div class="hamburger-menu">    
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
+
     <ul class="nav-list">
-      <li>
-        <a href="../PLANILHA/lista_fretes.html">
-          <i class="fas fa-table"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M620-163 450-333l56-56 114 114 226-226 56 56-282 282Zm220-397h-80v-200h-80v120H280v-120h-80v560h240v80H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v200ZM480-760q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z" />
-            </svg></i>
-          <span>Planilha</span>
-        </a>
-      </li>
-      <!-- <li>
-        <a href="#">
-          <i class="fas fa-truck"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q146 0 255.5 91.5T872-559h-82q-19-73-68.5-130.5T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h80v120h-40L168-552q-3 18-5.5 36t-2.5 36q0 131 92 225t228 95v80Zm364-20L716-228q-21 12-45 20t-51 8q-75 0-127.5-52.5T440-380q0-75 52.5-127.5T620-560q75 0 127.5 52.5T800-380q0 27-8 51t-20 45l128 128-56 56ZM620-280q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Z" />
-            </svg></i>
-          <span>Consulta de Frete</span>
-        </a>
-      </li> -->
-      <li>
-        <a href="../CHAT/chat.html">
-          <i class="fas fa-comments"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
-            </svg></i>
-          <span>Chat</span>
-        </a>
-      </li>
-      <li>
-        <a href="../CALCULADORAS/calculadoras.html">
-          <i class="fas fa-calculator"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />
-            </svg></i>
-          <span>Calculadoras</span>
-        </a>
-      </li>
-      <li>
-        <a href="oc.html">
-          <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="white">
-              <path
-                d="M280-280h84l240-238-86-86-238 238v86Zm352-266 42-44q6-6 6-14t-6-14l-56-56q-6-6-14-6t-14 6l-44 42 86 86ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />
-            </svg></i>
-          <span>Ordens Manuais</span>
-        </a>
-      </li>
-      <li>
-        <a href="../CONTATOS/contato.html">
-          <i class="fas fa-address-book"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-              width="24px" fill="#FFFFFF">
-              <path
-                d="M80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM360-400q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm400 160 80-80-60-80h-66q-6-18-10-38.5t-4-41.5q0-21 4-40.5t10-39.5h66l60-80-80-80q-54 42-87 106.5T640-480q0 69 33 133.5T760-240Zm-578 40h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm178-280q-17 0-28.5-11.5T320-520q0-17 11.5-28.5T360-560q17 0 28.5 11.5T400-520q0 17-11.5 28.5T360-480Zm120 0Z" />
-            </svg></i>
-          <span>Lista de Contatos</span>
-        </a>
-      </li>
-      <li>
-        <a href="../MOSTRADOR/index1.html">
-          <i class="fas fa-tv"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h720q33 0 56.5 23.5T920-680v480q0 33-23.5 56.5T840-120H120Zm0-80h720v-480H120v480Zm160 160v-80h400v80H280Z" />
-            </svg></i>
-          <span>Divulgação</span>
-        </a>
-      </li>
+        <li>
+            <a href="../PLANILHA/lista_fretes.html">
+                <i class="fas fa-table"></i>
+                <span>Planilha</span>
+            </a>
+        </li>
+        <li>
+            <a href="../CHAT/chat.html">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+            </a>
+        </li>
+        <li>
+            <a href="../CALCULADORAS/calculadoras.html">
+                <i class="fas fa-calculator"></i>
+                <span>Calculadoras</span>
+            </a>
+        </li>
+        <li>
+            <a href="../OC/oc.html">
+                <i class="fas fa-pencil-alt"></i>
+                <span>Ordens Manuais</span>
+            </a>
+        </li>
+        <li>
+            <a href="../CONTATOS/contato.html">
+                <i class="fas fa-address-book"></i>
+                <span>Lista de Contatos</span>
+            </a>
+        </li>
+        <li>
+            <a href="../MOSTRADOR/index1.html"> 
+                <i class="fas fa-tv"></i>
+                <span>Divulgação</span>
+            </a>
+        </li>
 
-      <li>
-        <a href="../utilitarios/index.html">
-            <i class="fas fa-tools"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF">
-                <path d="M360-120q-28 0-54-10t-46-28L80-400q-18-20-28-46t-10-54q0-28 10-54t28-46l180-180q18-18 44.5-28t53.5-10q27 0 53 9.5t45 27.5l-43 43q-12-8-25-12.5t-27-4.5q-14 0-27 5t-23 14L160-500q-9 9-14 21t-5 25q0 14 5 26t14 21l180 180q9 9 21 14t26 5q26 0 47-15.5t28-39.5h68q5 25 26.5 42.5T640-200q29 0 49.5-20.5T710-270q0-29-20.5-49.5T640-340q-14 0-26 5t-22 14l-42-42 42-42q18 10 40 10 14 0 26.5-4t23.5-12l43 43q-18 20-27.5 46t-9.5 54q0 28 9.5 54t27.5 46l-42 42q-20-18-46-28t-54-10h-80Zm440-400q0-28-9.5-54T762-620l42-42q20 18 28.5 44t8.5 52q0 27-9 52t-27 45l-42-42q10-10 15-23t5-27q0-14-5-26.5T762-660L582-840q-9-9-21-14t-26-5q-13 0-25.5 4.5T484-847l-42-43q20-18 45.5-27t52.5-9q28 0 54 10t46 28l180 180q18 20 28 46t10 54q0 28-10 54t-28 46l-42-42q9-9 14-21t5-26Z"/>
-            </svg></i>
-            <span>Utilitários</span>
-        </a>
-    </li>
+        <li class="double-icon">
+            <a href="index.html">
+                <i class="fas fa-tools"></i>
+                <span>Utilitários</span>
+            </a>
+        </li>
+        
 
-      <li>
-        <a href="../TRACKING/indextracking.html">
-          <i class="fas fa-truck"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q146 0 255.5 91.5T872-559h-82q-19-73-68.5-130.5T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h80v120h-40L168-552q-3 18-5.5 36t-2.5 36q0 131 92 225t228 95v80Zm364-20L716-228q-21 12-45 20t-51 8q-75 0-127.5-52.5T440-380q0-75 52.5-127.5T620-560q75 0 127.5 52.5T800-380q0 27-8 51t-20 45l128 128-56 56ZM620-280q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Z" />
-            </svg></i>
-          <span>Tracking</span>
-        </a>
-      </li>
-
-      <li>
-        <a href="../PLANILHA/dashboard.html">
-          <i class="fas fa-chart-line"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M120-120v-60h720v60H120Zm120-180v-60h480v60H240Zm120-180v-60h360v60H360Z"/></svg></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-
-      <!-- <li>
-        <a href="../../processos.html">
-          <i class="fas fa-project-diagram"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#FFFFFF"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3c0 .23.03.45.08.67l-2.16 1.25c-.55-.5-1.27-.82-2.07-.92V7.91c.58-.2 1-.76 1-1.41 0-.83-.67-1.5-1.5-1.5S6 5.67 6 6.5c0 .65.42 1.21 1 1.41v1.09C5.61 9.36 4 11.03 4 13c0 1.97 1.61 3.64 3.5 3.99V19c0 .55.45 1 1 1s1-.45 1-1v-2.01c.8-.1 1.52-.42 2.07-.92l2.16 1.25c-.05.22-.08.44-.08.67z"/></svg></i>
-          <span>Gestão de Processos</span>
-        </a>
-      </li> -->
-
-      <li>
-        <a href="../dashboard.html">
-          <i class="fas fa-home"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960"
-              width="30px" fill="#FFFFFF">
-              <path
-                d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
-            </svg></i>
-          <span>Início</span>
-        </a>
-      </li>
-
+        <li>
+            <a href="../TRACKING/indextracking.html">
+                <i class="fas fa-truck"></i>
+                <span>Tracking</span>
+            </a>
+        </li>
+        <li>
+            <a href="../PLANILHA/dashboard.html">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="../dashboard.html">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </a>
+        </li>
     </ul>
-  </nav>
+</nav>
 
   <div class="container">
     <div class="ordempgua">
       <h1>Ordem Paranaguá</h1>
       <a class="pgua" href="ordempgua/formordempgua.html">
-        <img src="../../assets/ordempgua.png" alt="" />
+        <img src="../assets/ordempgua.png" alt="" />
       </a>
     </div>
 
     <div class="ordemaraquari">
       <h1>Ordem Araquari</h1>
       <a class="araquari" href="ordemquari/form_araquari.html">
-        <img src="../../assets/ordempgua.png" alt="" />
+        <img src="../assets/ordempgua.png" alt="" />
       </a>
     </div>
 
@@ -164,7 +119,6 @@
 
 
   <script src="../../js/menu.js"></script>
-
 </body>
 
 </html>

@@ -4,99 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora - Utilitários</title>
+    <link rel="shortcut icon" href="../../../assets/favcom.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../css/shared-styles.css">
     <link rel="stylesheet" href="calculadora.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1><a href="../index.html" class="header-link">Painel de Utilitários</a></h1>
-        <p>Calculadora Científica</p>
-    </header>
 
-    <main class="calculator-container">
-        <!-- Este container será movido para a janela PiP -->
-        <div id="pip-container">
-            <div class="calculator" id="calculator-body"> <!-- Adicionado ID -->
-                <div class="calculator-header">
-                    <div id="display" class="display">0</div>
-                    <button id="pip-button" class="btn-pip" title="Modo Flutuante (Picture-in-Picture)">
-                        <i class="fa-solid fa-window-restore"></i>
-                    </button>
-                </div>
+    <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger"></div>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="../../PLANILHA/lista_fretes.html">
+                    <i class="fas fa-table"></i>
+                    <span>Planilha</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CHAT/chat.html">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CALCULADORAS/calculadoras.html">
+                    <i class="fas fa-calculator"></i>
+                    <span>Calculadoras</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../OC/oc.html">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span>Ordens Manuais</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CONTATOS/contato.html">
+                    <i class="fas fa-address-book"></i>
+                    <span>Lista de Contatos</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../MOSTRADOR/index1.html">
+                    <i class="fas fa-tv"></i>
+                    <span>Divulgação</span>
+                </a>
+            </li>
 
-                <!-- Botão de Alternância de Modo -->
-                <div class="mode-switcher">
-                    <button id="mode-scientific" class="mode-btn active">Científica</button>
-                    <button id="mode-finance" class="mode-btn">Financeira</button>
-                </div>
+            <li class="double-icon">
+                <a href="../index.html">
+                    <i class="fas fa-tools"></i>
+                    <span>Utilitários</span>
+                </a>
+            </li>
+            
 
-                <!-- Painel Financeiro (inicialmente oculto) -->
-                <div id="finance-panel" class="finance-panel hidden">
-                    <div class="finance-input">
-                        <label for="pv">Valor Presente (R$)</label>
-                        <input type="number" id="pv" placeholder="1000">
+            <li>
+                <a href="../../TRACKING/indextracking.html">
+                    <i class="fas fa-truck"></i>
+                    <span>Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../PLANILHA/dashboard.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-container">
+            <div class="content-wrapper">
+                <div id="pip-container">
+                    <div class="form-card" id="calculator-body">
+                        <header class="form-header">
+                            <button class="back-button" onclick="window.history.back()"><i class="fas fa-arrow-left"></i></button>
+                            <h1>Calculadora</h1>
+                            <p class="form-subtitle">Científica e Financeira</p>
+                        </header>
+
+                        <div class="calculator-header">
+                            <div id="display" class="display">0</div>
+                            <button id="pip-button" class="btn-pip" title="Modo Flutuante (PiP)">
+                                <i class="fa-solid fa-window-restore"></i>
+                            </button>
+                        </div>
+
+                        <div class="mode-switcher">
+                            <button id="mode-scientific" class="mode-btn active">Científica</button>
+                            <button id="mode-finance" class="mode-btn">Financeira</button>
+                        </div>
+
+                        <div id="finance-panel" class="finance-panel hidden">
+                            <div class="form-group">
+                                <label for="pv">Valor Presente (R$)</label>
+                                <input type="number" id="pv" placeholder="1000" step="50">
+                            </div>
+                            <div class="form-group">
+                                <label for="rate">Taxa de Juros (%)</label>
+                                <input type="number" id="rate" placeholder="1.5" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="periods">Nº de Períodos</label>
+                                <input type="number" id="periods" placeholder="12">
+                            </div>
+                            <div class="form-actions">
+                                <button id="calc-simple-interest" class="btn btn-secondary">Juros Simples</button>
+                                <button id="calc-compound-interest" class="btn btn-secondary">Juros Compostos</button>
+                            </div>
+                            <div id="finance-result" class="finance-result"></div>
+                        </div>
+
+                        <div class="buttons" id="scientific-buttons">
+                            <button class="btn operator" data-value="sin">sin</button>
+                            <button class="btn operator" data-value="cos">cos</button>
+                            <button class="btn operator" data-value="tan">tan</button>
+                            <button class="btn operator" data-value="sqrt">√</button>
+                            <button class="btn operator" data-value="^2">x²</button>
+                            <button class="btn operator" data-value="log">log</button>
+                            <button class="btn operator" data-value="(">(</button>
+                            <button class="btn operator" data-value=")">)</button>
+                            
+                            <button class="btn control" data-action="clear">C</button>
+                            <button class="btn control" data-action="backspace">←</button>
+                            <button class="btn operator" data-value="%">%</button>
+                            <button class="btn operator" data-value="/">÷</button>
+
+                            <button class="btn number" data-value="7">7</button>
+                            <button class="btn number" data-value="8">8</button>
+                            <button class="btn number" data-value="9">9</button>
+                            <button class="btn operator" data-value="*">×</button>
+
+                            <button class="btn number" data-value="4">4</button>
+                            <button class="btn number" data-value="5">5</button>
+                            <button class="btn number" data-value="6">6</button>
+                            <button class="btn operator" data-value="-">−</button>
+
+                            <button class="btn number" data-value="1">1</button>
+                            <button class="btn number" data-value="2">2</button>
+                            <button class="btn number" data-value="3">3</button>
+                            <button class="btn operator" data-value="+">+</button>
+
+                            <button class="btn number zero" data-value="0">0</button>
+                            <button class="btn number" data-value=".">.</button>
+                            <button class="btn equals" data-action="calculate">=</button>
+                        </div>
                     </div>
-                    <div class="finance-input">
-                        <label for="rate">Taxa de Juros (%)</label>
-                        <input type="number" id="rate" placeholder="1.5" step="0.01">
-                    </div>
-                    <div class="finance-input">
-                        <label for="periods">Nº de Períodos</label>
-                        <input type="number" id="periods" placeholder="12">
-                    </div>
-                    <div class="finance-buttons">
-                        <button id="calc-simple-interest">Juros Simples</button>
-                        <button id="calc-compound-interest">Juros Compostos</button>
-                    </div>
-                    <div id="finance-result" class="finance-result"></div>
-                </div>
-
-                <!-- Botões da Calculadora -->
-                <div class="buttons" id="scientific-buttons">
-                    <!-- Botões da calculadora (sem alteração) -->
-                    <button class="btn operator" data-value="sin">sin</button>
-                    <button class="btn operator" data-value="cos">cos</button>
-                    <button class="btn operator" data-value="tan">tan</button>
-                    <button class="btn operator" data-value="sqrt">√</button>
-                    <button class="btn operator" data-value="^2">x²</button>
-                    <button class="btn operator" data-value="log">log</button>
-                    <button class="btn operator" data-value="(">(</button>
-                    <button class="btn operator" data-value=")">)</button>
-                    
-                    <button class="btn control" data-action="clear">C</button>
-                    <button class="btn control" data-action="backspace">←</button>
-                    <button class="btn operator" data-value="%">%</button>
-                    <button class="btn operator" data-value="/">÷</button>
-
-                    <button class="btn number" data-value="7">7</button>
-                    <button class="btn number" data-value="8">8</button>
-                    <button class="btn number" data-value="9">9</button>
-                    <button class="btn operator" data-value="*">×</button>
-
-                    <button class="btn number" data-value="4">4</button>
-                    <button class="btn number" data-value="5">5</button>
-                    <button class="btn number" data-value="6">6</button>
-                    <button class="btn operator" data-value="-">−</button>
-
-                    <button class="btn number" data-value="1">1</button>
-                    <button class="btn number" data-value="2">2</button>
-                    <button class="btn number" data-value="3">3</button>
-                    <button class="btn operator" data-value="+">+</button>
-
-                    <button class="btn number zero" data-value="0">0</button>
-                    <button class="btn number" data-value=".">.</button>
-                    <button class="btn equals" data-action="calculate">=</button>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer>
-        <p>Desenvolvido por Manus</p>
-    </footer>
-
     <script src="calculadora.js"></script>
+    <script src="../../../js/menu.js"></script>
 </body>
 </html>

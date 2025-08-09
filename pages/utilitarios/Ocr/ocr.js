@@ -9,45 +9,75 @@ const exportTxtBtn = document.getElementById("export-txt-btn");
 const exportPdfBtn = document.getElementById("export-pdf-btn");
 const clearBtn = document.getElementById("clear-btn");
 
+const uploadArea = document.getElementById("upload-area");
+
 // --- Funções de Status ---
-function setStatus(message, color = '#66d9ef') {
+function setStatus(message, type = 'info') { // types: info, success, error
     status.textContent = message;
-    status.style.color = color;
+    status.className = 'status-message'; // Reset classes
+    if (message) {
+        status.classList.add(type);
+    }
 }
 
-// --- Lógica de OCR ---
-upload.addEventListener("change", async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+// --- Lógica de Upload (Clique e Arrastar e Soltar) ---
 
-    clearAll(); // Limpa o estado anterior antes de começar
+uploadArea.addEventListener('click', () => upload.click());
+
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'var(--primary-color)';
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.style.borderColor = 'var(--border-color)';
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'var(--border-color)';
+    const files = e.dataTransfer.files;
+    if (files.length) {
+        handleFile(files[0]);
+    }
+});
+
+upload.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        handleFile(file);
+    }
+});
+
+async function handleFile(file) {
+    clearAll(); // Limpa o estado anterior
 
     const reader = new FileReader();
     reader.onload = async () => {
         try {
-            setStatus("🧐 Reconhecendo texto...", '#f9ca24');
+            setStatus("🧐 Reconhecendo texto...", 'info');
             translateBtn.disabled = true;
 
             const { data: { text } } = await Tesseract.recognize(reader.result, "por", {
                 logger: (m) => {
                     const progress = (m.progress * 100).toFixed(0);
-                    setStatus(`Progresso: ${m.status} (${progress}%)`, '#f9ca24');
+                    setStatus(`Progresso: ${m.status} (${progress}%)`, 'info');
                 },
             });
 
             ocrOutput.value = text;
-            setStatus("✅ Texto reconhecido com sucesso!", '#4caf50');
+            setStatus("✅ Texto reconhecido com sucesso!", 'success');
             if (text.trim()) {
-                translateBtn.disabled = false; // Habilita o botão de tradução
+                translateBtn.disabled = false;
             }
 
         } catch (err) {
             console.error("Erro no OCR:", err);
-            setStatus("⚠️ Erro no processamento de OCR.", '#ff6b6b');
+            setStatus("⚠️ Erro no processamento de OCR.", 'error');
         }
     };
     reader.readAsDataURL(file);
-});
+}
 
 // --- Lógica de Tradução ---
 translateBtn.addEventListener('click', async () => {

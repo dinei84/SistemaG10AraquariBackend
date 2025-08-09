@@ -4,52 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Texto para Áudio - Utilitários</title>
+    <link rel="shortcut icon" href="../../../assets/favcom.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../css/shared-styles.css">
     <link rel="stylesheet" href="texto-para-audio.css">
 </head>
 <body>
-    <header>
-        <h1><a href="../index.html" class="header-link">Painel de Utilitários</a></h1>
-        <p>Conversor de Texto para Áudio (Text-to-Speech )</p>
-    </header>
 
-    <main class="tts-container">
-        <div class="tts-box">
-            <h2>Digite o texto para converter</h2>
-            <textarea id="text-to-speak" placeholder="Comece a digitar aqui..."></textarea>
+    <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger"></div>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="../../PLANILHA/lista_fretes.html">
+                    <i class="fas fa-table"></i>
+                    <span>Planilha</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CHAT/chat.html">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CALCULADORAS/calculadoras.html">
+                    <i class="fas fa-calculator"></i>
+                    <span>Calculadoras</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../OC/oc.html">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span>Ordens Manuais</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CONTATOS/contato.html">
+                    <i class="fas fa-address-book"></i>
+                    <span>Lista de Contatos</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../MOSTRADOR/index1.html">
+                    <i class="fas fa-tv"></i>
+                    <span>Divulgação</span>
+                </a>
+            </li>
+
+            <li class="double-icon">
+                <a href="../index.html">
+                    <i class="fas fa-tools"></i>
+                    <span>Utilitários</span>
+                </a>
+            </li>
             
-            <div class="controls-grid">
-                <div class="voice-control">
-                    <label for="voice-select">Escolha uma voz:</label>
-                    <select id="voice-select"></select>
-                </div>
-                
-                <div class="range-control">
-                    <label for="rate">Velocidade: <span id="rate-value">1</span></label>
-                    <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
-                </div>
 
-                <div class="range-control">
-                    <label for="pitch">Tom: <span id="pitch-value">1</span></label>
-                    <input type="range" id="pitch" min="0" max="2" value="1" step="0.1">
+            <li>
+                <a href="../../TRACKING/indextracking.html">
+                    <i class="fas fa-truck"></i>
+                    <span>Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../PLANILHA/dashboard.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-container">
+            <div class="content-wrapper">
+                <div class="form-card">
+                    <header class="form-header">
+                        <button class="back-button" onclick="window.history.back()"><i class="fas fa-arrow-left"></i></button>
+                        <h1>Texto para Áudio</h1>
+                        <p class="form-subtitle">Converta qualquer texto em fala natural</p>
+                    </header>
+
+                    <div class="form-group">
+                        <label for="text-to-speak">Texto</label>
+                        <textarea id="text-to-speak" placeholder="Digite o texto que você deseja ouvir..."></textarea>
+                    </div>
+
+                    <div class="controls-grid">
+                        <div class="form-group">
+                            <label for="voice-select">Voz</label>
+                            <select id="voice-select"></select>
+                        </div>
+                        <div class="form-group range-control">
+                            <label for="rate">Velocidade: <span id="rate-value">1</span></label>
+                            <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
+                        </div>
+                        <div class="form-group range-control">
+                            <label for="pitch">Tom: <span id="pitch-value">1</span></label>
+                            <input type="range" id="pitch" min="0" max="2" value="1" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button id="play-btn" class="btn btn-primary"><i class="fas fa-play"></i> Ouvir</button>
+                        <button id="pause-btn" class="btn btn-secondary" disabled><i class="fas fa-pause"></i> Pausar</button>
+                        <button id="resume-btn" class="btn btn-secondary" disabled><i class="fas fa-play-circle"></i> Continuar</button>
+                        <button id="stop-btn" class="btn btn-outline" disabled><i class="fas fa-stop"></i> Parar</button>
+                    </div>
+
+                    <div id="status" class="status-message"></div>
                 </div>
             </div>
-
-            <div class="action-buttons">
-                <button id="play-btn"><i class="fas fa-play"></i> Ouvir</button>
-                <button id="pause-btn" disabled><i class="fas fa-pause"></i> Pausar</button>
-                <button id="resume-btn" disabled><i class="fas fa-play-circle"></i> Continuar</button>
-                <button id="stop-btn" disabled><i class="fas fa-stop"></i> Parar</button>
-            </div>
-            <div id="status" class="status-message"></div>
         </div>
     </main>
 
-    <footer>
-        <p>Desenvolvido por Manus</p>
-    </footer>
-
     <script src="texto-para-audio.js"></script>
+    <script src="../../../js/menu.js"></script>
 </body>
 </html>

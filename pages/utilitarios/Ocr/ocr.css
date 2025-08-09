@@ -1,105 +1,85 @@
-/* Estilos específicos para a página de OCR */
-.ocr-container {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-    flex-grow: 1;
-}
 
-.ocr-box {
-    width: 100%;
-    max-width: 800px;
-    background-color: var(--tertiary-color);
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+.form-card {
+    max-width: 900px;
     text-align: center;
 }
 
-.ocr-box h2 {
-    color: var(--quaternary-color);
-    margin-bottom: 1.5rem;
+.back-button {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
 }
 
-.ocr-upload {
-    display: block;
-    margin: 0 auto 1.5rem auto;
-    padding: 0.5rem;
-    color: var(--quaternary-color);
+.upload-area {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: #f8f9fa;
+}
+
+.upload-area p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
 }
 
 .status-message {
     margin-bottom: 1.5rem;
-    font-weight: bold;
+    font-weight: 500;
     min-height: 24px;
-    color: #66d9ef; /* Cor de status padrão */
+    font-size: 1.1rem;
+}
+
+.status-message.success {
+    color: var(--success-color);
+}
+
+.status-message.error {
+    color: var(--quaternary-color);
+}
+
+.status-message.info {
+    color: var(--primary-color);
 }
 
 .text-areas {
     display: flex;
+    flex-direction: column;
     gap: 1.5rem;
-    margin-bottom: 1.5rem;
-    flex-direction: column; /* Organiza os textareas em coluna */
+    margin-bottom: 2rem;
 }
 
-/* O textarea principal ocupa toda a largura */
-#ocrOutput {
+textarea {
     width: 100%;
-    height: 250px;
+    min-height: 200px;
     padding: 1rem;
-    border-radius: 5px;
-    border: 1px solid var(--quintenary-color);
-    background-color: #fdfdfd;
-    color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
     font-size: 1rem;
     resize: vertical;
 }
 
-/* Container da tradução */
-.translation-container {
-    width: 100%;
+#translatedOutput {
+    background-color: #f8f9fa;
 }
 
 .translation-container.hidden {
     display: none;
-}
-
-#translatedOutput {
-    width: 100%;
-    height: 200px;
-    padding: 1rem;
-    border-radius: 5px;
-    border: 1px solid var(--quintenary-color);
-    background-color: #e9ecef; /* Cor de fundo diferente para indicar 'readonly' */
-    color: var(--secondary-color);
-    font-size: 1rem;
-    resize: vertical;
-}
-
-.action-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.action-buttons button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    background-color: var(--primary-color);
-    color: var(--quaternary-color);
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s, opacity 0.3s;
-}
-
-.action-buttons button:hover:not(:disabled) {
-    background-color: #9c2d55;
-}
-
-.action-buttons button:disabled {
-    background-color: var(--secondary-color);
-    opacity: 0.5;
-    cursor: not-allowed;
 }

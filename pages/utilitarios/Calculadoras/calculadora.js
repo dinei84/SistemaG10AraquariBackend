@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Adiciona um listener para quando a janela PiP for fechada
                     pipWindow.addEventListener('pagehide', () => {
-                        const mainContainer = document.querySelector('.calculator-container');
+                        const mainContainer = document.querySelector('.content-wrapper');
                         pipContainer.id = 'pip-container'; // Restaura o ID original
                         mainContainer.append(pipContainer); // Move a calculadora de volta para a página principal
                     });
