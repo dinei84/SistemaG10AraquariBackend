@@ -10,6 +10,7 @@ html, body {
   }
   
   body {
+    background-image: url("../../../assets/g10ok.jpeg");
     display: flex;
     justify-content: center;
     align-items: center;
