@@ -218,11 +218,6 @@ async function carregarDados() {
 
         atualizarInterface(fretesFiltrados);
         
-        document.getElementById('emissorFilter').value = '';
-        document.getElementById('ordensMes').textContent = '0';
-        document.getElementById('caminhoesMes').textContent = '0';
-        document.getElementById('totalRetirado').textContent = '0 ton';
-        
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
         alert("Erro ao carregar dados do dashboard");
@@ -246,30 +241,38 @@ function calcularValorMedioPorEstado(fretes) {
     const estados = {};
     
     fretes.forEach(frete => {
-        const estado = frete.estado || 'N/A';
+        // Ignorar fretes sem estado, frempresa ou liberado inválidos
+        if (!frete.estado || !frete.valor || !frete.quantidade) return;
         
-        if (!estados[estado]) {
-            estados[estado] = {
-                total: 0,
-                quantidade: 0
-            };
-        }
-        
+        const estado = frete.estado.toUpperCase();
         const valor = parseFloat(frete.valor) || 0;
         const quantidade = parseFloat(frete.quantidade) || 0;
         
-        if (quantidade > 0) {
-            estados[estado].total += valor * quantidade;
-            estados[estado].quantidade += quantidade;
+        if (quantidade <= 0) return;
+        
+        if (!estados[estado]) {
+            estados[estado] = {
+                totalValor: 0,
+                totalQuantidade: 0,
+                count: 0
+            };
         }
+        
+        estados[estado].totalValor += valor;
+        estados[estado].totalQuantidade += quantidade;
+        estados[estado].count++;
     });
     
     return Object.entries(estados)
-        .filter(([_, dados]) => dados.quantidade > 0)
         .map(([estado, dados]) => ({
             estado,
-            valorMedio: Math.round(dados.total / dados.quantidade)
-        }));
+            valorMedio: dados.totalQuantidade > 0
+                ? (dados.totalValor / dados.totalQuantidade).toFixed(2)
+                : 0,
+            fretes: dados.count
+        }))
+        .filter(item => item.valorMedio > 0)
+        .sort((a, b) => b.valorMedio - a.valorMedio);
 }
 
 function calcularTopProdutos(fretes) {
@@ -401,8 +404,70 @@ function calcularRankingEmissores(carregamentos, mesAnterior = false) {
     return resultado;
 }
 
+// Função para calcular a projeção de carregamentos por emissor
+function calcularProjecaoEmissores(carregamentosAtual, carregamentosAnterior) {
+    const hoje = new Date();
+    const diasNoMesAtual = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
+    const diaAtual = hoje.getDate();
+    
+    // Calcular ranking do mês atual e anterior
+    const rankingAtual = calcularRankingEmissores(carregamentosAtual, false);
+    const rankingAnterior = calcularRankingEmissores(carregamentosAnterior, true);
+    
+    // Calcular total do mês anterior
+    const totalMesAnterior = rankingAnterior.reduce((acc, emissor) => acc + emissor.totalRetirado, 0);
+    
+    // Calcular total do mês atual
+    const totalMesAtual = rankingAtual.reduce((acc, emissor) => acc + emissor.totalRetirado, 0);
+    
+    // Calcular projeção para cada emissor
+    const projecoes = [];
+    
+    // Obter todos os emissores únicos (combinando mês atual e anterior)
+    const todosEmissores = new Set([...rankingAtual.map(e => e.emissor), ...rankingAnterior.map(e => e.emissor)]);
+    
+    todosEmissores.forEach(emissor => {
+        const dadosAnterior = rankingAnterior.find(e => e.emissor === emissor) || { totalRetirado: 0 };
+        const dadosAtual = rankingAtual.find(e => e.emissor === emissor) || { totalRetirado: 0 };
+        
+        // Calcular média diária do mês anterior
+        const diasNoMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+        const mediaDiariaAnterior = dadosAnterior.totalRetirado / diasNoMesAnterior;
+        
+        // Calcular projeção para o mês atual
+        const projecao = Math.round(mediaDiariaAnterior * diasNoMesAtual);
+        
+        // Adicionar à lista de projeções se houver dados relevantes
+        if (projecao > 0 || dadosAtual.totalRetirado > 0) {
+            projecoes.push({
+                emissor,
+                projecao,
+                realizado: Math.round(dadosAtual.totalRetirado),
+                percentualRealizado: projecao > 0 ? Math.round((dadosAtual.totalRetirado / projecao) * 100) : 0
+            });
+        }
+    });
+    
+    // Ordenar por projeção (maior para menor)
+    projecoes.sort((a, b) => b.projecao - a.projecao);
+    
+    // Calcular variação percentual em relação ao mês anterior
+    const projecaoTotal = projecoes.reduce((acc, emissor) => acc + emissor.projecao, 0);
+    const variacaoPercentual = totalMesAnterior > 0 ? 
+        Math.round(((projecaoTotal - totalMesAnterior) / totalMesAnterior) * 100) : 0;
+    
+    return {
+        projecoes,
+        totalMesAtual,
+        totalMesAnterior,
+        projecaoTotal,
+        variacaoPercentual,
+        percentualRealizado: projecaoTotal > 0 ? Math.round((totalMesAtual / projecaoTotal) * 100) : 0
+    };
+}
+
 function atualizarInterface(fretes) {
-    const chartsIds = ['graficoProjecao', 'graficoEstados', 'graficoProdutos', 'graficoClientes', 'graficoEmissores'];
+    const chartsIds = ['graficoProjecao', 'graficoEstados', 'graficoProdutos', 'graficoClientes', 'graficoEmissores', 'graficoProjecaoEmissores'];
     chartsIds.forEach(id => {
         const chart = Chart.getChart(id);
         if (chart) chart.destroy();
@@ -432,27 +497,130 @@ function atualizarInterface(fretes) {
         }
     });
     
+    // Obter carregamentos do mês atual e anterior para projeções
+    const hoje = new Date();
+    const inicioMesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const fimMesAtual = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    const inicioMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
+    const fimMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
+    
+    const carregamentosAtual = window.carregamentosDashboard.filter(carregamento => {
+        const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
+        return dataCarregamento >= inicioMesAtual && dataCarregamento <= fimMesAtual;
+    });
+    
+    const carregamentosAnterior = window.carregamentosDashboard.filter(carregamento => {
+        const dataCarregamento = parseDataCarregamento(carregamento.dataoc);
+        return dataCarregamento >= inicioMesAnterior && dataCarregamento <= fimMesAnterior;
+    });
+    
+    // Calcular projeções de carregamentos
+    const dadosProjecao = calcularProjecaoEmissores(carregamentosAtual, carregamentosAnterior);
+    
+    // Atualizar interface com os dados de projeção
+    document.getElementById('totalMesAtual').textContent = `${Math.round(dadosProjecao.totalMesAtual)} ton`;
+    
+    // Atualizar variação percentual
+    const variacaoElement = document.getElementById('variacaoMes');
+    const variacaoTexto = `(${dadosProjecao.variacaoPercentual}% ${dadosProjecao.variacaoPercentual >= 0 ? '↑' : '↓'})`;
+    variacaoElement.textContent = variacaoTexto;
+    variacaoElement.className = 'variacao ' + (dadosProjecao.variacaoPercentual >= 0 ? 'positiva' : 'negativa');
+    
+    // Atualizar barra de progresso
+    const progressBar = document.getElementById('progressoCarregamento');
+    progressBar.style.width = `${dadosProjecao.percentualRealizado}%`;
+    
+    // Atualizar lista de emissores
+    const listaEmissores = document.getElementById('listaEmissoresProjecao');
+    listaEmissores.innerHTML = dadosProjecao.projecoes.slice(0, 5).map(emissor => {
+        const abaixoProjecao = emissor.realizado < (emissor.projecao * (hoje.getDate() / fimMesAtual.getDate()));
+        return `
+            <li class="emissor-item">
+                <span class="emissor-nome">${emissor.emissor}</span>
+                <div class="emissor-dados">
+                    <span class="projecao-valor">Proj.: ${emissor.projecao} ton</span>
+                    <span class="realizado-valor ${abaixoProjecao ? 'abaixo' : ''}">Realizado: ${emissor.realizado} ton</span>
+                </div>
+            </li>
+        `;
+    }).join('');
+    
+    // Criar gráfico de projeções
+    if (document.getElementById('graficoProjecaoEmissores')) {
+        const ctxProjecaoEmissores = document.getElementById('graficoProjecaoEmissores').getContext('2d');
+        new Chart(ctxProjecaoEmissores, {
+            type: 'bar',
+            data: {
+                labels: dadosProjecao.projecoes.slice(0, 5).map(e => e.emissor),
+                datasets: [
+                    {
+                        label: 'Projeção (ton)',
+                        data: dadosProjecao.projecoes.slice(0, 5).map(e => e.projecao),
+                        backgroundColor: '#3498db'
+                    },
+                    {
+                        label: 'Realizado (ton)',
+                        data: dadosProjecao.projecoes.slice(0, 5).map(e => e.realizado),
+                        backgroundColor: '#2ecc71'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Projeção vs. Realizado por Emissor'
+                    }
+                }
+            }
+        });
+    }
+    
     const estados = calcularValorMedioPorEstado(fretes);
     const tbody = document.querySelector('#tabelaEstados tbody');
-    tbody.innerHTML = estados.map(estado => `
-        <tr>
-            <td>${estado.estado}</td>
-            <td>R$ ${estado.valorMedio}/ton</td>
+    
+    // Exibir apenas os top 5 estados
+    const top5Estados = estados.slice(0, 5);
+    
+    tbody.innerHTML = top5Estados.map((estado, index) => `
+        <tr class="ranking-row">
+            <td class="ranking-position">${index + 1}</td>
+            <td class="estado-nome">${estado.estado}</td>
+            <td class="valor-medio">R$ ${estado.valorMedio}</td>
+            <td class="fretes-count">${estado.fretes}</td>
         </tr>
     `).join('');
     
     const ctxEstados = document.getElementById('graficoEstados').getContext('2d');
     new Chart(ctxEstados, {
-        type: 'pie',
+        type: 'bar',
         data: {
-            labels: estados.map(e => e.estado),
+            labels: top5Estados.map(e => e.estado),
             datasets: [{
-                data: estados.map(e => e.valorMedio),
+                label: 'Valor Médio (R$/ton)',
+                data: top5Estados.map(e => e.valorMedio),
                 backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f1c40f', '#9b59b6']
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Valor Médio por Estado (R$/ton)'
+                }
+            }
         }
     });
     
@@ -589,19 +757,11 @@ function atualizarInterface(fretes) {
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('periodo').addEventListener('change', () => carregarDados());
     document.getElementById('estado').addEventListener('change', () => carregarDados());
-    document.getElementById('emissorFilter').addEventListener('change', () => {
-        const emissor = document.getElementById('emissorFilter').value;
-        if (emissor) {
-            const emissorStats = calcularEmissorStats(window.carregamentosDashboard, emissor);
-            document.getElementById('ordensMes').textContent = emissorStats.ordens;
-            document.getElementById('caminhoesMes').textContent = emissorStats.caminhoes;
-            document.getElementById('totalRetirado').textContent = emissorStats.totalRetirado + ' ton';
-        } else {
-            document.getElementById('ordensMes').textContent = '0';
-            document.getElementById('caminhoesMes').textContent = '0';
-            document.getElementById('totalRetirado').textContent = '0 ton';
-        }
-    });
 
     carregarDados();
+    
+    // Configurar atualização periódica para manter os dados em tempo real
+    setInterval(() => {
+        carregarDados();
+    }, 300000); // Atualizar a cada 5 minutos (300000ms)
 });

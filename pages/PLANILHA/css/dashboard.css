@@ -85,6 +85,9 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 th, td {
@@ -94,8 +97,57 @@ th, td {
 }
 
 th {
-    background-color: #f8f9fa;
+    background-color: #3498db;
+    color: white;
     font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+/* Estilos para o ranking */
+.ranking-row {
+    transition: background-color 0.2s;
+}
+
+.ranking-row:hover {
+    background-color: #f5f9ff;
+}
+
+.ranking-position {
+    font-weight: bold;
+    text-align: center;
+    color: #3498db;
+    font-size: 1.1em;
+}
+
+.estado-nome {
+    font-weight: 600;
+}
+
+.valor-medio {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.fretes-count {
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 3px;
+}
+
+/* Destaque para o primeiro colocado */
+.ranking-row:first-child {
+    background-color: #f5f9ff;
+}
+
+.ranking-row:first-child .ranking-position {
+    color: #e74c3c;
+    font-size: 1.2em;
+}
+
+.ranking-row:first-child .valor-medio {
+    color: #e74c3c;
+    font-weight: bold;
 }
 
 .lista-produtos, .lista-clientes {
@@ -221,67 +273,118 @@ canvas {
     margin-top: 60px;
 }
 
-/* Estilos para a seção de emissor */
-.emissor-stats {
+/* Estilos para a seção de projeção de carregamentos */
+.projecao-carregamentos {
     margin-top: 15px;
-}
-
-.emissor-info {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 20px;
 }
 
-.emissor-select {
+.total-mes {
     display: flex;
-    gap: 10px;
     align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
-.emissor-select label {
+.total-mes .label {
     font-weight: 500;
     color: #2c3e50;
 }
 
-.emissor-select select {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
-    font-size: 14px;
+.total-mes .value {
+    font-weight: bold;
+    color: #3498db;
+    font-size: 20px;
+}
+
+.total-mes .variacao {
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.variacao.positiva {
+    color: #2ecc71;
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.variacao.negativa {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 12px;
+    background-color: #ecf0f1;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.emissores-projecao {
+    margin-top: 10px;
+}
+
+.emissores-projecao h4 {
+    margin-bottom: 10px;
     color: #2c3e50;
-    cursor: pointer;
+    font-size: 16px;
 }
 
-.emissor-select select:hover {
-    border-color: #3498db;
+.emissores-projecao ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
+.emissores-projecao li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ecf0f1;
 }
 
-.stat-item {
+.emissor-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
+    margin-bottom: 8px;
 }
 
-.stat-item .label {
+.emissor-nome {
     font-weight: 500;
     color: #2c3e50;
 }
 
-.stat-item .value {
-    font-weight: bold;
+.emissor-dados {
+    display: flex;
+    gap: 15px;
+}
+
+.projecao-valor {
     color: #3498db;
+    font-weight: 500;
+}
+
+.realizado-valor {
+    color: #2ecc71;
+    font-weight: 500;
+}
+
+.realizado-valor.abaixo {
+    color: #e74c3c;
 }
 
 /* Estilos para tabelas */
@@ -328,4 +431,4 @@ table tr:last-child td {
     table th, table td {
         padding: 8px;
     }
-} 
+}

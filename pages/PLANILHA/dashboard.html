@@ -128,39 +128,23 @@
                             </div>
                         </div>
 
-                        <!-- Emissor do Mês -->
+                        <!-- Projeção de Carregamentos -->
                         <div class="dashboard-card">
-                            <h3>Emissor do Mês</h3>
-                            <div class="emissor-stats">
-                                <div class="emissor-info">
-                                    <div class="emissor-select">
-                                        <select id="emissorFilter" class="filter-select">
-                                            <option value="">Selecione um emissor</option>
-                                            <option value="Dinei">Dinei</option>
-                                            <option value="Thiago">Thiago</option>
-                                            <option value="Geovane">Geovane</option>
-                                            <option value="Ton">Ton</option>
-                                            <option value="Joao">João</option>
-                                            <option value="Milene">Milene</option>
-                                            <option value="JoaoVitor">JoãoVitor</option>
-                                        </select>
-                                    </div>
-                                    <div class="stats">
-                                        <div class="stat-item">
-                                            <span class="label">Ordens do Mês:</span>
-                                            <span class="value" id="ordensMes">0</span>
-                                        </div>
-                                        <div class="stat-item">
-                                            <span class="label">Caminhões do Mês:</span>
-                                            <span class="value" id="caminhoesMes">0</span>
-                                        </div>
-                                        <div class="stat-item">
-                                            <span class="label">Total Retirado:</span>
-                                            <span class="value" id="totalRetirado">0 ton</span>
-                                        </div>
-                                    </div>
+                            <h3>PROJEÇÃO DE CARREGAMENTOS</h3>
+                            <div class="projecao-carregamentos">
+                                <div class="total-mes">
+                                    <span class="label">Total este mês:</span>
+                                    <span class="value" id="totalMesAtual">0 ton</span>
+                                    <span class="variacao" id="variacaoMes">(0% ↑)</span>
                                 </div>
-                                <canvas id="graficoEmissor"></canvas>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="progressoCarregamento"></div>
+                                </div>
+                                <div class="emissores-projecao">
+                                    <h4>Emissores:</h4>
+                                    <ul id="listaEmissoresProjecao"></ul>
+                                </div>
+                                <canvas id="graficoProjecaoEmissores"></canvas>
                             </div>
                         </div>
 
@@ -171,8 +155,10 @@
                                 <table id="tabelaEstados">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Estado</th>
                                             <th>Valor Médio (R$/ton)</th>
+                                            <th>Fretes</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -226,4 +212,4 @@
     <script src="../../js/menu.js"></script>
     <script type="module" src="js/dashboard.js"></script>
 </body>
-</html> 
+</html>
