@@ -32,6 +32,30 @@ h1 {
     margin-right: 10px;
 }
 
+/* Garante que as tabelas serão visíveis */
+.table-card.lista-carregamento {
+  background-color: white !important;
+}
+
+table {
+  background-color: white !important;
+  border-collapse: collapse !important;
+}
+
+th, td {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #ddd !important;
+  padding: 8px !important;
+}
+
+/* Remove qualquer transformação que possa afetar a renderização */
+.table-card, .table-card * {
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 .btn-novo-carregamento {
     background-color: #560e24;
     color: white;

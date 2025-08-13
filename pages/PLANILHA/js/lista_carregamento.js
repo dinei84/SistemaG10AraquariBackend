@@ -310,78 +310,66 @@ document.querySelectorAll('input[type="number"]').forEach((input) => {
 // Substitua a função window.captureAndShare por esta versão melhorada
 window.captureAndDownload = async () => {
   try {
-    alert("Preparando para o download...")
-
-    //Carrega os dados do frete para obter destino e pedido
-    const freteDoc = await getDoc(doc(db, "fretes", freteId));
-    let destino = "SemDestino";
-    let pedido = "SemPedido";
-
-    if (freteDoc.exists()) {
-      const freteData = freteDoc.data();
-      destino = freteData.destino || destino;
-      pedido = freteData.pedido || pedido;
-    }
-
-    // Formatar a data como DD-MM-YYYY
-    const dataAtual = new Date();
-    const dataFormatada = dataAtual.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    }).replace(/\//g, '-');
-
-    // Elementos a serem ocultados
-    const elementsToHide = [
-      document.getElementById('btnNovoCarregamento'),
-      document.getElementById('btn-voltar-fretes'),
-      document.querySelector('button[onclick ="captureAndDownload()]'),
-      ...document.querySelectorAll('.acoes'),
-    ];
-
-    // Ocultar elementos
-    elementsToHide.forEach((e)=>{
-      if (e) e.classList.add("hide-for-print");
-    });
-
-    // Configurações do html2canvas
+    loadingManager.show(); // Mostra loader
+    
+    // 1. Espera um frame para garantir que o DOM está pronto
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    
+    // 2. Define o container específico
+    const container = document.querySelector('.table-card.lista-carregamento');
+    
+    // 3. Configurações otimizadas para html2canvas
     const options = {
       scale: 2,
       logging: true,
       useCORS: true,
-      scrollY: -window.scrollY,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      removeContainer: true,
       onclone: (clonedDoc) => {
-        clonedDoc.querySelectorAll(".hide-for-print").forEach((element) => {
-          element.style.display = "none";
+        // Garante que todos os elementos estão visíveis
+        clonedDoc.querySelectorAll('table, tr, td, th').forEach(el => {
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
         });
-      },
+        
+        // Remove elementos que não devem aparecer
+        clonedDoc.querySelectorAll('.hide-for-print').forEach(el => {
+          el.style.display = 'none';
+        });
+      }
     };
 
-    const container = document.querySelector(".container");
-    const canvas = await html2canvas(container, options);
-    const dataUrl = canvas.toDataURL("image/png", 1.0);
+    // 4. Força redraw antes de capturar
+    container.style.display = 'none';
+    container.offsetHeight; // Trigger reflow
+    container.style.display = 'block';
 
-    //Criar nome do arquivo com destino, data e pedido
-    const nomeArquivo = `${destino} ${dataFormatada} ${pedido}.png`;
+    // 5. Captura com timeout para garantir renderização
+    const canvas = await Promise.race([
+      html2canvas(container, options),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Tempo excedido')), 5000))
+    ]);
 
-    //Criar e disparar downoload
+    // 6. Configura o download
+    const freteDoc = await getDoc(doc(db, "fretes", freteId));
+    const freteData = freteDoc.exists() ? freteDoc.data() : {};
+    
+    const fileName = `Carregamentos_${freteData.destino || 'frete'}_${new Date().toISOString().slice(0,10)}.png`;
+    const dataUrl = canvas.toDataURL('image/png', 1.0);
+
     const link = document.createElement('a');
-    link.download = nomeArquivo;
+    link.download = fileName;
     link.href = dataUrl;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    //Restaurar elementos
-    elementsToHide.forEach((e)=>{
-      if(e) e.classList.remove("hide-for-print");
-    });
-   
-    alert("Imagem gerada com sucesso!");
-
   } catch (error) {
-    console.error("Erro na captuta", error);
-    alert("Falha ao gerar imagem")
+    console.error('Erro na captura:', error);
+    alert(`Erro ao gerar imagem: ${error.message}`);
+  } finally {
+    loadingManager.hide();
   }
 };
 
