@@ -37,10 +37,8 @@ function areSimilarStrings(str1, str2) {
     
     // Verificar se as strings têm pelo menos 70% de similaridade
     if (normalized1.length > 3 && normalized2.length > 3) {
-        // Verificar se pelo menos 70% dos caracteres de uma string estão na outra
         let matchCount = 0;
         const minLength = Math.min(normalized1.length, normalized2.length);
-        const maxLength = Math.max(normalized1.length, normalized2.length);
         
         for (let i = 0; i < minLength; i++) {
             if (normalized1.includes(normalized2[i])) matchCount++;
@@ -70,27 +68,15 @@ export default class ExcelImportManager {
      * Inicializa os eventos do gerenciador de importação
      */
     init() {
-        // Botão para abrir o modal de importação
         document.getElementById('btnImportarExcel').addEventListener('click', () => this.abrirModalImportacao());
-        
-        // Input de arquivo Excel
         document.getElementById('excelFileInput').addEventListener('change', (e) => this.handleFileSelect(e));
-        
-        // Botão para sincronizar carregamentos
         document.getElementById('btnSincronizarCarregamentos').addEventListener('click', () => this.sincronizarCarregamentos());
-        
-        // Botão para confirmar alterações
         document.getElementById('btnConfirmarAlteracoes').addEventListener('click', () => this.confirmarAlteracoes());
-        
-        // Botão para baixar relatório
         document.getElementById('btnBaixarRelatorio').addEventListener('click', () => this.gerarRelatorioPDF());
-        
-        // Botão para cancelar importação
         document.getElementById('btnCancelarImportacao').addEventListener('click', () => this.fecharModalImportacao());
-
-        // Adicionar funções globais para controle dos modais
-        window.fecharModalImportacao = () => this.fecharModalImportacao();
-        window.excelImportManager = this; // Expor a instância globalmente
+        
+        // Expor a instância globalmente para ser acessada por eventos onclick no HTML
+        window.excelImportManager = this;
     }
 
     /**
@@ -136,7 +122,6 @@ export default class ExcelImportManager {
             return;
         }
 
-        // Verificar se é um arquivo Excel
         if (!file.name.endsWith('.xlsx')) {
             alert('Por favor, selecione um arquivo Excel (.xlsx)');
             event.target.value = '';
@@ -154,7 +139,6 @@ export default class ExcelImportManager {
     async readExcelFile() {
         const fileInput = document.getElementById('excelFileInput');
         const file = fileInput.files[0];
-        
         if (!file) {
             throw new Error('Nenhum arquivo selecionado');
         }
@@ -167,14 +151,11 @@ export default class ExcelImportManager {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     
-                    // Assume que os dados estão na primeira planilha
                     const firstSheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[firstSheetName];
                     
-                    // Converter para JSON
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     
-                    // Processar os dados para obter um array de objetos com cabeçalhos
                     if (jsonData.length < 2) {
                         reject(new Error('O arquivo Excel não contém dados suficientes'));
                         return;
@@ -182,9 +163,6 @@ export default class ExcelImportManager {
                     
                     const headers = jsonData[0];
                     const rows = jsonData.slice(1);
-                    
-                    // Log para depuração - mostrar todos os cabeçalhos do Excel
-                    console.log('Cabeçalhos do Excel:', headers);
                     
                     const processedData = rows.map(row => {
                         const obj = {};
@@ -195,11 +173,6 @@ export default class ExcelImportManager {
                         });
                         return obj;
                     });
-                    
-                    // Log para depuração - mostrar a primeira linha de dados processados
-                    if (processedData.length > 0) {
-                        console.log('Primeira linha de dados processados:', processedData[0]);
-                    }
                     
                     resolve(processedData);
                 } catch (error) {
@@ -245,17 +218,14 @@ export default class ExcelImportManager {
      */
     async sincronizarCarregamentos() {
         try {
-            // Mostrar loading
             loadingManager.show();
             
-            // Ler o arquivo Excel
             this.excelData = await this.readExcelFile();
             
             if (!this.excelData || this.excelData.length === 0) {
                 throw new Error('Não foi possível ler os dados do Excel ou o arquivo está vazio');
             }
             
-            // Buscar todos os fretes no Firestore
             const fretesRef = collection(db, "fretes");
             const fretesSnapshot = await getDocs(fretesRef);
             
@@ -263,10 +233,8 @@ export default class ExcelImportManager {
                 throw new Error('Não há fretes cadastrados no sistema');
             }
             
-            // Verificar correspondências entre Excel e Firestore
             const matches = [];
             
-            // Obter valores das colunas usando o método flexível
             const excelRow = this.excelData[0];
             const localEntrega = this.getColumnValue(excelRow, ['Local da entrega', 'Local entrega', 'Destino', 'Local']);
             const freteUnitario = this.getColumnValue(excelRow, ['Frete unitário', 'Frete', 'Valor frete']);
@@ -274,79 +242,20 @@ export default class ExcelImportManager {
             const cliente = this.getColumnValue(excelRow, ['Cliente', 'Nome cliente']);
             const pedido = this.getColumnValue(excelRow, ['Pedido', 'Número pedido', 'Num pedido']);
             
-            // Log para depuração - mostrar os dados do Excel
-            console.log('Dados do Excel para correspondência:', {
-                'Local da entrega': localEntrega || 'N/A',
-                'Frete unitário': freteUnitario || 'N/A',
-                'Shipment': shipment || 'N/A',
-                'Cliente': cliente || 'N/A',
-                'Pedido': pedido || 'N/A'
-            });
-            
             fretesSnapshot.forEach((doc) => {
                 const freteData = doc.data();
                 const freteId = doc.id;
                 
-                // Verificar se há correspondência com base nos critérios
                 let matchCount = 0;
                 
-                // Verificar localEntrega (Firestore) ↔ coluna "Local da entrega" (Excel)
-                if (freteData.destino && localEntrega) {
-                    if (areSimilarStrings(freteData.destino, localEntrega.toString())) {
-                        matchCount++;
-                        console.log(`Match encontrado para destino: ${freteData.destino} ↔ ${localEntrega}`);
-                    }
-                }
+                if (freteData.destino && localEntrega && areSimilarStrings(freteData.destino, localEntrega.toString())) matchCount++;
+                if (freteData.frempresa && freteUnitario && areSimilarStrings(freteData.frempresa, freteUnitario.toString())) matchCount++;
+                if (freteData.shipment && shipment && areSimilarStrings(freteData.shipment, shipment.toString())) matchCount++;
+                if (freteData.cliente && cliente && areSimilarStrings(freteData.cliente, cliente.toString())) matchCount++;
+                if (freteData.pedido && pedido && areSimilarStrings(freteData.pedido, pedido.toString())) matchCount++;
                 
-                // Verificar freteUnitario (Firestore) ↔ coluna "Frete unitário" (Excel)
-                if (freteData.frempresa && freteUnitario) {
-                    if (areSimilarStrings(freteData.frempresa, freteUnitario.toString())) {
-                        matchCount++;
-                        console.log(`Match encontrado para frete: ${freteData.frempresa} ↔ ${freteUnitario}`);
-                    }
-                }
-                
-                // Verificar shipment (Firestore) ↔ coluna "Shipment" (Excel)
-                if (freteData.shipment && shipment) {
-                    if (areSimilarStrings(freteData.shipment, shipment.toString())) {
-                        matchCount++;
-                        console.log(`Match encontrado para shipment: ${freteData.shipment} ↔ ${shipment}`);
-                    }
-                }
-                
-                // Verificar cliente (Firestore) ↔ coluna "Cliente" (Excel)
-                if (freteData.cliente && cliente) {
-                    if (areSimilarStrings(freteData.cliente, cliente.toString())) {
-                        matchCount++;
-                        console.log(`Match encontrado para cliente: ${freteData.cliente} ↔ ${cliente}`);
-                    }
-                }
-                
-                // Verificar pedido (Firestore) ↔ coluna "Pedido" (Excel)
-                if (freteData.pedido && pedido) {
-                    if (areSimilarStrings(freteData.pedido, pedido.toString())) {
-                        matchCount++;
-                        console.log(`Match encontrado para pedido: ${freteData.pedido} ↔ ${pedido}`);
-                    }
-                }
-                
-                // Log para depuração - mostrar comparação de cada frete
-                console.log(`Comparando frete ${freteId}:`, {
-                    'destino': freteData.destino || 'N/A',
-                    'frempresa': freteData.frempresa || 'N/A',
-                    'shipment': freteData.shipment || 'N/A',
-                    'cliente': freteData.cliente || 'N/A',
-                    'pedido': freteData.pedido || 'N/A',
-                    'matchCount': matchCount
-                });
-                
-                // Se houver pelo menos uma correspondência, adicionar à lista de matches
                 if (matchCount >= 1) {
-                    matches.push({
-                        freteId,
-                        freteData,
-                        matchCount
-                    });
+                    matches.push({ freteId, freteData, matchCount });
                 }
             });
             
@@ -354,23 +263,16 @@ export default class ExcelImportManager {
                 throw new Error('Não foi possível encontrar um frete correspondente no sistema');
             }
             
-            // Se houver apenas um match, usar esse frete
             if (matches.length === 1) {
-                this.matchedFrete = {
-                    id: matches[0].freteId,
-                    ...matches[0].freteData
-                };
+                this.matchedFrete = { id: matches[0].freteId, ...matches[0].freteData };
                 await this.processarCarregamentos(matches[0].freteId);
+                this.mostrarPreVisualizacao();
             } else {
-                // Se houver múltiplos matches, mostrar opções para o usuário escolher
                 this.multipleMatches = matches;
                 this.mostrarOpcoesDeFretes();
                 loadingManager.hide();
-                return; // Parar aqui e esperar a seleção do usuário
+                return; 
             }
-            
-            // Mostrar pré-visualização
-            this.mostrarPreVisualizacao();
             
         } catch (error) {
             console.error('Erro ao sincronizar carregamentos:', error);
@@ -396,32 +298,19 @@ export default class ExcelImportManager {
                 <p><strong>Cliente:</strong> ${match.freteData.cliente || 'N/A'}</p>
                 <p><strong>Destino:</strong> ${match.freteData.destino || 'N/A'}</p>
                 <p><strong>Pedido:</strong> ${match.freteData.pedido || 'N/A'}</p>
-                <p><strong>Frete Empresa:</strong> ${match.freteData.frempresa || 'N/A'}</p>
-                <p><strong>Shipment:</strong> ${match.freteData.shipment || 'N/A'}</p>
             `;
             
             freteOption.addEventListener('click', async () => {
-                // Remover seleção anterior
-                document.querySelectorAll('.match-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                
-                // Adicionar seleção atual
+                document.querySelectorAll('.match-option').forEach(opt => opt.classList.remove('selected'));
                 freteOption.classList.add('selected');
                 
-                // Armazenar o ID do frete selecionado
                 this.selectedFreteId = match.freteId;
                 
-                // Habilitar botão de confirmar
                 document.getElementById('btnConfirmarAlteracoes').disabled = false;
                 
-                // Processar carregamentos para o frete selecionado
                 loadingManager.show();
                 try {
-                    this.matchedFrete = {
-                        id: match.freteId,
-                        ...match.freteData
-                    };
+                    this.matchedFrete = { id: match.freteId, ...match.freteData };
                     await this.processarCarregamentos(match.freteId);
                     this.mostrarPreVisualizacao();
                 } catch (error) {
@@ -435,11 +324,9 @@ export default class ExcelImportManager {
             freteMatchContent.appendChild(freteOption);
         });
         
-        // Mostrar step 2
         document.querySelector('#importExcelModal .step-1').style.display = 'none';
         document.querySelector('#importExcelModal .step-2').style.display = 'block';
         
-        // Desabilitar botão de confirmar até que um frete seja selecionado
         document.getElementById('btnConfirmarAlteracoes').disabled = true;
     }
 
@@ -448,66 +335,50 @@ export default class ExcelImportManager {
      * @param {string} freteId - ID do frete
      */
     async processarCarregamentos(freteId) {
-        // Resetar arrays
         this.carregamentosToUpdate = [];
         this.placasNaoEncontradas = [];
         
-        // Buscar carregamentos existentes do frete
         const carregamentosRef = collection(db, "fretes", freteId, "carregamentos");
         const carregamentosSnapshot = await getDocs(carregamentosRef);
         
-        // Mapear carregamentos existentes por placa
         const carregamentosMap = new Map();
         carregamentosSnapshot.forEach(doc => {
             const carregamento = doc.data();
             if (carregamento.placa) {
                 const normalizedPlaca = normalizeString(carregamento.placa);
-                carregamentosMap.set(normalizedPlaca, {
-                    id: doc.id,
-                    ...carregamento
-                });
+                carregamentosMap.set(normalizedPlaca, { id: doc.id, ...carregamento });
             }
         });
         
-        // Processar cada linha do Excel
         for (const row of this.excelData) {
-            // Verificar se a linha tem uma placa
             if (!row['Placa']) continue;
             
-            // Normalizar a placa
             const normalizedPlaca = normalizeString(row['Placa']);
             
-            // Verificar se a placa existe nos carregamentos
             if (carregamentosMap.has(normalizedPlaca)) {
-                // Placa encontrada, verificar e propor atualizações
                 const carregamentoExistente = carregamentosMap.get(normalizedPlaca);
                 const updates = {};
                 let hasUpdates = false;
 
-                // 1. Peso Carregado
                 const pesoExcel = row['Peso'] !== undefined ? parseFloat(row['Peso']) : undefined;
                 const pesoExistente = carregamentoExistente['peso-carregado'] !== undefined ? parseFloat(carregamentoExistente['peso-carregado']) : undefined;
-
                 if (pesoExcel !== undefined && pesoExcel !== pesoExistente) {
                     updates['peso-carregado'] = pesoExcel || 0;
                     hasUpdates = true;
                 }
 
-                // 2. Data do Manifesto
                 const dataManifestoExcel = row['Data Emissão NF'] ? this.formatarData(row['Data Emissão NF']) : undefined;
                 if (dataManifestoExcel && dataManifestoExcel !== carregamentoExistente['data-manifesto']) {
                     updates['data-manifesto'] = dataManifestoExcel;
                     hasUpdates = true;
                 }
 
-                // 3. CTe
                 const cteExcel = row['Nº conhec.'] ? row['Nº conhec.'].toString() : undefined;
                 if (cteExcel && cteExcel !== carregamentoExistente.cte) {
                     updates.cte = cteExcel;
                     hasUpdates = true;
                 }
 
-                // 4. Data de Entrega (calculada)
                 if (dataManifestoExcel && !carregamentoExistente['data-entrega']) {
                     const dataEmissao = new Date(dataManifestoExcel);
                     dataEmissao.setDate(dataEmissao.getDate() + 2);
@@ -518,7 +389,6 @@ export default class ExcelImportManager {
                     }
                 }
 
-                // 5. NFe
                 const nfeExcel = row['Notas fiscais'] ? row['Notas fiscais'].toString() : undefined;
                 if (nfeExcel && nfeExcel !== carregamentoExistente.nfe) {
                     updates.nfe = nfeExcel;
@@ -535,7 +405,6 @@ export default class ExcelImportManager {
                     });
                 }
             } else {
-                // Placa não encontrada, adicionar à lista
                 this.placasNaoEncontradas.push({
                     placa: row['Placa'],
                     local: row['Local da entrega'],
@@ -561,28 +430,23 @@ export default class ExcelImportManager {
         if (data instanceof Date) {
             dataObj = data;
         } else if (typeof data === 'string') {
-            // Tentar diferentes formatos de data
             const parts = data.split('/');
             if (parts.length === 3) {
-                // Formato DD/MM/YYYY ou MM/DD/YYYY
                 const day = parseInt(parts[0], 10);
                 const month = parseInt(parts[1], 10) - 1; // Mês em JS é 0-indexed
                 const year = parseInt(parts[2], 10);
                 dataObj = new Date(year, month, day);
             } else {
-                // Tentar como ISO ou outro formato reconhecido pelo JS
                 dataObj = new Date(data);
             }
         } else {
             return null;
         }
         
-        // Verificar se a data é válida
         if (isNaN(dataObj.getTime())) {
             return null;
         }
         
-        // Formatar como YYYY-MM-DD
         const year = dataObj.getFullYear();
         const month = String(dataObj.getMonth() + 1).padStart(2, '0');
         const day = String(dataObj.getDate()).padStart(2, '0');
@@ -594,67 +458,30 @@ export default class ExcelImportManager {
      * Mostra a pré-visualização das alterações
      */
     mostrarPreVisualizacao() {
-        // Mostrar step 2
         document.querySelector('#importExcelModal .step-1').style.display = 'none';
         document.querySelector('#importExcelModal .step-2').style.display = 'block';
         
-        // Mostrar frete correspondente
         const freteMatchContent = document.getElementById('freteMatchContent');
         freteMatchContent.innerHTML = `
+            <h4>Frete Correspondente</h4>
             <table class="preview-table">
-                <tr>
-                    <th>Cliente</th>
-                    <td>${this.matchedFrete.cliente || 'N/A'}</td>
-                </tr>
-                <tr>
-                    <th>Destino</th>
-                    <td>${this.matchedFrete.destino || 'N/A'}</td>
-                </tr>
-                <tr>
-                    <th>Pedido</th>
-                    <td>${this.matchedFrete.pedido || 'N/A'}</td>
-                </tr>
-                <tr>
-                    <th>Frete Empresa</th>
-                    <td>${this.matchedFrete.frempresa || 'N/A'}</td>
-                </tr>
-                <tr>
-                    <th>Liberado</th>
-                    <td>${this.matchedFrete.liberado || '0'} Ton</td>
-                </tr>
-                <tr>
-                    <th>Carregado</th>
-                    <td>${this.matchedFrete.carregado || '0'} Ton</td>
-                </tr>
-                <tr>
-                    <th>Saldo</th>
-                    <td>${(parseFloat(this.matchedFrete.liberado || 0) - parseFloat(this.matchedFrete.carregado || 0)).toFixed(3)} Ton</td>
-                </tr>
+                <tr><th>Cliente</th><td>${this.matchedFrete.cliente || 'N/A'}</td></tr>
+                <tr><th>Destino</th><td>${this.matchedFrete.destino || 'N/A'}</td></tr>
+                <tr><th>Pedido</th><td>${this.matchedFrete.pedido || 'N/A'}</td></tr>
             </table>
         `;
         
-        // Mostrar carregamentos a atualizar
         const carregamentosUpdateContent = document.getElementById('carregamentosUpdateContent');
-        this.carregamentoDetailsData = []; // Limpar dados de detalhes anteriores
+        this.carregamentoDetailsData = [];
         if (this.carregamentosToUpdate.length === 0) {
             carregamentosUpdateContent.innerHTML = '<p>Nenhum carregamento para atualizar. Os dados do Excel coincidem com os do sistema.</p>';
         } else {
             let html = `
+            <h4>Carregamentos a Atualizar</h4>
             <div class="preview-section-update">
                 <table class="preview-table">
-                    <thead>
-                        <tr>
-                            <th>Placa</th>
-                            <th>Motorista</th>
-                            <th>Campo</th>
-                            <th>Valor Antigo</th>
-                            <th>Novo Valor</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
+                    <thead><tr><th>Placa</th><th>Motorista</th><th>Campo</th><th>Valor Antigo</th><th>Novo Valor</th><th>Ações</th></tr></thead>
+                    <tbody>`;
             this.carregamentosToUpdate.forEach(carregamento => {
                 const camposAtualizados = Object.keys(carregamento.updates);
                 this.carregamentoDetailsData.push(carregamento.original);
@@ -680,61 +507,33 @@ export default class ExcelImportManager {
                             <td>${nomeCampo}</td>
                             <td><span class="valor-antigo">${valorAntigo}</span></td>
                             <td><span class="valor-novo">${valorNovo}</span></td>
-                            ${index === 0 ? `<td rowspan="${camposAtualizados.length}"><button class="btn btn-secondary" onclick='window.excelImportManager.mostrarDetalhesCarregamento(${currentIndex})'>Detalhes</button></td>` : ''}
-                        </tr>
-                    `;
+                            ${index === 0 ? `<td rowspan="${camposAtualizados.length}"><button class="btn btn-secondary btn-sm" onclick='window.excelImportManager.mostrarDetalhesCarregamento(${currentIndex})'>Detalhes</button></td>` : ''}
+                        </tr>`;
                 });
             });
-            
-            html += `
-                    </tbody>
-                </table>
-            </div>
-            `;
-            
+            html += `</tbody></table></div>`;
             carregamentosUpdateContent.innerHTML = html;
         }
         
-        // Mostrar placas não encontradas
         const placasNaoEncontradasContent = document.getElementById('placasNaoEncontradasContent');
         if (this.placasNaoEncontradas.length === 0) {
-            placasNaoEncontradasContent.innerHTML = '<p>Todas as placas foram encontradas.</p>';
+            placasNaoEncontradasContent.innerHTML = '<p>Todas as placas do Excel foram encontradas no sistema.</p>';
         } else {
             let html = `
+            <h4>Placas do Excel Não Encontradas neste Frete</h4>
             <div class="preview-section-new">
                 <table class="preview-table">
-                    <thead>
-                        <tr>
-                            <th>Placa</th>
-                            <th>Local</th>
-                            <th>Frete Unitário</th>
-                            <th>Shipment</th>
-                            <th>Peso</th>
-                            <th>Nota Fiscal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
+                    <thead><tr><th>Placa</th><th>Peso</th><th>Nota Fiscal</th></tr></thead>
+                    <tbody>`;
             this.placasNaoEncontradas.forEach(placa => {
                 html += `
                     <tr>
                         <td>${placa.placa || 'N/A'}</td>
-                        <td>${placa.local || 'N/A'}</td>
-                        <td>${placa.freteUnitario || 'N/A'}</td>
-                        <td>${placa.shipment || 'N/A'}</td>
                         <td>${placa.peso || 'N/A'}</td>
                         <td>${placa.notaFiscal || 'N/A'}</td>
-                    </tr>
-                `;
+                    </tr>`;
             });
-            
-            html += `
-                    </tbody>
-                </table>
-            </div>
-            `;
-            
+            html += `</tbody></table></div>`;
             placasNaoEncontradasContent.innerHTML = html;
         }
     }
@@ -768,78 +567,54 @@ export default class ExcelImportManager {
      * Confirma as alterações e atualiza os carregamentos no Firestore
      */
     async confirmarAlteracoes() {
+        if (!this.matchedFrete || !this.matchedFrete.id) {
+            alert("Nenhum frete foi selecionado para a sincronização.");
+            return;
+        }
+
         try {
             loadingManager.show();
             
-            // Verificar se o usuário tem permissão especial para adicionar carregamentos que excedam o limite
             const user = auth.currentUser;
-            const userDoc = await getDoc(doc(db, 'users', user.uid));
-            const userData = userDoc.exists ? userDoc.data() : {};
-            const hasSpecialPermission = userData.role === 'admin' || userData.permissions?.includes('override_carregamento_limit');
-            
-            // Verificar se há um frete selecionado
-            const freteId = this.selectedFreteId || (this.matchedFrete ? this.matchedFrete.id : null);
-            if (!freteId) {
-                throw new Error('Nenhum frete selecionado');
+            if (!user) {
+                throw new Error("Usuário não autenticado.");
+            }
+            const userDocSnap = await getDoc(doc(db, 'users', user.uid));
+            if (!userDocSnap.exists()) {
+                throw new Error("Dados do usuário não encontrados.");
             }
             
-            // Atualizar carregamentos
-            const freteRef = doc(db, 'fretes', freteId);
-            
-            // Verificar o saldo atual do frete
-            const freteDoc = await getDoc(freteRef);
-            const freteData = freteDoc.data();
-            let liberado = parseFloat(freteData.liberado || 0);
-            let carregado = parseFloat(freteData.carregado || 0);
-            
-            // Calcular o novo peso total após as atualizações
-            let novoPesoTotal = carregado;
-            for (const carregamento of this.carregamentosToUpdate) {
-                if (carregamento.updates['peso-carregado'] !== undefined) {
-                    // Subtrair o peso antigo e adicionar o novo
-                    const pesoAntigo = parseFloat(carregamento.original['peso-carregado'] || 0);
-                    const pesoNovo = parseFloat(carregamento.updates['peso-carregado']);
-                    novoPesoTotal = novoPesoTotal - pesoAntigo + pesoNovo;
-                }
+            if (this.carregamentosToUpdate.length === 0) {
+                alert("Nenhuma alteração para confirmar. Os dados já estão sincronizados.");
+                this.fecharModalImportacao();
+                return;
             }
-            
-            // Verificar se o novo peso total excede o liberado
-            if (novoPesoTotal > liberado && !hasSpecialPermission) {
-                throw new Error('O peso total dos carregamentos excede o peso liberado. Você não tem permissão para realizar esta operação.');
-            }
-            
-            // Atualizar cada carregamento
-            for (const carregamento of this.carregamentosToUpdate) {
-                const carregamentoRef = doc(db, 'fretes', freteId, 'carregamentos', carregamento.id);
-                await updateDoc(carregamentoRef, carregamento.updates);
-            }
-            
-            // Atualizar o campo 'carregado' do frete
-            await updateDoc(freteRef, {
-                carregado: novoPesoTotal,
-                saldo: Math.max(0, liberado - novoPesoTotal)
+
+            const updatePromises = this.carregamentosToUpdate.map(carregamento => {
+                const carregamentoRef = doc(db, "fretes", this.matchedFrete.id, "carregamentos", carregamento.id);
+                return updateDoc(carregamentoRef, carregamento.updates);
             });
+
+            await Promise.all(updatePromises);
+
+            alert(`${this.carregamentosToUpdate.length} carregamento(s) atualizado(s) com sucesso!`);
             
-            alert('Carregamentos atualizados com sucesso!');
-            
-            // Fechar o modal
             this.fecharModalImportacao();
-            
-            // Recarregar a lista de fretes
-            if (typeof carregarFretes === 'function') {
-                carregarFretes();
-            }
-            
+
+            // Sugestão: em vez de recarregar a página inteira, o ideal é ter uma função
+            // que apenas atualize a tabela ou a lista de dados na tela.
+            window.location.reload();
+
         } catch (error) {
-            console.error('Erro ao confirmar alterações:', error);
-            alert(`Erro ao confirmar alterações: ${error.message}`);
+            console.error("Erro ao confirmar alterações:", error);
+            alert(`Falha ao atualizar os carregamentos: ${error.message}`);
         } finally {
             loadingManager.hide();
         }
     }
 
     /**
-     * Gera um relatório PDF das placas não encontradas
+     * Gera um relatório em PDF (função de placeholder)
      */
     gerarRelatorioPDF() {
         try {
@@ -893,5 +668,6 @@ export default class ExcelImportManager {
             console.error('Erro ao gerar relatório PDF:', error);
             alert(`Erro ao gerar relatório PDF: ${error.message}`);
         }
+    
     }
 }
