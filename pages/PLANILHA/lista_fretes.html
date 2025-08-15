@@ -62,6 +62,134 @@
           padding: 4px 6px;
         }
       }
+
+      /* Estilos para o modal de importação */
+      #importExcelModal .popup-content {
+        width: 80%;
+        max-width: 900px;
+      }
+
+      .import-steps {
+        margin-top: 20px;
+      }
+
+      .file-input {
+        margin: 15px 0;
+        width: 100%;
+      }
+
+      #previewContainer {
+        margin-top: 20px;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        padding: 15px;
+        border-radius: 4px;
+      }
+
+      #previewContainer h4 {
+        margin-top: 15px;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .preview-table {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 12px;
+      }
+
+      .preview-table th {
+        background-color: #f5f5f5;
+        padding: 8px;
+      }
+
+      .preview-table td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .action-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .btn-success {
+        background-color: #4CAF50;
+        color: white;
+      }
+
+      .btn-danger {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .match-option {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .match-option:hover {
+        background-color: #f5f5f5;
+      }
+
+      .match-option.selected {
+        background-color: #e3f2fd;
+        border-color: #2196F3;
+      }
+
+      .valor-antigo {
+        color: #f44336; /* Red */
+        text-decoration: line-through;
+      }
+      .valor-novo {
+        color: #4CAF50; /* Green */
+        font-weight: bold;
+      }
+
+      .preview-section-update {
+        background-color: #fffbe6; /* Light yellow */
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        border: 1px solid #ffe58f;
+      }
+      .preview-section-new {
+        background-color: #e6f7ff; /* Light blue */
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        border: 1px solid #91d5ff;
+      }
+
+      #carregamentoDetailsModal .popup-content {
+        width: 60%;
+        max-width: 600px;
+      }
+
+      #carregamentoDetailsBody {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      #carregamentoDetailsBody table {
+        width: 100%;
+        font-size: 14px;
+      }
+
+      #carregamentoDetailsBody th {
+        text-align: right;
+        padding-right: 15px;
+        width: 40%;
+        font-weight: bold;
+        background-color: #f9f9f9;
+      }
     </style>
   </head>
   <body>
@@ -174,6 +302,10 @@
                                 <span class="btn-icon">➕</span>
                                 Novo Frete
                             </a>
+                            <button id="btnImportarExcel" class="btn btn-secondary">
+                                <span class="btn-icon">📥</span>
+                                Importar Excel
+                            </button>
                         </div>
                     </div>
                     
@@ -214,10 +346,89 @@
         </div>
     </div>
 
+    <!-- Modal de Detalhes do Carregamento -->
+    <div id="carregamentoDetailsModal" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <span class="close-btn" onclick="window.excelImportManager.fecharDetalhesCarregamento()">&times;</span>
+            <h2>Detalhes do Carregamento</h2>
+            <div class="popup-body" id="carregamentoDetailsBody">
+                <!-- Detalhes serão inseridos aqui via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Importação Excel -->
+    <div id="importExcelModal" class="popup-overlay">
+        <div class="popup-content">
+            <span class="close-btn" onclick="fecharModalImportacao()">&times;</span>
+            <h2>Importar Carregamentos via Excel</h2>
+            <div class="popup-body">
+                <div class="import-steps">
+                    <div class="step-1">
+                        <p>Selecione um arquivo Excel (.xlsx) para importar carregamentos:</p>
+                        <input type="file" id="excelFileInput" accept=".xlsx" class="file-input" />
+                        <button id="btnSincronizarCarregamentos" class="btn btn-primary" disabled>
+                            <span class="btn-icon">🔄</span>
+                            Sincronizar Carregamentos
+                        </button>
+                    </div>
+                    <div class="step-2" style="display: none;">
+                        <h3>Pré-visualização das Alterações</h3>
+                        <div id="previewContainer">
+                            <div id="freteMatchContainer">
+                                <h4>Frete Correspondente</h4>
+                                <div id="freteMatchContent"></div>
+                            </div>
+                            <div id="carregamentosContainer">
+                                <h4>Carregamentos a Atualizar</h4>
+                                <div id="carregamentosUpdateContent"></div>
+                            </div>
+                            <div id="placasNaoEncontradasContainer">
+                                <h4>Placas Não Encontradas</h4>
+                                <div id="placasNaoEncontradasContent"></div>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="btnConfirmarAlteracoes" class="btn btn-success">
+                                <span class="btn-icon">✓</span>
+                                Confirmar Alterações
+                            </button>
+                            <button id="btnBaixarRelatorio" class="btn btn-secondary">
+                                <span class="btn-icon">📄</span>
+                                Baixar Relatório
+                            </button>
+                            <button id="btnCancelarImportacao" class="btn btn-danger">
+                                <span class="btn-icon">✕</span>
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../../js/menu.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pizzip@3.1.4/dist/pizzip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docxtemplater@3.37.9/build/docxtemplater.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <!-- SheetJS para leitura de Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- jsPDF para geração de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script type="module" src="js/lista_fretes.js"></script>
+    <!-- Script de importação Excel -->
+    <script type="module">
+        import ExcelImportManager from './js/excel-import.js';
+        
+        // Inicializar o gerenciador de importação após o carregamento da página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar o ExcelImportManager diretamente
+            // O Firebase já é importado dentro do excel-import.js
+            const excelImportManager = new ExcelImportManager();
+            excelImportManager.init();
+        });
+    </script>
   </body>
 </html>
