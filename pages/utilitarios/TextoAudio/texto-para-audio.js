@@ -143,3 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
     rate.addEventListener('input', () => rateValue.textContent = rate.value);
     pitch.addEventListener('input', () => pitchValue.textContent = pitch.value);
 });
+
+function clean() {
+    document.getElementById("text-to-speak").value = "";
+    // document.getElementById("voice-select").value = "";
+    // document.getElementById("rate").value = "1";
+    // document.getElementById("pitch").value = "1";
+    // document.getElementById("rate-value").textContent = "1";
+    // document.getElementById("pitch-value").textContent = "1";
+    updateButtonStates(false, false);
+}
+
+    
