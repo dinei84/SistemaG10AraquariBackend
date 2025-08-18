@@ -355,7 +355,7 @@ window.captureAndDownload = async () => {
     const freteDoc = await getDoc(doc(db, "fretes", freteId));
     const freteData = freteDoc.exists() ? freteDoc.data() : {};
     
-    const fileName = `Carregamentos_${freteData.destino || 'frete'}_${new Date().toISOString().slice(0,10)}.png`;
+    const fileName = `Cidade: ${freteData.destino || 'frete'}_Pedido: ${freteData.pedido || 'pedido'}_ Data-Exclusão: ${new Date().toISOString().slice(0,10)}.png`;
     const dataUrl = canvas.toDataURL('image/png', 1.0);
 
     const link = document.createElement('a');
