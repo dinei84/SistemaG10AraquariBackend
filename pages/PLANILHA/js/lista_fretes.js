@@ -416,7 +416,7 @@ window.gerarOrdemCarregamento = async (freteId, event) => {
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
 
-      saveAs(out, `Ordem_Carregamento_${freteData.cliente || 'cliente'}_${freteData.pedido || 'pedido'}.docx`);
+      saveAs(out, `OC ${freteData.cliente || 'cliente'}_${freteData.pedido || 'pedido'}.docx`);
 
   } catch (error) {
       console.error("Erro ao gerar ordem:", error);

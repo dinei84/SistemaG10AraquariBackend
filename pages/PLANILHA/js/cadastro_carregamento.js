@@ -127,7 +127,25 @@ async function processarDocumentoWord(file) {
       dataoc: document.getElementById('dataoc').value || ''
     };
 
-    console.log('Dados sendo enviados para o template:', formData); // Para depuração
+    let destino = ''
+    try{
+      const freteDoc = await getDoc(doc(db, "fretes", freteId));
+      if(freteDoc.exists()){
+        const freteData = freteDoc.data();
+        destino = freteData.destino || '';
+
+        if(destino.length > 20){
+          destino = destino.substring(0, 20) + '...';
+        }
+
+        destino = destino.replace(/[\\/:*?"<>|]/g, '');
+        
+      }
+    }catch(error){
+      console.error("Erro ao obter dados do frete:", error);
+    }
+
+    formData.destino = destino;
 
     // Ler o arquivo como ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
@@ -157,8 +175,8 @@ async function processarDocumentoWord(file) {
     
     btnDownload.onclick = () => {
       const placaFormatada = formData.placa.replace(/-/g, '').toUpperCase();
-      const dataAtual = new Date().toISOString().split('T')[0];
-      const nomeArquivo = `Carregamento_${placaFormatada}_${dataAtual}.docx`;
+      // const dataAtual = new Date().toISOString().split('T')[0];
+      const nomeArquivo = `OC ${placaFormatada} ${freteId.destino}.docx`;
       window.saveAs(out, nomeArquivo);
     };
     
