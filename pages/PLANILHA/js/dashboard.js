@@ -22,6 +22,11 @@ onAuthStateChanged(auth, (user) => {
 window.fretesDashboard = [];
 window.carregamentosDashboard = [];
 
+// Meta por emissor (toneladas)
+const META_EMISSOR_TON = 4000;
+// Meta geral (toneladas)
+const META_GERAL_TON = 20000;
+
 // Função para normalizar nomes de emissores
 function normalizarEmissor(emissor) {
     if (!emissor) return '';
@@ -526,20 +531,36 @@ function atualizarInterface(fretes) {
     variacaoElement.textContent = variacaoTexto;
     variacaoElement.className = 'variacao ' + (dadosProjecao.variacaoPercentual >= 0 ? 'positiva' : 'negativa');
     
-    // Atualizar barra de progresso
+    // Atualizar barra de progresso geral (meta 20.000 ton)
     const progressBar = document.getElementById('progressoCarregamento');
-    progressBar.style.width = `${dadosProjecao.percentualRealizado}%`;
+    const totalGeral = Math.round(dadosProjecao.totalMesAtual);
+    const faltaGeral = Math.max(META_GERAL_TON - totalGeral, 0);
+    const percentualGeral = Math.min(Math.round((totalGeral / META_GERAL_TON) * 100), 100);
+    progressBar.style.width = `${percentualGeral}%`;
+    progressBar.classList.toggle('ok', totalGeral >= META_GERAL_TON);
+    const metaGeralEl = document.getElementById('metaGeral');
+    const faltaMetaGeralEl = document.getElementById('faltaMetaGeral');
+    const percentualMetaGeralEl = document.getElementById('percentualMetaGeral');
+    if (metaGeralEl) metaGeralEl.textContent = `${META_GERAL_TON} ton`;
+    if (faltaMetaGeralEl) faltaMetaGeralEl.textContent = `${faltaGeral} ton`;
+    if (percentualMetaGeralEl) percentualMetaGeralEl.textContent = `${percentualGeral}%`;
     
     // Atualizar lista de emissores
     const listaEmissores = document.getElementById('listaEmissoresProjecao');
-    listaEmissores.innerHTML = dadosProjecao.projecoes.slice(0, 5).map(emissor => {
+    listaEmissores.innerHTML = dadosProjecao.projecoes.map(emissor => {
         const abaixoProjecao = emissor.realizado < (emissor.projecao * (hoje.getDate() / fimMesAtual.getDate()));
+        const diferenca = emissor.realizado - META_EMISSOR_TON;
+        const bateuMeta = diferenca >= 0;
+        const rotuloDiferenca = bateuMeta ? 'Excedente' : 'Falta';
+        const classeDiferenca = bateuMeta ? 'diferenca-positiva' : 'diferenca-negativa';
         return `
-            <li class="emissor-item">
+            <li class="emissor-item ${bateuMeta ? 'com-meta-atingida' : ''}">
                 <span class="emissor-nome">${emissor.emissor}</span>
                 <div class="emissor-dados">
                     <span class="projecao-valor">Proj.: ${emissor.projecao} ton</span>
                     <span class="realizado-valor ${abaixoProjecao ? 'abaixo' : ''}">Realizado: ${emissor.realizado} ton</span>
+                    <span class="meta-valor">Meta: ${META_EMISSOR_TON} ton</span>
+                    <span class="diferenca-valor ${classeDiferenca}">${rotuloDiferenca}: ${Math.abs(Math.round(diferenca))} ton</span>
                 </div>
             </li>
         `;
@@ -562,6 +583,15 @@ function atualizarInterface(fretes) {
                         label: 'Realizado (ton)',
                         data: dadosProjecao.projecoes.slice(0, 5).map(e => e.realizado),
                         backgroundColor: '#2ecc71'
+                    },
+                    {
+                        label: 'Meta (4.000)',
+                        data: dadosProjecao.projecoes.slice(0, 5).map(() => META_EMISSOR_TON),
+                        type: 'line',
+                        borderColor: '#27ae60',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false
                     }
                 ]
             },
