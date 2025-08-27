@@ -96,6 +96,41 @@ table#tabelaFretes tbody tr td:nth-child(3) {
 #tabelaFretes tbody tr:hover td:nth-child(3) {
   color: #f44336; 
 }
+
+/* Estilo para fretes antigos - deve ter prioridade sobre outros estilos */
+.frete-antigo {
+  background-color: rgb(249, 192, 200) !important;
+}
+
+.frete-antigo:hover {
+  background-color: rgb(249, 192, 200) !important;
+}
+
+.frete-antigo td {
+  background-color: rgb(249, 192, 200) !important;
+}
+
+.frete-antigo:hover td {
+  background-color: rgb(249, 192, 200) !important;
+}
+
+/* Estilo para fretes muito antigos (2 meses ou mais) - amarelo */
+.frete-muito-antigo {
+  background-color: rgb(255, 255, 0) !important;
+}
+
+.frete-muito-antigo:hover {
+  background-color: rgb(255, 255, 0) !important;
+}
+
+.frete-muito-antigo td {
+  background-color: rgb(255, 255, 0) !important;
+}
+
+.frete-muito-antigo:hover td {
+  background-color: rgb(255, 255, 0) !important;
+}
+
 /* Adicionar no lista_fretes.css */
 #tabelaFretes td:nth-child(8) {
   background-color: #ffd700; /* Amarelo */

@@ -44,17 +44,41 @@ document.querySelectorAll("#valordoFrete, #pedagio").forEach((input) => {
 });
 
 function verificarFreteAntigo(dataString) {
-  if (!dataString || dataString === "N/A") return false;
+  if (!dataString || dataString === "N/A") return "normal";
   
   try {
-    const dataFrete = new Date(dataString);
+    let dataFrete;
+    
+    // Verifica se a data está no formato brasileiro (dd/mm/yyyy ou dd/mm/yy)
+    if (/^\d{2}\/\d{2}\/\d{2,4}$/.test(dataString)) {
+      const partes = dataString.split('/');
+      const dia = parseInt(partes[0]);
+      const mes = parseInt(partes[1]) - 1; // Mês começa em 0
+      const ano = parseInt(partes[2]);
+      // Se o ano tem 2 dígitos, assume século 20 se < 50, senão século 21
+      const anoCompleto = ano < 50 ? 2000 + ano : 1900 + ano;
+      dataFrete = new Date(anoCompleto, mes, dia);
+    } else {
+      // Tenta criar a data diretamente
+      dataFrete = new Date(dataString);
+    }
+    
     const dataAtual = new Date();
     const diferencaDias = Math.floor((dataAtual - dataFrete) / (1000 * 60 * 60 * 24));
     
-    return diferencaDias > 30;
+    console.log(`Verificando frete: ${dataString}, data convertida: ${dataFrete.toISOString()}, diferença em dias: ${diferencaDias}`);
+    
+    // Retorna categoria baseada na idade do frete
+    if (diferencaDias > 60) {
+      return "muito-antigo"; // 2 meses ou mais - amarelo
+    } else if (diferencaDias > 30) {
+      return "antigo"; // 1 mês - vermelho
+    } else {
+      return "normal"; // Menos de 1 mês
+    }
   } catch (error) {
     console.error("Erro ao verificar idade do frete:", error);
-    return false;
+    return "normal";
   }
 }
 
@@ -96,14 +120,27 @@ async function carregarFretes() {
             botaoOrdem = `<button class="btn-gerar-ordem" onclick="gerarOrdemCarregamento('${doc.id}', event)">Gerar Ordem</button>`;
         }
         
-        const isFreteAntigo = verificarFreteAntigo(frete.data);
+        const categoriaFrete = verificarFreteAntigo(frete.data);
         const corFundo = getCorFundoCentroCusto(frete.centrodecusto);
-        const estiloLinha = isFreteAntigo 
-            ? 'style="background-color:rgb(249, 192, 200);"' 
-            : `style="background-color:${corFundo};"`;
+        
+        // Aplicar classe CSS e cor baseada na categoria de idade do frete
+        let classeFreteAntigo = '';
+        let corFreteAntigo = corFundo;
+        
+        if (categoriaFrete === "antigo") {
+          classeFreteAntigo = 'frete-antigo';
+          corFreteAntigo = 'rgb(249, 192, 200)'; // Vermelho claro
+        } else if (categoriaFrete === "muito-antigo") {
+          classeFreteAntigo = 'frete-muito-antigo';
+          corFreteAntigo = 'rgb(255, 255, 0)'; // Amarelo
+        }
+        
+        const estiloLinha = `style="background-color:${corFreteAntigo};"`;
+
+        console.log(`Frete ${frete.cliente} - Data: ${frete.data}, Categoria: ${categoriaFrete}, Classe aplicada: ${classeFreteAntigo}`);
 
       const linha = `
-        <tr class="linha-clicavel" data-frete-id="${doc.id}" data-centro-custo="${frete.centrodecusto || 'fertilizante'}" ${estiloLinha}>
+        <tr class="linha-clicavel ${classeFreteAntigo}" data-frete-id="${doc.id}" data-centro-custo="${frete.centrodecusto || 'fertilizante'}" ${estiloLinha}>
           <td>${formatarData(frete.data)}</td>
           <td>${frete.cliente}</td>
           <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
