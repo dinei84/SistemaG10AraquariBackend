@@ -42,12 +42,19 @@ table {
   border-collapse: collapse !important;
 }
 
-th, td {
+th {
   background-color: white !important;
-  color: black !important;
+  color: white !important;
   border: 1px solid #ddd !important;
   padding: 8px !important;
 }
+td{ background-color: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+}
+
+
 
 /* Remove qualquer transformação que possa afetar a renderização */
 .table-card, .table-card * {
