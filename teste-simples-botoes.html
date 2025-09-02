@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples dos Botões</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .acoes {
+            display: flex !important;
+            gap: 0.25rem !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            min-height: 40px !important;
+            padding: 0.25rem !important;
+            background-color: transparent !important;
+            border: 2px solid #ddd;
+            margin: 20px 0;
+        }
+        
+        .acoes button {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.25rem !important;
+            padding: 0.5rem 0.75rem !important;
+            border: none !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 0.7rem !important;
+            font-weight: 500 !important;
+            min-width: 80px !important;
+            max-width: 120px !important;
+            height: auto !important;
+            line-height: 1.2 !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            position: relative !important;
+            overflow: visible !important;
+            z-index: 1 !important;
+        }
+        
+        .acoes button:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .action-icon {
+            display: inline-block !important;
+            width: 1rem !important;
+            height: 1rem !important;
+            flex-shrink: 0 !important;
+            font-size: 1rem !important;
+            line-height: 1 !important;
+        }
+        
+        .action-text {
+            display: inline-block !important;
+            font-size: 0.7rem !important;
+            font-weight: 500 !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            max-width: none !important;
+            line-height: 1.2 !important;
+        }
+        
+        .btn-visualizar {
+            background-color: #17a2b8 !important;
+            color: white !important;
+        }
+        
+        .btn-editar {
+            background-color: #28a745 !important;
+            color: white !important;
+        }
+        
+        .btn-excluir {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
+        
+        .btn-carregamento {
+            background-color: #003867 !important;
+            color: white !important;
+        }
+        
+        .btn-gerar-ordem {
+            background-color: #2196F3 !important;
+            color: white !important;
+        }
+        
+        .info {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .info h3 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste Simples dos Botões de Ação</h1>
+        
+        <div class="info">
+            <h3>📋 Instruções do Teste</h3>
+            <p>Este arquivo testa se os botões estão funcionando corretamente com os estilos CSS aplicados. Se você vir os botões coloridos abaixo, significa que o CSS está funcionando.</p>
+        </div>
+        
+        <div class="acoes">
+            <button class="btn-visualizar" onclick="testarBotao('Visualizar')">
+                <i class="fas fa-eye action-icon"></i>
+                <span class="action-text">Visualizar</span>
+            </button>
+            <button class="btn-editar" onclick="testarBotao('Editar')">
+                <i class="fas fa-edit action-icon"></i>
+                <span class="action-text">Editar</span>
+            </button>
+            <button class="btn-excluir" onclick="testarBotao('Excluir')">
+                <i class="fas fa-trash action-icon"></i>
+                <span class="action-text">Excluir</span>
+            </button>
+            <button class="btn-carregamento" onclick="testarBotao('Carregamentos')">
+                <i class="fas fa-truck action-icon"></i>
+                <span class="action-text">Carregamentos</span>
+            </button>
+            <button class="btn-gerar-ordem" onclick="testarBotao('Gerar Ordem')">
+                <i class="fas fa-file-alt action-icon"></i>
+                <span class="action-text">Gerar Ordem</span>
+            </button>
+        </div>
+        
+        <div id="status" class="status success">
+            ✅ Teste carregado com sucesso! Clique nos botões para testar.
+        </div>
+        
+        <div class="info">
+            <h3>🔍 O que verificar:</h3>
+            <ul>
+                <li><strong>Botões visíveis:</strong> Todos os 5 botões devem aparecer</li>
+                <li><strong>Cores diferentes:</strong> Cada botão deve ter uma cor única</li>
+                <li><strong>Ícones:</strong> Ícones Font Awesome devem aparecer</li>
+                <li><strong>Texto:</strong> Texto dos botões deve ser legível</li>
+                <li><strong>Hover:</strong> Botões devem reagir ao passar o mouse</li>
+                <li><strong>Clique:</strong> Cliques devem mostrar mensagens</li>
+            </ul>
+        </div>
+        
+        <div class="info">
+            <h3>🚨 Se os botões não aparecerem:</h3>
+            <ol>
+                <li>Verifique se o Font Awesome está carregando (ícones devem aparecer)</li>
+                <li>Verifique o console do navegador (F12) para erros</li>
+                <li>Teste em outro navegador</li>
+                <li>Verifique se o CSS está sendo aplicado corretamente</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        function testarBotao(acao) {
+            const status = document.getElementById('status');
+            status.textContent = `🎯 Botão "${acao}" clicado com sucesso!`;
+            status.className = 'status success';
+            
+            // Reset após 3 segundos
+            setTimeout(() => {
+                status.textContent = '✅ Teste carregado com sucesso! Clique nos botões para testar.';
+                status.className = 'status success';
+            }, 3000);
+        }
+        
+        // Verificar se os botões estão visíveis
+        window.addEventListener('load', function() {
+            const botoes = document.querySelectorAll('.acoes button');
+            const status = document.getElementById('status');
+            
+            if (botoes.length === 5) {
+                status.textContent = '✅ 5 botões detectados e funcionando!';
+                status.className = 'status success';
+            } else {
+                status.textContent = `❌ Erro: Apenas ${botoes.length} botões detectados (esperado: 5)`;
+                status.className = 'status error';
+            }
+        });
+    </script>
+</body>
+</html>

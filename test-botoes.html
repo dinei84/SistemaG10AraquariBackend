@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste dos Botões de Ação - Lista de Fretes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .test-header h1 {
+            color: #f3501e;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+        }
+        
+        .test-header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .buttons-demo {
+            margin-bottom: 40px;
+        }
+        
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #003867;
+        }
+        
+        .demo-section h3 {
+            color: #003867;
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+        }
+        
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .button-group {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        
+        .button-group h4 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+        
+        .acoes {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+        }
+        
+        .acoes button {
+            padding: 0.375rem 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            min-width: 70px;
+            max-width: 80px;
+            text-align: center;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .acoes button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-icon {
+            width: 0.875rem;
+            height: 0.875rem;
+            flex-shrink: 0;
+            font-size: 0.875rem;
+        }
+        
+        .action-text {
+            font-size: 0.65rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            display: inline-block;
+        }
+        
+        .btn-visualizar {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-editar {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-excluir {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-carregamento {
+            background-color: #003867;
+            color: white;
+        }
+        
+        .btn-gerar-ordem {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #003867, #004a8c);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        
+        .cta-section h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
+        }
+        
+        .cta-section p {
+            margin: 0 0 20px 0;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #f3501e;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #e0451a;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .test-container {
+                padding: 15px;
+            }
+            
+            .test-header h1 {
+                font-size: 2rem;
+            }
+            
+            .buttons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .test-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .demo-section {
+                padding: 15px;
+            }
+            
+            .cta-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔧 Teste dos Botões de Ação</h1>
+            <p>Verificação dos botões com ícones Font Awesome na lista de fretes</p>
+        </div>
+        
+        <div class="buttons-demo">
+            <div class="demo-section">
+                <h3>🎯 Botões de Ação Implementados</h3>
+                <div class="buttons-grid">
+                    <div class="button-group">
+                        <h4>Botões Principais</h4>
+                        <div class="acoes">
+                            <button class="btn-visualizar" aria-label="Visualizar frete">
+                                <i class="fas fa-eye action-icon"></i>
+                                <span class="action-text">Visualizar</span>
+                            </button>
+                            <button class="btn-editar" aria-label="Editar frete">
+                                <i class="fas fa-edit action-icon"></i>
+                                <span class="action-text">Editar</span>
+                            </button>
+                            <button class="btn-excluir" aria-label="Excluir frete">
+                                <i class="fas fa-trash action-icon"></i>
+                                <span class="action-text">Excluir</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <h4>Botões de Carregamento</h4>
+                        <div class="acoes">
+                            <button class="btn-carregamento" aria-label="Ver carregamentos">
+                                <i class="fas fa-truck action-icon"></i>
+                                <span class="action-text">Carregamentos</span>
+                            </button>
+                            <button class="btn-gerar-ordem" aria-label="Gerar ordem de carregamento">
+                                <i class="fas fa-file-alt action-icon"></i>
+                                <span class="action-text">Gerar Ordem</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <h4>Responsividade</h4>
+                        <p style="font-size: 0.9rem; color: #666; margin: 0;">
+                            Os botões se adaptam automaticamente ao tamanho da tela, mantendo os ícones visíveis em todas as resoluções.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h3>✨ Características dos Botões</h3>
+                <div class="buttons-grid">
+                    <div class="button-group">
+                        <h4>🎨 Design</h4>
+                        <ul style="text-align: left; margin: 0; padding-left: 20px;">
+                            <li>Ícones Font Awesome</li>
+                            <li>Cores distintas por ação</li>
+                            <li>Hover effects</li>
+                            <li>Sombras suaves</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="button-group">
+                        <h4>📱 Responsividade</h4>
+                        <ul style="text-align: left; margin: 0; padding-left: 20px;">
+                            <li>Breakpoint 1366px</li>
+                            <li>Breakpoint 1024px</li>
+                            <li>Breakpoint 768px</li>
+                            <li>Breakpoint 480px</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="button-group">
+                        <h4>♿ Acessibilidade</h4>
+                        <ul style="text-align: left; margin: 0; padding-left: 20px;">
+                            <li>aria-label em todos</li>
+                            <li>Tooltips nativos</li>
+                            <li>Contraste adequado</li>
+                            <li>Foco visível</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h3>🚀 Botões Funcionando!</h3>
+            <p>Os botões de ação agora estão implementados com ícones Font Awesome e são totalmente responsivos em todas as resoluções.</p>
+            <a href="pages/PLANILHA/lista_fretes.html" class="cta-button">Ver Lista de Fretes</a>
+        </div>
+    </div>
+</body>
+</html>

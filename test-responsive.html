@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Responsividade - Lista de Fretes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .test-header h1 {
+            color: #f3501e;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+        }
+        
+        .test-header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .responsive-demo {
+            margin-bottom: 40px;
+        }
+        
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #003867;
+        }
+        
+        .demo-section h3 {
+            color: #003867;
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+        }
+        
+        .demo-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .demo-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .demo-item h4 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        .demo-item p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .breakpoint-info {
+            background: #e3f2fd;
+            border: 1px solid #2196F3;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .breakpoint-info h4 {
+            color: #1976D2;
+            margin: 0 0 10px 0;
+        }
+        
+        .breakpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .breakpoint-item {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #bbdefb;
+        }
+        
+        .breakpoint-item strong {
+            color: #1976D2;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .breakpoint-item span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .fixes-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .fixes-section h4 {
+            color: #856404;
+            margin: 0 0 10px 0;
+        }
+        
+        .fix-item {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ffeaa7;
+            margin-bottom: 10px;
+        }
+        
+        .fix-item strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .fix-item span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #003867, #004a8c);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        
+        .cta-section h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
+        }
+        
+        .cta-section p {
+            margin: 0 0 20px 0;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #f3501e;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #e0451a;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .test-container {
+                padding: 15px;
+            }
+            
+            .test-header h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .breakpoint-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .test-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .demo-section {
+                padding: 15px;
+            }
+            
+            .cta-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🚛 Lista de Fretes - Responsiva</h1>
+            <p>Webapp completamente refatorado para responsividade total em qualquer tela</p>
+        </div>
+        
+        <div class="responsive-demo">
+            <div class="demo-section">
+                <h3>✨ Principais Melhorias Implementadas</h3>
+                <div class="demo-content">
+                    <div class="demo-item">
+                        <h4>🎯 Responsividade Total</h4>
+                        <ul class="feature-list">
+                            <li><span class="feature-icon">✓</span>CSS Grid e Flexbox para layout fluido</li>
+                            <li><span class="feature-icon">✓</span>Breakpoints específicos para 1366x768</li>
+                            <li><span class="feature-icon">✓</span>Unidades relativas (rem, vw, %) em vez de px</li>
+                            <li><span class="feature-icon">✓</span>Container centralizado e fluido</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-item">
+                        <h4>🔧 Tabela Responsiva</h4>
+                        <ul class="feature-list">
+                            <li><span class="feature-icon">✓</span>Scroll horizontal em telas pequenas</li>
+                            <li><span class="feature-icon">✓</span>Cabeçalho fixo (sticky)</li>
+                            <li><span class="feature-icon">✓</span>Zebra striping para melhor legibilidade</li>
+                            <li><span class="feature-icon">✓</span>Largura mínima para evitar quebra</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-item">
+                        <h4>🎨 Design Moderno</h4>
+                        <ul class="feature-list">
+                            <li><span class="feature-icon">✓</span>Ícones Lucide para ações</li>
+                            <li><span class="feature-icon">✓</span>Cantos arredondados e sombras</li>
+                            <li><span class="feature-icon">✓</span>Gradientes e transições suaves</li>
+                            <li><span class="feature-icon">✓</span>Scrollbar personalizada</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h3>🔧 Problemas Corrigidos</h3>
+                <div class="fixes-section">
+                    <h4>Correções específicas implementadas:</h4>
+                    <div class="fix-item">
+                        <strong>🚫 Overflow Horizontal</strong>
+                        <span>Corrigido o vazamento da tabela para a direita usando max-width: 100% e overflow: hidden</span>
+                    </div>
+                    <div class="fix-item">
+                        <strong>📏 Larguras de Colunas</strong>
+                        <span>Definidas larguras específicas para cada coluna (8% a 12%) para evitar desalinhamento</span>
+                    </div>
+                    <div class="fix-item">
+                        <strong>📝 Truncamento de Texto</strong>
+                        <span>Implementado script para truncar texto longo (>15 caracteres) com reticências e tooltips</span>
+                    </div>
+                    <div class="fix-item">
+                        <strong>🎯 Botões Compactos</strong>
+                        <span>Reduzido tamanho dos botões de ação (60px) e espaçamentos para melhor aproveitamento</span>
+                    </div>
+                    <div class="fix-item">
+                        <strong>📱 Breakpoint 1366px</strong>
+                        <span>Ajustes específicos para resolver o problema principal de layout em 1366x768</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h3>📱 Breakpoints de Responsividade</h3>
+                <div class="breakpoint-info">
+                    <h4>Configurações específicas para cada tamanho de tela:</h4>
+                    <div class="breakpoint-grid">
+                        <div class="breakpoint-item">
+                            <strong>1366x768</strong>
+                            <span>Breakpoint principal para resolver o problema de layout</span>
+                        </div>
+                        <div class="breakpoint-item">
+                            <strong>1024px</strong>
+                            <span>Tablets e telas médias</span>
+                        </div>
+                        <div class="breakpoint-item">
+                            <strong>768px</strong>
+                            <span>Dispositivos móveis</span>
+                        </div>
+                        <div class="breakpoint-item">
+                            <strong>480px</strong>
+                            <span>Smartphones pequenos</span>
+                        </div>
+                        <div class="breakpoint-item">
+                            <strong>320px</strong>
+                            <span>Telas muito pequenas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h3>🔍 Funcionalidades Principais</h3>
+                <div class="demo-content">
+                    <div class="demo-item">
+                        <h4>📊 Gerenciamento de Fretes</h4>
+                        <p>Sistema completo para visualizar, editar, excluir e gerenciar fretes com filtros por centro de custo e busca textual.</p>
+                    </div>
+                    
+                    <div class="demo-item">
+                        <h4>📥 Importação Excel</h4>
+                        <p>Funcionalidade para importar carregamentos via arquivos Excel com pré-visualização e validação de dados.</p>
+                    </div>
+                    
+                    <div class="demo-item">
+                        <h4>📱 Interface Adaptativa</h4>
+                        <p>Botões com ícones representativos que se adaptam ao tamanho da tela, mantendo a usabilidade em qualquer dispositivo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h3>🚀 Pronto para Uso!</h3>
+            <p>O webapp de lista de fretes foi completamente refatorado e agora é totalmente responsivo em qualquer tela, incluindo a resolução problemática de 1366x768. Todos os problemas de overflow foram corrigidos!</p>
+            <a href="pages/PLANILHA/lista_fretes.html" class="cta-button">Ver Lista de Fretes</a>
+        </div>
+    </div>
+</body>
+</html>

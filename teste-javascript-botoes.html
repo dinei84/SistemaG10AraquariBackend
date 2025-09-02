@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste JavaScript dos Botões</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .info {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .info h3 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        
+        .debug-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .debug-section h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        
+        .test-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .test-button:hover {
+            background-color: #218838;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .acoes {
+            display: flex !important;
+            gap: 0.25rem !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            min-height: 40px !important;
+            padding: 0.25rem !important;
+            border: 2px solid red !important; /* DEBUG: Borda vermelha */
+        }
+        
+        .acoes button {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.25rem !important;
+            padding: 0.5rem 0.75rem !important;
+            border: none !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 0.7rem !important;
+            font-weight: 500 !important;
+            min-width: 80px !important;
+            max-width: 120px !important;
+            background-color: #17a2b8 !important;
+            color: white !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .action-icon {
+            display: inline-block !important;
+            width: 1rem !important;
+            height: 1rem !important;
+            font-size: 1rem !important;
+        }
+        
+        .action-text {
+            display: inline-block !important;
+            font-size: 0.7rem !important;
+            font-weight: 500 !important;
+        }
+        
+        .btn-editar {
+            background-color: #28a745 !important;
+        }
+        
+        .btn-excluir {
+            background-color: #dc3545 !important;
+        }
+        
+        .btn-carregamento {
+            background-color: #003867 !important;
+        }
+        
+        .btn-gerar-ordem {
+            background-color: #2196F3 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste JavaScript dos Botões de Ação</h1>
+        
+        <div class="info">
+            <h3>📋 Objetivo do Teste</h3>
+            <p>Este arquivo simula exatamente como o JavaScript está renderizando os botões na tabela de fretes. Se os botões aparecerem aqui, o problema está no CSS. Se não aparecerem, o problema está no JavaScript.</p>
+        </div>
+        
+        <div class="debug-section">
+            <h3>🔧 Controles de Teste</h3>
+            <button class="test-button" onclick="testarRenderizacao()">🧪 Testar Renderização</button>
+            <button class="test-button" onclick="limparTabela()">🗑️ Limpar Tabela</button>
+            <button class="test-button" onclick="verificarBotoes()">🔍 Verificar Botões</button>
+        </div>
+        
+        <div id="status" class="status info">
+            ✅ Página carregada. Clique em "Testar Renderização" para simular o JavaScript.
+        </div>
+        
+        <div class="info">
+            <h3>📊 Tabela de Teste</h3>
+            <p>A tabela abaixo será populada dinamicamente pelo JavaScript, simulando exatamente o comportamento da lista de fretes:</p>
+        </div>
+        
+        <table id="tabelaTeste">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Pedido</th>
+                    <th>Produto</th>
+                    <th>Frete Empresa</th>
+                    <th>Liberado</th>
+                    <th>Carregado</th>
+                    <th>Saldo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabelaTeste">
+                <!-- Botões serão inseridos aqui via JavaScript -->
+            </tbody>
+        </table>
+        
+        <div class="debug-section">
+            <h3>🔍 Informações de Debug</h3>
+            <div id="debugInfo">
+                <p><strong>Status:</strong> Aguardando teste...</p>
+                <p><strong>Botões encontrados:</strong> 0</p>
+                <p><strong>Container .acoes:</strong> Não encontrado</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simular exatamente o que o JavaScript da lista de fretes faz
+        function testarRenderizacao() {
+            const status = document.getElementById('status');
+            const corpoTabela = document.getElementById('corpoTabelaTeste');
+            
+            status.textContent = '🔄 Renderizando botões...';
+            status.className = 'status info';
+            
+            // Limpar tabela
+            corpoTabela.innerHTML = '';
+            
+            // Simular dados de frete
+            const dadosTeste = [
+                {
+                    id: 'teste1',
+                    data: '2024-01-15',
+                    cliente: 'Cliente Teste 1',
+                    destino: 'Destino Teste 1',
+                    pedido: 'PED001',
+                    produto: 'Produto Teste 1',
+                    frempresa: 'R$ 100,00',
+                    liberado: 50,
+                    carregado: 30,
+                    saldo: 20
+                },
+                {
+                    id: 'teste2',
+                    data: '2024-01-16',
+                    cliente: 'Cliente Teste 2',
+                    destino: 'Destino Teste 2',
+                    pedido: 'PED002',
+                    produto: 'Produto Teste 2',
+                    frempresa: 'R$ 150,00',
+                    liberado: 60,
+                    carregado: 40,
+                    saldo: 20
+                }
+            ];
+            
+            // Renderizar linhas (exatamente como no JavaScript original)
+            dadosTeste.forEach((frete, index) => {
+                const linha = `
+                    <tr class="linha-clicavel" data-frete-id="${frete.id}">
+                        <td>${frete.data}</td>
+                        <td>${frete.cliente}</td>
+                        <td style="color: #f44336; font-weight: 500;">${frete.destino}</td>
+                        <td>${frete.pedido}</td>
+                        <td>${frete.produto}</td>
+                        <td>${frete.frempresa}</td>
+                        <td>${frete.liberado} Ton</td>
+                        <td>${frete.carregado} Ton</td>
+                        <td>${frete.saldo} Ton</td>
+                        <td class="acoes" style="display: flex !important; gap: 0.25rem !important; flex-wrap: wrap !important; justify-content: center !important; align-items: center !important; min-height: 40px !important; padding: 0.25rem !important;">
+                            <button class="btn-visualizar" onclick="testarBotao('Visualizar', '${frete.id}')" aria-label="Visualizar frete" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 0.25rem !important; padding: 0.5rem 0.75rem !important; border: none !important; border-radius: 6px !important; cursor: pointer !important; font-size: 0.7rem !important; font-weight: 500 !important; min-width: 80px !important; max-width: 120px !important; background-color: #17a2b8 !important; color: white !important; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;">
+                                <i class="fas fa-eye action-icon" style="display: inline-block !important; width: 1rem !important; height: 1rem !important; font-size: 1rem !important;"></i>
+                                <span class="action-text" style="display: inline-block !important; font-size: 0.7rem !important; font-weight: 500 !important;">Visualizar</span>
+                            </button>
+                            <button class="btn-editar" onclick="testarBotao('Editar', '${frete.id}')" aria-label="Editar frete" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 0.25rem !important; padding: 0.5rem 0.75rem !important; border: none !important; border-radius: 6px !important; cursor: pointer !important; font-size: 0.7rem !important; font-weight: 500 !important; min-width: 80px !important; max-width: 120px !important; background-color: #28a745 !important; color: white !important; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;">
+                                <i class="fas fa-edit action-icon" style="display: inline-block !important; width: 1rem !important; height: 1rem !important; font-size: 1rem !important;"></i>
+                                <span class="action-text" style="display: inline-block !important; font-size: 0.7rem !important; font-weight: 500 !important;">Editar</span>
+                            </button>
+                            <button class="btn-excluir" onclick="testarBotao('Excluir', '${frete.id}')" aria-label="Excluir frete" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 0.25rem !important; padding: 0.5rem 0.75rem !important; border: none !important; border-radius: 6px !important; cursor: pointer !important; font-size: 0.7rem !important; font-weight: 500 !important; min-width: 80px !important; max-width: 120px !important; background-color: #dc3545 !important; color: white !important; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;">
+                                <i class="fas fa-trash action-icon" style="display: inline-block !important; width: 1rem !important; height: 1rem !important; font-size: 1rem !important;"></i>
+                                <span class="action-text" style="display: inline-block !important; font-size: 0.7rem !important; font-weight: 500 !important;">Excluir</span>
+                            </button>            
+                            <button class="btn-carregamento" onclick="testarBotao('Carregamentos', '${frete.id}')" aria-label="Ver carregamentos" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 0.25rem !important; padding: 0.5rem 0.75rem !important; border: none !important; border-radius: 6px !important; cursor: pointer !important; font-size: 0.7rem !important; font-weight: 500 !important; min-width: 80px !important; max-width: 120px !important; background-color: #003867 !important; color: white !important; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;">
+                                <i class="fas fa-truck action-icon" style="display: inline-block !important; width: 1rem !important; height: 1rem !important; font-size: 1rem !important;"></i>
+                                <span class="action-text" style="display: inline-block !important; font-size: 0.7rem !important; font-weight: 500 !important;">Carregamentos</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                
+                corpoTabela.innerHTML += linha;
+            });
+            
+            status.textContent = '✅ Botões renderizados! Verifique se estão visíveis.';
+            status.className = 'status success';
+            
+            // Aguardar um pouco e verificar
+            setTimeout(() => {
+                verificarBotoes();
+            }, 100);
+        }
+        
+        function limparTabela() {
+            document.getElementById('corpoTabelaTeste').innerHTML = '';
+            document.getElementById('status').textContent = '🗑️ Tabela limpa.';
+            document.getElementById('status').className = 'status info';
+            document.getElementById('debugInfo').innerHTML = '<p><strong>Status:</strong> Tabela limpa...</p>';
+        }
+        
+        function verificarBotoes() {
+            const botoes = document.querySelectorAll('.acoes button');
+            const acoesContainer = document.querySelector('.acoes');
+            const debugInfo = document.getElementById('debugInfo');
+            
+            let infoHTML = `
+                <p><strong>Status:</strong> Verificação concluída</p>
+                <p><strong>Botões encontrados:</strong> ${botoes.length}</p>
+            `;
+            
+            if (acoesContainer) {
+                const computedStyle = window.getComputedStyle(acoesContainer);
+                infoHTML += `
+                    <p><strong>Container .acoes:</strong> Encontrado</p>
+                    <p><strong>Display:</strong> ${computedStyle.display}</p>
+                    <p><strong>Width:</strong> ${acoesContainer.offsetWidth}px</p>
+                    <p><strong>Height:</strong> ${acoesContainer.offsetHeight}px</p>
+                    <p><strong>Children:</strong> ${acoesContainer.children.length}</p>
+                `;
+            } else {
+                infoHTML += '<p><strong>Container .acoes:</strong> ❌ NÃO ENCONTRADO</p>';
+            }
+            
+            if (botoes.length > 0) {
+                botoes.forEach((botao, index) => {
+                    const computedStyle = window.getComputedStyle(botao);
+                    infoHTML += `
+                        <p><strong>Botão ${index + 1}:</strong> ${botao.className}</p>
+                        <p><strong>Display:</strong> ${computedStyle.display}</p>
+                        <p><strong>Visível:</strong> ${botao.offsetWidth > 0 && botao.offsetHeight > 0 ? '✅ Sim' : '❌ Não'}</p>
+                    `;
+                });
+            }
+            
+            debugInfo.innerHTML = infoHTML;
+        }
+        
+        function testarBotao(acao, id) {
+            alert(`🎯 Botão "${acao}" clicado para o frete ${id}!`);
+        }
+        
+        // Verificar ao carregar a página
+        window.addEventListener('load', function() {
+            verificarBotoes();
+        });
+    </script>
+</body>
+</html>
