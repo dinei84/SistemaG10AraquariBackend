@@ -151,11 +151,21 @@ async function carregarFretes() {
           <td>${formatNumber(carregado)} Ton</td>
           <td>${formatNumber(saldo)} Ton</td>
           <td class="acoes">
-            <button class="btn-visualizar" onclick="visualizarFrete('${doc.id}', event)">Visualizar</button>
-            <button class="btn-editar" onclick="editarFrete('${doc.id}', event)">Editar</button>
-            <button class="btn-excluir" onclick="excluirFrete('${doc.id}', event)">Excluir</button>            
-            <button class="btn-carregamento" onclick="listarCarregamentos('${doc.id}', event)">Carregamentos</button>
-            ${botaoOrdem}
+            <button class="btn-acao btn-visualizar" onclick="visualizarFrete('${doc.id}', event)" title="Visualizar">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn-acao btn-editar" onclick="editarFrete('${doc.id}', event)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-acao btn-excluir" onclick="excluirFrete('${doc.id}', event)" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>            
+            <button class="btn-acao btn-carregamento" onclick="listarCarregamentos('${doc.id}', event)" title="Carregamentos">
+              <i class="fas fa-truck"></i>
+            </button>
+            ${botaoOrdem ? `<button class="btn-acao btn-gerar-ordem" onclick="gerarOrdemCarregamento('${doc.id}', event)" title="Gerar Ordem">
+              <i class="fas fa-file-alt"></i>
+            </button>` : ''}
           </td>
         </tr>
       `;
