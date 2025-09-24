@@ -242,7 +242,7 @@ window.excluirFrete = async (freteId, event) => {
         loadingManager.show();
         await deleteDoc(doc(db, "fretes", freteId));
         await carregarFretes(); 
-        alert("Frete excluído com sucesso!");
+        // alert("Frete excluído com sucesso!");
     } catch (error) {
         console.error("Erro ao excluir frete:", error);
         alert("Erro ao excluir frete");
