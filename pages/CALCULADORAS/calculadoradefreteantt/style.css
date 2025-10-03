@@ -1,0 +1,870 @@
+/* Importar cores do sistema */
+@import url('../../../css/_colors.css');
+
+/* Reset e configurações globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Header principal */
+.main-header {
+    background: linear-gradient(135deg, #721738, #560e24);
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    background: white;
+    color: #721738;
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.title-section h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+}
+
+.title-section p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-email {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.logout-btn-header {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logout-btn-header:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.validity-banner {
+    background: #ff6b6b;
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Container principal */
+.main-content {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 2rem;
+    min-height: calc(100vh - 200px);
+}
+
+/* Seção do formulário */
+.form-section {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.form-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.form-card h2 {
+    color: #721738;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Seletor de modo */
+.mode-selector {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.mode-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: #555;
+}
+
+.mode-label input[type="radio"] {
+    display: none;
+}
+
+.radio-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.mode-label input[type="radio"]:checked + .radio-custom {
+    border-color: #721738;
+    background: #721738;
+}
+
+.mode-label input[type="radio"]:checked + .radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* Grupos de formulário */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #721738;
+    box-shadow: 0 0 0 2px rgba(114, 23, 56, 0.1);
+}
+
+/* Parâmetros financeiros */
+.financial-params {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #721738;
+}
+
+.financial-params h3 {
+    color: #721738;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Botões */
+.btn-primary {
+    width: 100%;
+    background: #721738;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary:hover {
+    background: #560e24;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(114, 23, 56, 0.3);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+/* Seção de resultados */
+.results-section {
+    min-height: 600px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.results-header h3 {
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.btn-clear {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-clear:hover {
+    background: #c82333;
+}
+
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+/* Card de resultado */
+.result-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease;
+}
+
+/* Painel central branco para resultados */
+.results-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    width: 100%;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #721738;
+}
+
+.result-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #721738;
+}
+
+.result-axles {
+    background: #721738;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.result-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.result-value {
+    font-weight: 500;
+    color: #333;
+}
+
+.result-total {
+    background: #28a745;
+    color: white;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.result-total .label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 0.25rem;
+}
+
+.result-total .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.result-freight {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.freight-item {
+    text-align: center;
+    padding: 0.75rem;
+    border-radius: 4px;
+}
+
+.freight-company {
+    background: #e9ecef;
+    color: #333;
+}
+
+.freight-driver {
+    background: #007bff;
+    color: white;
+}
+
+.freight-label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 0.25rem;
+}
+
+.freight-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Estado sem resultados */
+.no-results {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #666;
+}
+
+.no-results i {
+    font-size: 3rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.no-results p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.no-results span {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.loading-spinner i {
+    font-size: 2rem;
+    color: #721738;
+    margin-bottom: 1rem;
+}
+
+.loading-spinner p {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 350px 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .form-section {
+        position: static;
+    }
+    
+    .results-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .user-section {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .form-card {
+        padding: 1.5rem;
+    }
+    
+    .result-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-freight {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 1rem;
+    }
+    
+    .title-section h1 {
+        font-size: 1.4rem;
+    }
+    
+    .form-card {
+        padding: 1rem;
+    }
+    
+    .mode-selector {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .result-card {
+        padding: 1rem;
+    }
+    
+    .result-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+.result-card {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Layout compacto para cards (conforme referência) */
+.result-card-compact {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    background: #fff;
+}
+
+.result-card-compact .result-header {
+    padding: 8px 10px;
+}
+
+.result-card-compact .result-title {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.result-card-compact .result-axles {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.result-card-compact .result-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 6px 8px;
+}
+
+.result-card-compact .result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.result-card-compact .result-total {
+    padding: 8px;
+    border-top: 1px dashed #e5e7eb;
+}
+
+.result-card-compact .result-total .label {
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.result-card-compact .result-total .value {
+    font-size: 18px;
+    color: white;
+    font-weight: 800;
+}
+
+.result-card-compact .result-freight {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 6px 8px 0 8px;
+}
+
+.result-card-compact .freight-label {
+    font-size: 11px;
+    color: red;
+}
+
+.result-card-compact .freight-value {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* Badge de motorista como no exemplo */
+.result-card-compact .freight-item.freight-driver {
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px; }
+
+/* Grid de cards compacto */
+#resultsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    #resultsContainer { gap: 10px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .result-card-compact .result-total .value { font-size: 16px; }
+}
+
+/* Formulário mais achatado (menos espaço vertical) */
+.form-content .form-group {
+    margin-bottom: 8px;
+}
+
+.form-content input,
+.form-content select {
+    height: 34px;
+    padding: 6px 10px;
+}
+
+.financial-params h3 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-clear {
+    padding: 10px 12px;
+}
+
+/* Notificações */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    animation: slideIn 0.3s ease;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Melhorias de acessibilidade */
+.form-group input:focus,
+.form-group select:focus,
+.btn-primary:focus,
+.btn-secondary:focus,
+.btn-clear:focus {
+    outline: 2px solid #721738;
+    outline-offset: 2px;
+}
+
+/* Estados de erro */
+.form-group.error input,
+.form-group.error select {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1);
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Estados de sucesso */
+.form-group.success input,
+.form-group.success select {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1);
+}
+
+/* Estilos para geolocalização */
+#getCurrentLocation {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#getCurrentLocation:hover {
+    background: #0056b3;
+}
+
+#getCurrentLocation:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Estilos para detalhes da rota */
+.route-details {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    animation: fadeIn 0.3s ease;
+}
+
+.route-details h4 {
+    color: #495057;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.route-details p {
+    margin: 8px 0;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.route-details strong {
+    color: #495057;
+}
+
+.toll-estimates {
+    margin-top: 12px;
+    padding: 12px;
+    background: #e9ecef;
+    border-radius: 4px;
+}
+
+.toll-estimates small {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.toll-estimates ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+}
+
+.toll-estimates li {
+    margin: 4px 0;
+    color: #495057;
+    font-size: 13px;
+}
+
+/* Responsividade para geolocalização */
+@media (max-width: 768px) {
+    #getCurrentLocation {
+        width: 100%;
+        margin-top: 12px;
+    }
+    
+    .route-details {
+        margin: 12px 0;
+        padding: 12px;
+    }
+    
+    .route-details h4 {
+        font-size: 14px;
+    }
+    
+    .route-details p {
+        font-size: 13px;
+    }
+}

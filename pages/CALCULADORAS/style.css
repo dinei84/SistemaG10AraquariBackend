@@ -42,7 +42,8 @@
 }
 
 .calculadoras-page .calculadora1, 
-.calculadoras-page .calculadora2 {
+.calculadoras-page .calculadora2,
+.calculadoras-page .calculadora3 {
   width: 300px;
   height: 300px;
   border-radius: 10px;
@@ -52,7 +53,8 @@
 }
 
 .calculadoras-page .btn, 
-.calculadoras-page .btn2 {
+.calculadoras-page .btn2,
+.calculadoras-page .btn3 {
   font-size: 3.0rem;
   padding: -1rem 2.5rem;
   border: none;
@@ -71,12 +73,14 @@
 }
 
 .calculadoras-page .btn:active, 
-.calculadoras-page .btn2:active {
+.calculadoras-page .btn2:active,
+.calculadoras-page .btn3:active {
   scale: 0.92;
 }
 
 .calculadoras-page .btn:hover, 
-.calculadoras-page .btn2:hover {
+.calculadoras-page .btn2:hover,
+.calculadoras-page .btn3:hover {
   background: var(--quintenary-color);
   background: linear-gradient(270deg, var(--tertiary-color) 0%, var(--quintenary-color) 60%);
   color: rgb(4, 4, 38);
@@ -100,13 +104,15 @@
   }
   
   .calculadoras-page .calculadora1, 
-  .calculadoras-page .calculadora2 {
+  .calculadoras-page .calculadora2,
+  .calculadoras-page .calculadora3 {
       width: 100%;
       margin-bottom: 20px;
   }
   
   .calculadoras-page .btn, 
-  .calculadoras-page .btn2 {
+  .calculadoras-page .btn2,
+  .calculadoras-page .btn3 {
       font-size: 2rem;
       padding: 1rem 1.5rem;
       margin-top: 60px;
@@ -120,7 +126,8 @@
   }
   
   .calculadoras-page .btn, 
-  .calculadoras-page .btn2 {
+  .calculadoras-page .btn2,
+  .calculadoras-page .btn3 {
       font-size: 1.5rem;
       padding: 0.8rem 1.2rem;
       margin-top: 40px;

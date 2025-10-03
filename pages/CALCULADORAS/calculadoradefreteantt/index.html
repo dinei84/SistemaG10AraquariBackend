@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Frete ANTT - G10 Transportes</title>
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="../../../assets/favcom.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=note_alt" />
+</head>
+<body>
+       
+
+    <!-- Menu lateral -->
+    <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger"></div>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="../../PLANILHA/lista_fretes.html">
+                    <i class="fas fa-table"></i>
+                    <span>Planilha</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CHAT/chat.html">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </li>
+            <li>
+                <a href="../calculadoras.html">
+                    <i class="fas fa-calculator"></i>
+                    <span>Calculadoras</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../OC/oc.html">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span>Ordens Manuais</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../CONTATOS/contato.html">
+                    <i class="fas fa-address-book"></i>
+                    <span>Lista de Contatos</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../MOSTRADOR/index1.html">
+                    <i class="fas fa-tv"></i>
+                    <span>Divulgação</span>
+                </a>
+            </li>
+            <li class="double-icon">
+                <a href="../../utilitarios/index.html">
+                    <i class="fas fa-tools"></i>
+                    <span>Utilitários</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../TRACKING/indextracking.html">
+                    <i class="fas fa-truck"></i>
+                    <span>Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../PLANILHA/dashboard.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../../pages/dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Header principal -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">G10</div>
+                <div class="title-section">
+                    <h1>Gerenciador de Fretes</h1>
+                </div>
+            </div>
+            <div class="user-section">
+                <span id="userEmail" class="user-email">carregando...</span>
+                <button class="logout-btn-header">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Formulário de entrada (coluna esquerda) -->
+            <div class="form-section">
+                <div class="form-card">
+                    <h2>Calculadora Frete ANTT</h2>
+                    
+                    <!-- Seletor de modo -->
+                    <div class="mode-selector">
+                        <label class="mode-label">
+                            <input type="radio" name="inputMode" value="manual" checked>
+                            <span class="radio-custom"></span>
+                            Entrada Manual
+                        </label>
+                        <label class="mode-label">
+                            <input type="radio" name="inputMode" value="google">
+                            <span class="radio-custom"></span>
+                            Google Maps
+                        </label>
+                    </div>
+
+                    <!-- Formulário manual -->
+                    <div id="manualForm" class="form-content">
+                        <div class="form-group">
+                            <label for="cargoType">Tipo de Carga</label>
+                            <select id="cargoType" required>
+                                <option value="">Selecione o tipo de carga</option>
+                                <option value="geral">Carga Geral</option>
+                                <option value="granel">Carga Granel</option>
+                                <option value="perigosa">Carga Perigosa</option>
+                                <option value="animal">Carga Viva</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="axles">Número de Eixos</label>
+                            <select id="axles" required>
+                                <option value="">Selecione o número de eixos</option>
+                                <option value="6">6 Eixos</option>
+                                <option value="7">7 Eixos</option>
+                                <option value="9">9 Eixos</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="distance">Distância (Km)</label>
+                            <input type="number" id="distance" placeholder="Ex: 562" step="0.1" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="toll6Axles">Custo Pedágio 6 Eixos (R$)</label>
+                            <input type="number" id="toll6Axles" placeholder="Valor total do pedágio" step="0.01" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="toll7Axles">Custo Pedágio 7 Eixos (R$)</label>
+                            <input type="number" id="toll7Axles" placeholder="Valor total do pedágio" step="0.01" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="toll9Axles">Custo Pedágio 9 Eixos (R$)</label>
+                            <input type="number" id="toll9Axles" placeholder="Valor total do pedágio" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <!-- Formulário Google Maps -->
+                    <div id="googleForm" class="form-content" style="display: none;">
+                        <div class="form-group">
+                            <label for="origin">Origem</label>
+                            <input type="text" id="origin" placeholder="Cidade de origem">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="destination">Destino</label>
+                            <input type="text" id="destination" placeholder="Cidade de destino">
+                        </div>
+
+                        <button type="button" id="calculateRoute" class="btn-secondary">
+                            <i class="fas fa-route"></i>
+                            Calcular Rota
+                        </button>
+                        
+                        <!-- Container para detalhes da rota -->
+                        <div id="routeDetails" class="route-details-container"></div>
+                    </div>
+
+                    <!-- Parâmetros financeiros -->
+                    <div class="financial-params">
+                        <h3>Parâmetros Financeiros</h3>
+                        
+                        <div class="form-group">
+                            <label for="icms">ICMS (%)</label>
+                            <input type="number" id="icms" value="12" step="0.1" min="0" max="100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profitMargin">Margem de Lucro (%)</label>
+                            <input type="number" id="profitMargin" value="5" step="0.1" min="0" max="100">
+                        </div>
+                    </div>
+
+                    <button type="button" id="calculateQuote" class="btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        Calcular Cotação
+                    </button>
+                </div>
+            </div>
+
+            <!-- Seção de resultados (coluna direita) -->
+            <div class="results-section">
+                <div class="results-panel">
+                    <div class="results-header">
+                        <h3>Resultados dos Cálculos</h3>
+                        <button id="clearResults" class="btn-clear">
+                            <i class="fas fa-trash"></i>
+                            Limpar Todos
+                        </button>
+                    </div>
+                    <div id="resultsContainer" class="results-container">
+                        <div class="no-results">
+                            <i class="fas fa-calculator"></i>
+                            <p>Nenhum cálculo realizado ainda</p>
+                            <span>Preencha o formulário e clique em "Calcular Cotação"</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Calculando...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="script.js"></script>
+    <script src="../../../js/menu.js"></script>
+</body>
+</html>
