@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário de Folgas - CargoTecno</title>
+    <link rel="shortcut icon" href="../../../assets/favcom.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../css/shared-styles.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- FullCalendar CSS e JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    
+    <!-- Day.js -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/locale/pt-br.js"></script>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="hamburger-menu">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <ul class="nav-list">
+             <li><a href="../../PLANILHA/lista_fretes.html"><i class="fas fa-table"></i><span>Planilha</span></a></li>
+             <li><a href="../../CHAT/chat.html"><i class="fas fa-comments"></i><span>Chat</span></a></li>
+             <li><a href="../../CALCULADORAS/calculadoras.html"><i class="fas fa-calculator"></i><span>Calculadoras</span></a></li>
+             <li><a href="../../OC/oc.html"><i class="fas fa-pencil-alt"></i><span>Ordens Manuais</span></a></li>
+             <li><a href="../../CONTATOS/contato.html"><i class="fas fa-address-book"></i><span>Contatos</span></a></li>
+             <li><a href="../../MOSTRADOR/index1.html"><i class="fas fa-tv"></i><span>Divulgação</span></a></li>
+             <li class="double-icon"><a href="../index.html"><i class="fas fa-tools"></i><span>Utilitários</span></a></li>
+             <li><a href="../../TRACKING/indextracking.html"><i class="fas fa-truck"></i><span>Tracking</span></a></li>
+             <li><a href="../../PLANILHA/dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+             <li><a href="../../dashboard.html"><i class="fas fa-home"></i><span>Início</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-container">
+            <div class="content-wrapper full-width">
+                <header class="header-calendario">
+                    <div class="header-top">
+                        <div class="header-left">
+                            <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Voltar</a>
+                            <h1>Calendário de Folgas e Plantões</h1>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button id="btnAddFolga" class="btn-folga"><i class="fas fa-umbrella-beach"></i> Adicionar Folga</button>
+                        <button id="btnAddPlantao" class="btn-plantao"><i class="fas fa-briefcase"></i> Adicionar Plantão</button>
+                        <button id="btnAddFolgaLote" class="btn-secondary"><i class="fas fa-calendar-alt"></i> Folgas em Lote</button>
+                        <button id="btnAddPlantaoLote" class="btn-secondary"><i class="fas fa-calendar-week"></i> Plantões em Lote</button>
+                    </div>
+                </header>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>Carregando dados...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="error-message-global" style="display: none;"></div>
+
+                <div class="calendar-container">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Adicionar Folga -->
+    <div id="modalFolga" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle">Registrar Folga/Plantão</h2>
+            <form id="formFolga">
+                <input type="hidden" id="folgaId">
+                <input type="hidden" id="tipoEvento" value="folga">
+                <div class="form-group">
+                    <label for="colaborador">Colaborador</label>
+                    <div class="input-with-action">
+                        <select id="colaborador" required>
+                            <option value="">Carregando...</option>
+                        </select>
+                        <button type="button" id="btnNovoColaborador" class="btn-icon" title="Novo Colaborador"><i class="fas fa-user-plus"></i></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <div class="tipo-selector">
+                        <button type="button" class="tipo-btn tipo-folga active" data-tipo="folga">
+                            <i class="fas fa-umbrella-beach"></i> Folga
+                        </button>
+                        <button type="button" class="tipo-btn tipo-plantao" data-tipo="plantao">
+                            <i class="fas fa-briefcase"></i> Plantão
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dataFolga">Data</label>
+                    <input type="date" id="dataFolga" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="btnDeleteFolga" class="btn-icon" style="color: red; border-color: red; margin-right: auto; display: none;" title="Excluir"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Plantões em Lote -->
+    <div id="modalPlantaoLote" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close-modal-plantao-lote">&times;</span>
+            <h2>Plantões em Lote (Recorrentes)</h2>
+            <form id="formPlantaoLote">
+                <input type="hidden" id="tipoEventoPlantaoLote" value="plantao">
+                <div class="form-group">
+                    <label for="colaboradorPlantaoLote">Colaborador</label>
+                    <select id="colaboradorPlantaoLote" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Recorrência</label>
+                    <select id="tipoRecorrenciaPlantao" required>
+                        <option value="">Selecione o tipo...</option>
+                        <option value="semanal">Toda semana (dia fixo)</option>
+                        <option value="intervalo">A cada X dias</option>
+                        <option value="dias-semana">Dias específicos da semana</option>
+                    </select>
+                </div>
+
+                <!-- Opção: Toda semana (dia fixo) -->
+                <div id="opcaoSemanalPlantao" class="opcao-recorrencia" style="display: none;">
+                    <div class="form-group">
+                        <label for="diaSemanaPlantao">Dia da Semana</label>
+                        <select id="diaSemanaPlantao">
+                            <option value="0">Domingo</option>
+                            <option value="1">Segunda-feira</option>
+                            <option value="2">Terça-feira</option>
+                            <option value="3">Quarta-feira</option>
+                            <option value="4">Quinta-feira</option>
+                            <option value="5">Sexta-feira</option>
+                            <option value="6">Sábado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Opção: A cada X dias -->
+                <div id="opcaoIntervaloPlantao" class="opcao-recorrencia" style="display: none;">
+                    <div class="form-group">
+                        <label for="dataInicioIntervaloPlantao">Data de Início</label>
+                        <input type="date" id="dataInicioIntervaloPlantao">
+                    </div>
+                    <div class="form-group">
+                        <label for="intervaloDiasPlantao">A cada quantos dias?</label>
+                        <input type="number" id="intervaloDiasPlantao" min="1" placeholder="Ex: 2 (a cada 2 dias)">
+                    </div>
+                </div>
+
+                <!-- Opção: Dias específicos da semana -->
+                <div id="opcaoDiasSemanaPlantao" class="opcao-recorrencia" style="display: none;">
+                    <div class="form-group">
+                        <label>Selecione os dias da semana:</label>
+                        <div class="dias-semana-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="0" class="dia-checkbox-plantao"> Dom
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="1" class="dia-checkbox-plantao"> Seg
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="2" class="dia-checkbox-plantao"> Ter
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="3" class="dia-checkbox-plantao"> Qua
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="4" class="dia-checkbox-plantao"> Qui
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="5" class="dia-checkbox-plantao"> Sex
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="6" class="dia-checkbox-plantao"> Sáb
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Período de validade -->
+                <div class="form-group">
+                    <label for="dataInicioPlantaoLote">Data de Início</label>
+                    <input type="date" id="dataInicioPlantaoLote" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataFimPlantaoLote">Data de Término (opcional)</label>
+                    <input type="date" id="dataFimPlantaoLote">
+                    <small class="form-hint">Deixe em branco para plantões indefinidos</small>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="sobrescreverPlantoes">
+                        Sobrescrever plantões existentes no período
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelarPlantaoLote">Cancelar</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Gerar Plantões
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Folgas em Lote -->
+    <div id="modalFolgaLote" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close-modal-lote">&times;</span>
+            <h2 id="modalLoteTitle">Folgas em Lote (Recorrentes)</h2>
+            <form id="formFolgaLote">
+                <input type="hidden" id="tipoEventoLote" value="folga">
+                <div class="form-group">
+                    <label for="colaboradorLote">Colaborador</label>
+                    <select id="colaboradorLote" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <div class="tipo-selector">
+                        <button type="button" class="tipo-btn tipo-folga active" data-tipo="folga" data-lote="true">
+                            <i class="fas fa-umbrella-beach"></i> Folga
+                        </button>
+                        <button type="button" class="tipo-btn tipo-plantao" data-tipo="plantao" data-lote="true">
+                            <i class="fas fa-briefcase"></i> Plantão
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Recorrência</label>
+                    <select id="tipoRecorrencia" required>
+                        <option value="">Selecione o tipo...</option>
+                        <option value="semanal">Toda semana (dia fixo)</option>
+                        <option value="intervalo">A cada X dias</option>
+                        <option value="dias-semana">Dias específicos da semana</option>
+                    </select>
+                </div>
+
+                <!-- Opção: Toda semana (dia fixo) -->
+                <div id="opcaoSemanal" class="opcao-recorrencia" style="display: none;">
+                    <div class="form-group">
+                        <label for="diaSemana">Dia da Semana</label>
+                        <select id="diaSemana">
+                            <option value="0">Domingo</option>
+                            <option value="1">Segunda-feira</option>
+                            <option value="2">Terça-feira</option>
+                            <option value="3">Quarta-feira</option>
+                            <option value="4">Quinta-feira</option>
+                            <option value="5">Sexta-feira</option>
+                            <option value="6">Sábado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Opção: A cada X dias -->
+                <div id="opcaoIntervalo" class="opcao-recorrencia" style="display: none;">
+                    <div class="form-group">
+                        <label for="dataInicioIntervalo">Data de Início</label>
+                        <input type="date" id="dataInicioIntervalo">
+                    </div>
+                    <div class="form-group">
+                        <label for="intervaloDias">A cada quantos dias?</label>
+                        <input type="number" id="intervaloDias" min="1" placeholder="Ex: 2 (a cada 2 dias)">
+                    </div>
+                </div>
+
+                <!-- Opção: Dias específicos da semana -->
+                <div id="opcaoDiasSemana" class="opcao-recorrencia" style="display: none;">
+                    <div class="form-group">
+                        <label>Selecione os dias da semana:</label>
+                        <div class="dias-semana-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="0" class="dia-checkbox"> Dom
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="1" class="dia-checkbox"> Seg
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="2" class="dia-checkbox"> Ter
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="3" class="dia-checkbox"> Qua
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="4" class="dia-checkbox"> Qui
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="5" class="dia-checkbox"> Sex
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="6" class="dia-checkbox"> Sáb
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Período de validade -->
+                <div class="form-group">
+                    <label for="dataInicioLote">Data de Início</label>
+                    <input type="date" id="dataInicioLote" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataFimLote">Data de Término (opcional)</label>
+                    <input type="date" id="dataFimLote">
+                    <small class="form-hint">Deixe em branco para folgas indefinidas</small>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="sobrescreverFolgas">
+                        Sobrescrever folgas existentes no período
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelarLote">Cancelar</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Gerar Folgas
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Novo Colaborador -->
+    <div id="modalColaborador" class="modal">
+        <div class="modal-content">
+            <span class="close-modal-colab">&times;</span>
+            <h2>Novo Colaborador</h2>
+            <form id="formColaborador">
+                <div class="form-group">
+                    <label for="nomeColaborador">Nome Completo</label>
+                    <input type="text" id="nomeColaborador" required placeholder="Ex: João da Silva">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Cadastrar</button>
+                </div>
+            </form>
+            
+            <hr class="modal-divider">
+            
+            <h3>Colaboradores Cadastrados</h3>
+            <div class="colaboradores-list-container">
+                <ul id="listaColaboradores" class="colaboradores-list">
+                    <!-- Lista será preenchida via JS -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script src="../../../js/menu.js"></script>
+</body>
+</html>

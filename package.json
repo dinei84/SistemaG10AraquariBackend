@@ -16,5 +16,8 @@
     "node": ">=14.0.0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^12.8.0"
+  }
 }

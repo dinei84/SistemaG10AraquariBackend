@@ -8,7 +8,7 @@ const API_CONFIG = {
   DEFAULT_HEADERS: {
     'Content-Type': 'application/json'
   },
-  TIMEOUT: 10000 // 10 segundos
+  TIMEOUT: 30000 // 30 segundos (aumentado para evitar timeouts)
 };
 
 /**
@@ -28,7 +28,13 @@ async function getAuthToken() {
  */
 async function fetchWithAuth(url, options = {}) {
   try {
-    const token = await getAuthToken();
+    // Verificar se o usuário está autenticado
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('Usuário não autenticado. Faça login novamente.');
+    }
+    
+    const token = await currentUser.getIdToken();
     
     const headers = {
       ...API_CONFIG.DEFAULT_HEADERS,
@@ -40,24 +46,46 @@ async function fetchWithAuth(url, options = {}) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
     
-    const response = await fetch(url, {
-      ...options,
-      headers,
-      signal: controller.signal
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Erro ${response.status}: ${response.statusText}`);
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers,
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        // Se for erro 401, pode ser problema de autenticação
+        if (response.status === 401) {
+          throw new Error('Sessão expirada. Faça login novamente.');
+        }
+        
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Erro ${response.status}: ${response.statusText}`);
+      }
+      
+      return await response.json();
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      
+      if (fetchError.name === 'AbortError') {
+        throw new Error(`A requisição excedeu o tempo limite de ${API_CONFIG.TIMEOUT/1000} segundos. O servidor pode estar lento ou offline.`);
+      }
+      
+      // Se for erro de rede
+      if (fetchError.message.includes('Failed to fetch') || fetchError.message.includes('NetworkError')) {
+        throw new Error('Erro de conexão. Verifique sua internet e tente novamente.');
+      }
+      
+      throw fetchError;
     }
-    
-    return await response.json();
   } catch (error) {
-    if (error.name === 'AbortError') {
-      throw new Error(`A requisição excedeu o tempo limite de ${API_CONFIG.TIMEOUT/1000} segundos`);
+    // Se for erro de autenticação, relançar
+    if (error.message.includes('não autenticado') || error.message.includes('Sessão expirada')) {
+      throw error;
     }
+    
     console.error('Erro na requisição:', error);
     throw error;
   }
