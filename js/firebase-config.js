@@ -11,7 +11,10 @@ import {
     query,
     orderBy,
     getDocs,
-    doc
+    doc,
+    updateDoc,
+    writeBatch,
+    where
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js"; // Versão atualizada para 11.4.0
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js"; // Versão atualizada para 11.4.0
 
@@ -32,4 +35,4 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 
-export { collection, addDoc, getDoc, doc, deleteDoc, getDocs, setDoc, query, orderBy };
+export { collection, addDoc, getDoc, doc, deleteDoc, getDocs, setDoc, query, orderBy, updateDoc, writeBatch, where };
