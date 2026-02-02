@@ -158,10 +158,13 @@ function initCalendar() {
                 month: 'Mês',
                 list: 'Lista'
             },
+            showNonCurrentDates: false, // Hide grey dates from prev/next months
+            fixedWeekCount: false,      // only show the weeks the month actually has
             height: '100%',
             contentHeight: 'auto',
             events: [],
             dateClick: function (info) {
+                // Prevent clicking on padding areas if any remain (though showNonCurrentDates:false should remove them)
                 openModalFolga(null, info.dateStr, 'folga');
             },
             eventClick: function (info) {
