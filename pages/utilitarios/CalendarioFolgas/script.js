@@ -10,6 +10,8 @@ let calendar = null;
 let colaboradores = [];
 let folgas = [];
 let isInitialized = false;
+let currentView = 'calendar'; // 'calendar' or 'timeline'
+let timelineDate = dayjs(); // Data atual para a timeline
 
 // Elementos do DOM
 const modalFolga = document.getElementById('modalFolga');
@@ -414,6 +416,35 @@ function updateCalendarEvents() {
 
 // Event Listeners
 function setupEventListeners() {
+    // View Switcher
+    const btnViewCalendar = document.getElementById('btnViewCalendar');
+    const btnViewTimeline = document.getElementById('btnViewTimeline');
+
+    if (btnViewCalendar && btnViewTimeline) {
+        btnViewCalendar.addEventListener('click', () => switchView('calendar'));
+        btnViewTimeline.addEventListener('click', () => switchView('timeline'));
+    }
+
+    // Timeline Navigation
+    const btnTimelinePrev = document.getElementById('btnTimelinePrev');
+    const btnTimelineNext = document.getElementById('btnTimelineNext');
+    const btnTimelineToday = document.getElementById('btnTimelineToday');
+
+    if (btnTimelinePrev) btnTimelinePrev.addEventListener('click', () => updateTimelineDate(-1));
+    if (btnTimelineNext) btnTimelineNext.addEventListener('click', () => updateTimelineDate(1));
+    if (btnTimelineToday) btnTimelineToday.addEventListener('click', () => {
+        timelineDate = dayjs();
+        renderTimeline();
+    });
+
+    // Print Button
+    const btnPrint = document.getElementById('btnPrint');
+    if (btnPrint) {
+        btnPrint.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
     // Abrir Modal de Folga (Botão Principal)
     if (btnAddFolga) {
         btnAddFolga.addEventListener('click', () => {
@@ -1254,3 +1285,149 @@ function openModalPlantaoLote() {
 
     modalPlantaoLote.classList.add('active');
 }
+
+// --- Timeline View Implementation ---
+
+function switchView(view) {
+    currentView = view;
+
+    // Toggle Buttons
+    document.getElementById('btnViewCalendar').classList.toggle('active', view === 'calendar');
+    document.getElementById('btnViewTimeline').classList.toggle('active', view === 'timeline');
+
+    // Toggle Sections
+    document.getElementById('calendar').style.display = view === 'calendar' ? 'block' : 'none';
+    document.getElementById('timeline-view').style.display = view === 'timeline' ? 'block' : 'none';
+
+    if (view === 'timeline') {
+        renderTimeline();
+    } else {
+        if (calendar) calendar.render(); // Re-render to fix layout issues
+    }
+}
+
+function updateTimelineDate(delta) {
+    timelineDate = timelineDate.add(delta, 'month');
+    renderTimeline();
+}
+
+function renderTimeline() {
+    const wrapper = document.querySelector('.timeline-wrapper');
+    const title = document.getElementById('timelineTitle');
+
+    if (!wrapper || !title) return;
+
+    // Update Title
+    title.textContent = timelineDate.format('MMMM YYYY');
+
+    const daysInMonth = timelineDate.daysInMonth();
+    const monthStart = timelineDate.startOf('month');
+
+    // Build Table Header
+    let html = '<table class="timeline-table"><thead><tr>';
+    html += '<th class="col-colaborador">Colaborador</th>';
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        const day = monthStart.date(i);
+        const isWeekend = day.day() === 0 || day.day() === 6; // 0=Dom, 6=Sab
+        const isToday = day.isSame(dayjs(), 'day');
+        const weekDay = day.format('dd')[0]; // Primeira letra
+
+        let classNames = [];
+        if (isWeekend) classNames.push('weekend');
+        if (isToday) classNames.push('today');
+
+        html += `<th class="${classNames.join(' ')}" title="${day.format('dddd, DD/MM')}">
+                    <div>${i}</div>
+                    <div style="font-weight:normal;font-size:0.7em">${weekDay}</div>
+                 </th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    // Sort Colaboradores
+    const sortedColabs = [...colaboradores].sort((a, b) => a.nome.localeCompare(b.nome));
+
+    // Build Rows
+    sortedColabs.forEach(colab => {
+        if (colab.ativo === false) return;
+
+        html += `<tr>`;
+        html += `<td class="col-colaborador" title="${colab.nome}">${colab.nome}</td>`;
+
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = monthStart.date(i);
+            const dateStr = day.format('YYYY-MM-DD');
+            const isWeekend = day.day() === 0 || day.day() === 6;
+            const isToday = day.isSame(dayjs(), 'day');
+
+            // Find Event
+            const evento = folgas.find(f =>
+                f.colaboradorId === colab.id &&
+                dayjs(f.data).format('YYYY-MM-DD') === dateStr
+            );
+
+            let cellClasses = ['day-cell'];
+            if (isWeekend) cellClasses.push('weekend');
+            if (isToday) cellClasses.push('today');
+
+            html += `<td class="${cellClasses.join(' ')}" 
+                        data-date="${dateStr}" 
+                        data-colab="${colab.id}"
+                        onclick="handleTimelineCellClick(this)">`;
+
+            if (evento) {
+                const tipo = evento.tipo || 'folga';
+                html += `<span class="event-marker ${tipo}" title="${tipo === 'folga' ? 'Folga' : 'Plantão'}"></span>`;
+            }
+
+            html += `</td>`;
+        }
+        html += `</tr>`;
+    });
+
+    html += '</tbody></table>';
+    wrapper.innerHTML = html;
+}
+
+// Global function to handle cell click (needs to be on window or added via event listener)
+window.handleTimelineCellClick = function (cell) {
+    const dateStr = cell.dataset.date;
+    const colabId = cell.dataset.colab;
+    const eventMarker = cell.querySelector('.event-marker');
+
+    // Check if there is an event
+    const evento = folgas.find(f =>
+        f.colaboradorId === colabId &&
+        dayjs(f.data).format('YYYY-MM-DD') === dateStr
+    );
+
+    if (evento) {
+        // Edit existing event - Create a fake event object compatible with openModalFolga
+        const fakeEvent = {
+            id: evento.id,
+            title: '', // Ignored
+            start: evento.data,
+            extendedProps: {
+                colaboradorId: evento.colaboradorId,
+                tipo: evento.tipo || 'folga'
+            }
+        };
+        openModalFolga(fakeEvent);
+    } else {
+        // Create new event
+        // Pre-select collaborator if possible
+        if (selectColaborador) {
+            selectColaborador.value = colabId;
+        }
+        openModalFolga(null, dateStr, 'folga');
+    }
+};
+
+// Hook into existing updateCalendarEvents to also update timeline
+const originalUpdateCalendarEvents = updateCalendarEvents;
+updateCalendarEvents = function () {
+    originalUpdateCalendarEvents();
+    if (currentView === 'timeline') {
+        renderTimeline();
+    }
+};

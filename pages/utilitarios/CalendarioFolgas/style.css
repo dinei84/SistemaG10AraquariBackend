@@ -40,7 +40,7 @@ body {
     background: white;
     padding: 15px 20px;
     border-radius: 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     margin-bottom: 0;
     flex-shrink: 0;
 }
@@ -135,7 +135,7 @@ body {
     background: white;
     padding: 15px;
     border-radius: 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     flex: 1;
     min-height: 0;
     display: flex;
@@ -158,7 +158,7 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
 }
@@ -174,7 +174,7 @@ body {
     width: 90%;
     max-width: 450px;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     max-height: 90vh;
     overflow-y: auto;
 }
@@ -238,7 +238,10 @@ body {
     color: #ff0000;
 }
 
-.close-modal, .close-modal-colab, .close-modal-lote, .close-modal-plantao-lote {
+.close-modal,
+.close-modal-colab,
+.close-modal-lote,
+.close-modal-plantao-lote {
     position: absolute;
     right: 20px;
     top: 15px;
@@ -249,7 +252,10 @@ body {
     z-index: 10;
 }
 
-.close-modal:hover, .close-modal-colab:hover, .close-modal-lote:hover, .close-modal-plantao-lote:hover {
+.close-modal:hover,
+.close-modal-colab:hover,
+.close-modal-lote:hover,
+.close-modal-plantao-lote:hover {
     color: var(--primary-color);
 }
 
@@ -324,7 +330,8 @@ body {
     color: #444;
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -334,7 +341,8 @@ body {
     transition: border-color 0.3s;
 }
 
-.form-group input:focus, .form-group select:focus {
+.form-group input:focus,
+.form-group select:focus {
     border-color: var(--primary-color);
 }
 
@@ -455,7 +463,7 @@ body {
     cursor: pointer;
 }
 
-.checkbox-label input[type="checkbox"]:checked + span,
+.checkbox-label input[type="checkbox"]:checked+span,
 .checkbox-label:has(input[type="checkbox"]:checked) {
     border-color: var(--primary-color);
     background-color: rgba(114, 23, 56, 0.1);
@@ -471,7 +479,7 @@ body {
     padding: 40px;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
@@ -486,8 +494,13 @@ body {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loading-indicator p {
@@ -505,7 +518,7 @@ body {
     border: 1px solid #f5c6cb;
     border-radius: 8px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Success Notification */
@@ -517,7 +530,7 @@ body {
     color: white;
     padding: 15px 25px;
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     z-index: 2000;
     opacity: 0;
     transform: translateX(100%);
@@ -535,20 +548,33 @@ body {
     height: 100% !important;
     display: flex;
     flex-direction: column;
+    font-size: 0.85rem;
+    /* Base font size reduction */
 }
 
 .fc-view-harness {
     flex: 1;
     min-height: 0;
+    background: white;
 }
 
 .fc-scroller {
     overflow-y: auto !important;
 }
 
+.fc-header-toolbar {
+    margin-bottom: 0.5em !important;
+    padding-top: 5px;
+}
+
 .fc-toolbar-title {
-    font-size: 1.25rem !important;
+    font-size: 1.1rem !important;
     color: var(--primary-color);
+}
+
+.fc-button {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.85rem !important;
 }
 
 .fc-button-primary {
@@ -561,18 +587,40 @@ body {
     border-color: var(--secondary-color) !important;
 }
 
+.fc-col-header-cell-cushion {
+    padding: 2px 4px !important;
+    font-size: 0.8rem;
+}
+
+.fc-daygrid-day-number {
+    padding: 2px 4px !important;
+    font-size: 0.8rem;
+}
+
 .fc-event {
     cursor: pointer;
     border: none !important;
-    padding: 4px 6px;
-    border-radius: 4px;
+    padding: 1px 4px !important;
+    /* Reduced padding */
+    margin: 1px 2px !important;
+    /* Reduced margin */
+    border-radius: 2px !important;
     font-weight: 500;
+    font-size: 0.75rem !important;
+    /* Smaller font */
+    line-height: 1.2;
     transition: all 0.2s;
 }
 
-.fc-event:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+.fc-event-title,
+.fc-event-time {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fc-daygrid-day-events {
+    margin: 0 !important;
 }
 
 /* Eventos de Folga (Verde) */
@@ -591,8 +639,9 @@ body {
     color: white !important;
 }
 
-.fc-day-sat, .fc-day-sun {
-    background-color: rgba(0,0,0,0.02);
+.fc-day-sat,
+.fc-day-sun {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 .fc-day-today {
@@ -610,11 +659,11 @@ body {
     .content-wrapper.full-width {
         height: calc(100vh - 20px);
     }
-    
+
     .header-calendario {
         padding: 12px 15px;
     }
-    
+
     .header-top {
         flex-direction: column;
         align-items: flex-start;
@@ -622,57 +671,57 @@ body {
         margin-bottom: 10px;
         padding-bottom: 10px;
     }
-    
+
     .header-left h1 {
         font-size: 1.2rem;
     }
-    
+
     .header-actions {
         width: 100%;
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .header-actions button {
         width: 100%;
         justify-content: center;
         font-size: 0.9rem;
         padding: 8px 15px;
     }
-    
+
     .calendar-container {
         padding: 10px;
     }
-    
+
     .fc-header-toolbar {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .modal-large {
         max-width: 95%;
     }
-    
+
     .dias-semana-checkboxes {
         justify-content: center;
     }
-    
+
     .checkbox-label {
         flex: 1;
         min-width: 80px;
         justify-content: center;
     }
-    
+
     .tipo-selector {
         flex-direction: column;
     }
-    
+
     .success-notification {
         right: 10px;
         left: 10px;
         transform: translateY(-100%);
     }
-    
+
     .success-notification.show {
         transform: translateY(0);
     }
@@ -682,21 +731,342 @@ body {
     .content-wrapper.full-width {
         height: calc(100vh - 10px);
     }
-    
+
     .header-calendario {
         padding: 10px 12px;
     }
-    
+
     .header-left h1 {
         font-size: 1.1rem;
     }
-    
+
     .calendar-container {
         padding: 8px;
     }
-    
-    .btn-folga, .btn-plantao, .btn-secondary {
+
+    .btn-folga,
+    .btn-plantao,
+    .btn-secondary {
         font-size: 0.85rem;
         padding: 7px 12px;
+    }
+}
+
+/* View Toggles */
+.view-toggles {
+    display: flex;
+    background: #f0f0f0;
+    padding: 3px;
+    border-radius: 6px;
+    gap: 2px;
+}
+
+.view-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.view-btn.active {
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.view-btn:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.separator-vertical {
+    width: 1px;
+    height: 24px;
+    background-color: #ddd;
+    margin: 0 5px;
+}
+
+/* Timeline View */
+.view-section {
+    width: 100%;
+    height: 100%;
+}
+
+.timeline-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0;
+}
+
+.timeline-controls h3 {
+    margin: 0;
+    min-width: 150px;
+    text-align: center;
+    color: var(--primary-color);
+    text-transform: capitalize;
+}
+
+.timeline-wrapper {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 10px;
+    height: calc(100% - 50px);
+    background: white;
+}
+
+.timeline-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 100%;
+    font-size: 0.85rem;
+}
+
+.timeline-table th,
+.timeline-table td {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 2px;
+    text-align: center;
+    min-width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    font-size: 0.75rem;
+}
+
+.timeline-table th {
+    background: #f9f9f9;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Coluna Fixa do Colaborador */
+.col-colaborador {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 20;
+    text-align: left !important;
+    padding-left: 5px !important;
+    font-weight: 500;
+    min-width: 100px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 2px solid #ddd !important;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.02);
+    font-size: 0.8rem;
+}
+
+.timeline-table th.col-colaborador {
+    z-index: 30;
+    /* Maior que o resto */
+    background: #f9f9f9;
+}
+
+/* Weekend Styling */
+.day-column.weekend,
+.day-headers th.weekend {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.day-column.today {
+    background-color: rgba(114, 23, 56, 0.08);
+    /* Highlight today */
+}
+
+/* Cells */
+.day-cell {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.day-cell:hover {
+    background-color: #f0f0f0;
+}
+
+.event-marker {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 2px;
+}
+
+.event-marker.folga {
+    background-color: #28a745;
+}
+
+.event-marker.plantao {
+    background-color: #dc3545;
+}
+
+/* Imprimir / Print Styles */
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 5mm;
+    }
+
+    body {
+        background: white;
+        overflow: visible !important;
+        height: auto !important;
+        font-size: 10px;
+        /* Reduced base font size */
+    }
+
+    /* Esconder elementos desnecessários */
+    .sidebar,
+    .header-top .back-btn,
+    .header-actions,
+    /* Hide entire action block */
+    .view-toggles,
+    .timeline-controls button,
+    .btn-folga,
+    .btn-plantao,
+    .btn-secondary,
+    .separator-vertical {
+        display: none !important;
+    }
+
+    .timeline-controls {
+        border-bottom: none;
+        justify-content: center;
+        margin-bottom: 5px;
+        padding-bottom: 0;
+    }
+
+    .timeline-controls h3 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        color: black !important;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        height: auto;
+        overflow: visible;
+        padding: 0 !important;
+    }
+
+    .page-container,
+    .content-wrapper.full-width {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: auto;
+        display: block;
+    }
+
+    .calendar-container {
+        box-shadow: none;
+        padding: 0;
+        overflow: visible;
+        display: block;
+        margin: 0;
+    }
+
+    /* Force Timeline View on Print (if needed, or just rely on user being in that view) */
+    #timeline-view {
+        display: block !important;
+    }
+
+    #calendar {
+        display: none !important;
+        /* Hide month grid if printing timeline */
+    }
+
+    .timeline-wrapper {
+        border: none;
+        overflow: visible;
+        height: auto;
+        margin-top: 5px;
+    }
+
+    /* Configuração para a tabela na impressão */
+    .timeline-table {
+        font-size: 9px;
+        /* Tiny font for print */
+        width: 100%;
+        table-layout: fixed;
+        /* Force fixed layout */
+    }
+
+    .timeline-table th,
+    .timeline-table td {
+        border: 1px solid #ccc;
+        padding: 1px;
+        height: 14px;
+        /* Reduced height */
+        box-sizing: border-box;
+    }
+
+    .timeline-table th div:first-child {
+        font-size: 9px;
+    }
+
+    .timeline-table th div:last-child {
+        font-size: 7px;
+    }
+
+    /* Remover sticky na impressão */
+    .timeline-table th,
+    .col-colaborador {
+        position: static;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    /* Ajustar largura da coluna de nomes */
+    .col-colaborador {
+        width: 120px;
+        max-width: 120px;
+        min-width: 120px;
+        font-size: 9px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Cabeçalho */
+    .header-calendario {
+        box-shadow: none;
+        padding: 5px 0;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 5px;
+        border: none;
+    }
+
+    .header-top {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .header-left h1 {
+        font-size: 1.4rem;
+        text-align: center;
+        color: black !important;
+        margin: 0;
+    }
+
+    /* Cores de fundo precisam ser forçadas */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,15 @@
     <link rel="stylesheet" href="../css/shared-styles.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
+
     <!-- FullCalendar CSS e JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-    
+
     <!-- Day.js -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/locale/pt-br.js"></script>
 </head>
+
 <body>
     <nav class="sidebar">
         <div class="hamburger-menu">
@@ -27,16 +29,18 @@
             </div>
         </div>
         <ul class="nav-list">
-             <li><a href="../../PLANILHA/lista_fretes.html"><i class="fas fa-table"></i><span>Planilha</span></a></li>
-             <li><a href="../../CHAT/chat.html"><i class="fas fa-comments"></i><span>Chat</span></a></li>
-             <li><a href="../../CALCULADORAS/calculadoras.html"><i class="fas fa-calculator"></i><span>Calculadoras</span></a></li>
-             <li><a href="../../OC/oc.html"><i class="fas fa-pencil-alt"></i><span>Ordens Manuais</span></a></li>
-             <li><a href="../../CONTATOS/contato.html"><i class="fas fa-address-book"></i><span>Contatos</span></a></li>
-             <li><a href="../../MOSTRADOR/index1.html"><i class="fas fa-tv"></i><span>Divulgação</span></a></li>
-             <li class="double-icon"><a href="../index.html"><i class="fas fa-tools"></i><span>Utilitários</span></a></li>
-             <li><a href="../../TRACKING/indextracking.html"><i class="fas fa-truck"></i><span>Tracking</span></a></li>
-             <li><a href="../../PLANILHA/dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
-             <li><a href="../../dashboard.html"><i class="fas fa-home"></i><span>Início</span></a></li>
+            <li><a href="../../PLANILHA/lista_fretes.html"><i class="fas fa-table"></i><span>Planilha</span></a></li>
+            <li><a href="../../CHAT/chat.html"><i class="fas fa-comments"></i><span>Chat</span></a></li>
+            <li><a href="../../CALCULADORAS/calculadoras.html"><i
+                        class="fas fa-calculator"></i><span>Calculadoras</span></a></li>
+            <li><a href="../../OC/oc.html"><i class="fas fa-pencil-alt"></i><span>Ordens Manuais</span></a></li>
+            <li><a href="../../CONTATOS/contato.html"><i class="fas fa-address-book"></i><span>Contatos</span></a></li>
+            <li><a href="../../MOSTRADOR/index1.html"><i class="fas fa-tv"></i><span>Divulgação</span></a></li>
+            <li class="double-icon"><a href="../index.html"><i class="fas fa-tools"></i><span>Utilitários</span></a>
+            </li>
+            <li><a href="../../TRACKING/indextracking.html"><i class="fas fa-truck"></i><span>Tracking</span></a></li>
+            <li><a href="../../PLANILHA/dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+            <li><a href="../../dashboard.html"><i class="fas fa-home"></i><span>Início</span></a></li>
         </ul>
     </nav>
 
@@ -51,10 +55,23 @@
                         </div>
                     </div>
                     <div class="header-actions">
-                        <button id="btnAddFolga" class="btn-folga"><i class="fas fa-umbrella-beach"></i> Adicionar Folga</button>
-                        <button id="btnAddPlantao" class="btn-plantao"><i class="fas fa-briefcase"></i> Adicionar Plantão</button>
-                        <button id="btnAddFolgaLote" class="btn-secondary"><i class="fas fa-calendar-alt"></i> Folgas em Lote</button>
-                        <button id="btnAddPlantaoLote" class="btn-secondary"><i class="fas fa-calendar-week"></i> Plantões em Lote</button>
+                        <div class="view-toggles">
+                            <button id="btnViewCalendar" class="view-btn active" title="Visualização Calendário"><i
+                                    class="fas fa-calendar-alt"></i></button>
+                            <button id="btnViewTimeline" class="view-btn" title="Visualização Linha do Tempo"><i
+                                    class="fas fa-stream"></i></button>
+                        </div>
+                        <button id="btnPrint" class="btn-secondary" title="Imprimir"><i
+                                class="fas fa-print"></i></button>
+                        <div class="separator-vertical"></div>
+                        <button id="btnAddFolga" class="btn-folga"><i class="fas fa-umbrella-beach"></i> Adicionar
+                            Folga</button>
+                        <button id="btnAddPlantao" class="btn-plantao"><i class="fas fa-briefcase"></i> Adicionar
+                            Plantão</button>
+                        <button id="btnAddFolgaLote" class="btn-secondary"><i class="fas fa-calendar-alt"></i> Folgas em
+                            Lote</button>
+                        <button id="btnAddPlantaoLote" class="btn-secondary"><i class="fas fa-calendar-week"></i>
+                            Plantões em Lote</button>
                     </div>
                 </header>
 
@@ -68,7 +85,18 @@
                 <div id="errorMessage" class="error-message-global" style="display: none;"></div>
 
                 <div class="calendar-container">
-                    <div id="calendar"></div>
+                    <div id="calendar" class="view-section active"></div>
+                    <div id="timeline-view" class="view-section" style="display: none;">
+                        <div class="timeline-controls">
+                            <button id="btnTimelinePrev" class="btn-icon"><i class="fas fa-chevron-left"></i></button>
+                            <h3 id="timelineTitle">Janeiro 2026</h3>
+                            <button id="btnTimelineNext" class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                            <button id="btnTimelineToday" class="btn-secondary">Hoje</button>
+                        </div>
+                        <div class="timeline-wrapper">
+                            <!-- Timeline Table will be injected here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,7 +116,8 @@
                         <select id="colaborador" required>
                             <option value="">Carregando...</option>
                         </select>
-                        <button type="button" id="btnNovoColaborador" class="btn-icon" title="Novo Colaborador"><i class="fas fa-user-plus"></i></button>
+                        <button type="button" id="btnNovoColaborador" class="btn-icon" title="Novo Colaborador"><i
+                                class="fas fa-user-plus"></i></button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -107,7 +136,9 @@
                     <input type="date" id="dataFolga" required>
                 </div>
                 <div class="form-actions">
-                    <button type="button" id="btnDeleteFolga" class="btn-icon" style="color: red; border-color: red; margin-right: auto; display: none;" title="Excluir"><i class="fas fa-trash"></i></button>
+                    <button type="button" id="btnDeleteFolga" class="btn-icon"
+                        style="color: red; border-color: red; margin-right: auto; display: none;" title="Excluir"><i
+                            class="fas fa-trash"></i></button>
                     <button type="submit" class="btn-primary">Salvar</button>
                 </div>
             </form>
@@ -359,9 +390,9 @@
                     <button type="submit" class="btn-primary">Cadastrar</button>
                 </div>
             </form>
-            
+
             <hr class="modal-divider">
-            
+
             <h3>Colaboradores Cadastrados</h3>
             <div class="colaboradores-list-container">
                 <ul id="listaColaboradores" class="colaboradores-list">
@@ -374,4 +405,5 @@
     <script type="module" src="script.js"></script>
     <script src="../../../js/menu.js"></script>
 </body>
+
 </html>
